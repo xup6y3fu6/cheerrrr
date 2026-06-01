@@ -2,96 +2,119 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>陳綺貞 - 專輯全曲目默契考驗</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>陳綺貞 - 默契考驗</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* 自訂背景底色與字體顏色，貼近原圖質感 */
         body {
-            background-color: #FDFCF8;
-            color: #2C3E35;
+            background-color: #F6F8FA;
+            color: #1A2B3C;
+            -webkit-tap-highlight-color: transparent;
         }
-        /* 美化滾動條 */
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        /* 隱藏原生捲軸但保持可滾動 */
+        ::-webkit-scrollbar { display: none; }
+        textarea { resize: none; }
+        
+        /* 自訂 select 箭頭，配色改為藍灰色系 */
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23899CAE' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1em;
+        }
     </style>
 </head>
-<body class="min-h-screen py-10 px-4">
+<body class="min-h-screen pb-20 antialiased font-sans">
 
-    <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-sm border border-stone-100 p-6 md:p-10 space-y-10">
+    <!-- 將最大寬度限制在手機/平版尺寸，讓排版更緊湊 -->
+    <div class="max-w-lg mx-auto px-5 py-8 space-y-10">
         
-        <header class="text-center space-y-2 border-b border-stone-100 pb-8">
-            <h1 class="text-2xl font-bold tracking-wider">陳綺貞：全專輯默契考驗</h1>
-            <p class="text-stone-500 text-sm">在每一張專輯中，挑選一首你最愛的歌曲，並與他比較。</p>
+        <!-- Header -->
+        <header class="text-center space-y-2 pt-4">
+            <h1 class="text-2xl font-black tracking-widest text-[#1A2B3C]">陳綺貞默契考驗</h1>
+            <p class="text-[#748A9D] text-xs font-medium tracking-wide">在每張專輯中，挑出你最愛的唯一</p>
         </header>
 
+        <!-- 第一區：選擇區 -->
         <section class="space-y-6">
-            <div class="flex flex-col md:flex-row md:items-center gap-4 bg-[#F8F9F7] p-4 rounded-xl">
-                <label class="font-medium whitespace-nowrap text-[#2C3E35]">你的代號：</label>
-                <input type="text" id="userName" placeholder="請輸入名稱..." class="flex-1 bg-transparent border-b border-[#2C3E35]/20 px-2 py-1 focus:outline-none focus:border-[#2C3E35]">
+            <!-- 暱稱輸入 -->
+            <div class="bg-white p-1 rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-[#E1E8EE] flex items-center">
+                <div class="px-4 text-sm font-bold text-[#455E75]">你的代號</div>
+                <input type="text" id="userName" placeholder="請輸入..." class="flex-1 bg-transparent py-3 px-2 text-sm focus:outline-none text-[#1A2B3C] placeholder-[#A6B9C8]">
             </div>
 
-            <div id="albumContainer" class="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
-                <!-- 專輯卡片會由 JavaScript 渲染在這裡 -->
+            <!-- 專輯列表容器 -->
+            <div id="albumContainer" class="flex flex-col gap-3">
+                <!-- 由 JavaScript 渲染橫向列表 -->
             </div>
 
-            <button id="generateCodeBtn" class="w-full bg-[#2C3E35] hover:bg-[#1f2b25] text-white font-medium py-3 rounded-xl transition mt-6">
+            <button id="generateCodeBtn" class="w-full bg-[#1A2B3C] active:bg-[#0D1721] active:scale-[0.98] text-white font-bold py-4 rounded-2xl transition-all shadow-md mt-6 text-sm tracking-wide">
                 產生默契代碼
             </button>
 
-            <div id="codeResultArea" class="hidden bg-[#F8F9F7] p-4 rounded-xl space-y-2">
-                <p class="text-sm font-medium text-[#2C3E35]">請將下方代碼複製並傳送給比對者：</p>
-                <textarea id="generatedCode" readonly class="w-full bg-white border border-[#2C3E35]/10 rounded-lg p-3 text-xs font-mono h-24 focus:outline-none"></textarea>
+            <!-- 代碼顯示區 -->
+            <div id="codeResultArea" class="hidden bg-white p-5 rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-[#E1E8EE] space-y-3 transition-all">
+                <p class="text-xs font-bold text-[#455E75]">你的代碼已生成：</p>
+                <div class="relative">
+                    <textarea id="generatedCode" readonly class="w-full bg-[#EEF2F6] rounded-xl p-3 pr-20 text-[10px] font-mono h-20 focus:outline-none text-[#455E75]"></textarea>
+                    <button id="copyCodeBtn" class="absolute bottom-2 right-2 bg-[#3B719F] active:bg-[#2A5275] text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-colors shadow-sm">
+                        複製
+                    </button>
+                </div>
             </div>
         </section>
 
-        <section class="space-y-4 pt-6 border-t border-stone-100">
-            <h2 class="text-lg font-bold text-[#2C3E35]">進行默契比對</h2>
-            <div class="flex flex-col md:flex-row gap-3">
-                <input type="text" id="friendCode" placeholder="請貼上他的代碼..." class="flex-1 border border-stone-300 rounded-xl px-4 py-3 focus:outline-none focus:border-[#5A7D64]">
-                <button id="compareBtn" class="bg-[#5A7D64] hover:bg-[#4a6853] text-white px-8 py-3 rounded-xl font-medium transition whitespace-nowrap">
-                    開始比對
+        <!-- 第二區：比對區 -->
+        <section class="space-y-4 pt-8 border-t border-[#E1E8EE]">
+            <h2 class="text-sm font-black text-[#1A2B3C] tracking-wide pl-1">進行比對</h2>
+            <div class="flex flex-col gap-3">
+                <input type="text" id="friendCode" placeholder="貼上他的代碼..." class="w-full bg-white border border-[#E1E8EE] shadow-[0_2px_12px_rgba(0,0,0,0.03)] rounded-2xl px-5 py-4 text-sm focus:outline-none focus:border-[#3B719F] placeholder-[#A6B9C8]">
+                <button id="compareBtn" class="w-full bg-[#3B719F] active:bg-[#2A5275] active:scale-[0.98] text-white py-4 rounded-2xl font-bold transition-all shadow-md text-sm tracking-wide">
+                    看結果
                 </button>
             </div>
         </section>
 
-        <section id="resultArea" class="hidden pt-10 mt-10 border-t border-stone-200">
-            <h2 class="text-2xl font-bold mb-8 tracking-wide text-[#2C3E35]" id="resultMainTitle">陳綺貞 默契結果</h2>
+        <!-- 第三區：結果展示區 -->
+        <section id="resultArea" class="hidden pt-10 mt-10 border-t border-[#E1E8EE]">
+            <h2 class="text-xl font-black mb-6 tracking-wide text-center" id="resultMainTitle">默契結果</h2>
             
-            <div class="flex justify-between items-start mb-6">
-                <div class="flex-1 pr-4">
-                    <h1 class="text-6xl md:text-7xl font-extrabold text-[#111827] tracking-tighter" id="matchPercentage">44%</h1>
-                    <p class="text-sm md:text-base text-stone-600 mt-3 font-medium leading-relaxed" id="matchQuote">“無數時間線無盡可能性終於交織”</p>
+            <div class="flex items-center justify-between mb-8 overflow-visible">
+                <div class="flex-1">
+                    <h1 class="text-6xl font-black tracking-tighter text-[#1A2B3C] leading-none" id="matchPercentage">44%</h1>
+                    <p class="text-xs text-[#748A9D] mt-2 font-medium leading-relaxed pr-2" id="matchQuote">“無數時間線無盡可能性終於交織”</p>
                 </div>
-                <!-- 改為可動態切割的拼貼容器 -->
-                <div id="topCoverGrid" class="w-24 h-24 md:w-32 md:h-32 rounded-xl shadow-md border border-stone-100 overflow-hidden shrink-0 grid gap-[1px] bg-stone-100">
-                    <!-- 封面圖片將由 JavaScript 動態填入 -->
+                <!-- 扇形封面容器 -->
+                <div id="topCoverContainer" class="relative w-28 h-28 shrink-0 flex justify-center items-center">
+                    <!-- 封面將透過 JavaScript 扇形渲染 -->
                 </div>
             </div>
 
-            <div class="mb-4">
-                <span class="bg-[#E4EDE8] text-[#3D5B46] px-3 py-1.5 rounded-md text-sm font-bold" id="commonCountLabel">共同選擇 4/7</span>
-            </div>
-
-            <div class="bg-[#EEF4F0] rounded-2xl p-5 md:p-6 mb-6">
-                <h3 class="font-bold text-[#2C3E35] mb-4">你們都選了</h3>
-                <div id="commonChoicesList" class="space-y-4">
+            <!-- 共同選擇 -->
+            <div class="bg-white rounded-3xl p-5 shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-[#E1E8EE] mb-4">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-[#1A2B3C] text-sm">共同選擇</h3>
+                    <span class="bg-[#E3EDF6] text-[#2D5880] px-2 py-1 rounded-md text-[10px] font-black" id="commonCountLabel">4/7</span>
+                </div>
+                <div id="commonChoicesList" class="space-y-3">
                     <!-- 共同選擇清單 -->
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 gap-3 md:gap-4">
-                <div class="bg-[#587D65] rounded-2xl p-4 md:p-5 text-white">
-                    <h3 class="font-bold mb-4 opacity-90 text-sm md:text-base" id="myColumnTitle">我的選擇</h3>
+            <!-- 雙邊對比 -->
+            <div class="grid grid-cols-2 gap-3">
+                <div class="bg-[#3B719F] rounded-3xl p-4 text-white shadow-md">
+                    <h3 class="font-bold mb-4 opacity-90 text-xs tracking-wide" id="myColumnTitle">我的選擇</h3>
                     <div id="myChoicesList" class="space-y-3">
-                        <!-- 我的選擇列表 -->
+                        <!-- 我的選擇 -->
                     </div>
                 </div>
 
-                <div class="bg-[#F4F7F5] rounded-2xl p-4 md:p-5 text-[#2C3E35]">
-                    <h3 class="font-bold mb-4 opacity-90 text-sm md:text-base" id="friendColumnTitle">他的選擇</h3>
+                <div class="bg-[#EEF2F6] rounded-3xl p-4 text-[#1A2B3C] border border-[#E1E8EE]">
+                    <h3 class="font-bold mb-4 opacity-90 text-xs tracking-wide" id="friendColumnTitle">他的選擇</h3>
                     <div id="friendChoicesList" class="space-y-3">
-                        <!-- 他的選擇列表 -->
+                        <!-- 他的選擇 -->
                     </div>
                 </div>
             </div>
@@ -100,9 +123,6 @@
     </div>
 
     <script>
-        // ==========================================
-        // 1. 資料庫：陳綺貞全專輯設定區
-        // ==========================================
         const chenAlbums = [
             {
                 id: "album_01", title: "讓我想一想", year: "1998",
@@ -132,10 +152,10 @@
                 tracks: [
                     { id: "t03_01", name: "我親愛的偏執狂" }, { id: "t03_02", name: "太聰明" },
                     { id: "t03_03", name: "小步舞曲" }, { id: "t03_04", name: "1234567" },
-                    { id: "t03_05", name: "隨便說說" }, { id: "t03_06", name: "躺在你的衣櫃 (Guitar Version)" },
+                    { id: "t03_05", name: "隨便說說" }, { id: "t03_06", name: "躺在你的衣櫃" },
                     { id: "t03_07", name: "A Practice" }, { id: "t03_08", name: "吉他手" },
                     { id: "t03_09", name: "黑眼圈" }, { id: "t03_10", name: "就算全世界與我為敵" },
-                    { id: "t03_11", name: "小塵埃" }, { id: "t03_12", name: "不應該" }, { id: "t03_13", name: "躺在你的衣櫃 (Piano Version)" }
+                    { id: "t03_11", name: "小塵埃" }, { id: "t03_12", name: "不應該" }, { id: "t03_13", name: "躺在你的衣櫃 (Piano)" }
                 ]
             },
             {
@@ -181,30 +201,27 @@
                     { id: "t07_01", name: "傷害" }, { id: "t07_02", name: "小船" },
                     { id: "t07_03", name: "殘缺的彩虹" }, { id: "t07_04", name: "台北某個地方" },
                     { id: "t07_05", name: "沙發海" }, { id: "t07_06", name: "跳舞吧" },
-                    { id: "t07_07", name: "她說" }, { id: "t07_08", name: "華生" },
+                    { id: "t07_07", name: "他說" }, { id: "t07_08", name: "華生" },
                     { id: "t07_09", name: "變色龍" }, { id: "t07_10", name: "觀察者" },
                     { id: "t07_11", name: "神魂顛倒" }
                 ]
             }
         ];
 
-        // ==========================================
-        // 2. 渲染選擇區 UI
-        // ==========================================
+        // 渲染清單式選擇區
         const albumContainer = document.getElementById('albumContainer');
-
         chenAlbums.forEach(album => {
-            let optionsHtml = '<option value="">-- 選一首 --</option>';
+            let optionsHtml = '<option value="">未選擇</option>';
             album.tracks.forEach(track => {
                 optionsHtml += `<option value="${track.id}">${track.name}</option>`;
             });
 
             const cardHtml = `
-                <div class="bg-white border border-stone-100 rounded-xl overflow-hidden shadow-sm flex flex-col group">
-                    <img src="${album.cover}" alt="${album.title}" class="w-full aspect-square object-cover bg-stone-100 group-hover:scale-105 transition duration-500">
-                    <div class="p-3 flex flex-col flex-1 bg-white relative z-10">
-                        <h3 class="font-bold text-sm text-[#2C3E35] truncate">${album.title}</h3>
-                        <select data-album-id="${album.id}" class="album-select mt-3 w-full border-b border-stone-200 py-1 text-xs focus:outline-none focus:border-[#5A7D64] bg-transparent text-stone-600">
+                <div class="bg-white p-2.5 rounded-2xl shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-[#E1E8EE] flex gap-3 items-center">
+                    <img src="${album.cover}" alt="${album.title}" class="w-14 h-14 rounded-xl object-cover border border-stone-100 shrink-0">
+                    <div class="flex-1 min-w-0 pr-1">
+                        <h3 class="font-bold text-xs text-[#1A2B3C] truncate">${album.title}</h3>
+                        <select data-album-id="${album.id}" class="album-select mt-1 w-full bg-[#EEF2F6] border-none py-1.5 px-2 rounded-lg text-xs text-[#455E75] font-medium outline-none">
                             ${optionsHtml}
                         </select>
                     </div>
@@ -213,7 +230,6 @@
             albumContainer.insertAdjacentHTML('beforeend', cardHtml);
         });
 
-        // 輔助函數：透過 ID 尋找歌曲名稱
         function getTrackName(trackId) {
             for (let album of chenAlbums) {
                 let track = album.tracks.find(t => t.id === trackId);
@@ -222,9 +238,7 @@
             return "未選擇";
         }
 
-        // ==========================================
-        // 3. 代碼生成邏輯
-        // ==========================================
+        // 產生代碼
         document.getElementById('generateCodeBtn').onclick = function() {
             const userName = document.getElementById('userName').value.trim() || "我";
             const selects = document.querySelectorAll('.album-select');
@@ -238,21 +252,34 @@
             });
 
             if (!isComplete) {
-                alert("必須在每一張專輯中都選擇一首歌，才能產生代碼。");
+                alert("每張專輯都要選一首歌喔！");
                 return;
             }
 
             const data = { n: userName, t: selectedTracks };
-            const jsonString = JSON.stringify(data);
-            const base64Code = btoa(encodeURIComponent(jsonString));
+            const base64Code = btoa(encodeURIComponent(JSON.stringify(data)));
 
             document.getElementById('generatedCode').value = base64Code;
             document.getElementById('codeResultArea').classList.remove('hidden');
         };
 
-        // ==========================================
-        // 4. 比對邏輯與結果渲染
-        // ==========================================
+        // 快捷複製按鈕
+        document.getElementById('copyCodeBtn').onclick = function() {
+            const codeInput = document.getElementById('generatedCode');
+            codeInput.select();
+            codeInput.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(codeInput.value).then(() => {
+                const btn = document.getElementById('copyCodeBtn');
+                btn.textContent = "已複製！";
+                btn.classList.add("bg-[#1A2B3C]");
+                setTimeout(() => {
+                    btn.textContent = "複製";
+                    btn.classList.remove("bg-[#1A2B3C]");
+                }, 2000);
+            }).catch(() => alert("請手動複製！"));
+        };
+
+        // 比對邏輯
         document.getElementById('compareBtn').onclick = function() {
             const myName = document.getElementById('userName').value.trim() || "你";
             const friendCode = document.getElementById('friendCode').value.trim();
@@ -266,33 +293,31 @@
             });
 
             if (!myComplete) {
-                alert("請先完成你自己的選擇，才能與他進行比對。");
+                alert("請先完成你自己的選擇！");
                 return;
             }
 
             if (!friendCode) {
-                alert("請貼上他的代碼。");
+                alert("請貼上他的代碼！");
                 return;
             }
 
             try {
-                const decodedString = decodeURIComponent(atob(friendCode));
-                const friendData = JSON.parse(decodedString);
-
-                if (!friendData.n || !friendData.t) throw new Error("無效代碼");
+                const friendData = JSON.parse(decodeURIComponent(atob(friendCode)));
+                if (!friendData.n || !friendData.t) throw new Error();
 
                 const friendName = friendData.n;
                 const friendTracks = friendData.t;
 
-                document.getElementById('resultMainTitle').textContent = `${myName} / ${friendName} 默契結果`;
-                document.getElementById('myColumnTitle').textContent = `${myName}的選擇`;
-                document.getElementById('friendColumnTitle').textContent = `${friendName}的選擇`;
+                document.getElementById('resultMainTitle').textContent = `${myName} 與 ${friendName}`;
+                document.getElementById('myColumnTitle').textContent = `${myName}`;
+                document.getElementById('friendColumnTitle').textContent = `${friendName}`;
 
                 let commonHtml = '';
                 let myHtml = '';
                 let friendHtml = '';
                 let matchCount = 0;
-                let matchedCovers = []; // 用陣列儲存所有共同選擇的封面
+                let matchedCovers = []; 
                 const total = chenAlbums.length;
 
                 chenAlbums.forEach((album, index) => {
@@ -300,92 +325,90 @@
                     const friendTrack = friendTracks[album.id] ? getTrackName(friendTracks[album.id]) : "未選擇";
                     const isMatch = (myTracks[album.id] === friendTracks[album.id] && myTracks[album.id] !== undefined);
 
-                    // 共同選擇區塊
+                    // 共同選擇
                     if (isMatch) {
                         matchCount++;
-                        matchedCovers.push(album.cover); // 將封面推入陣列
+                        matchedCovers.push(album.cover); 
                         commonHtml += `
-                            <div class="flex items-center justify-between border-b border-[#2C3E35]/10 pb-2 last:border-0 last:pb-0">
-                                <div class="flex items-center gap-3">
-                                    <img src="${album.cover}" class="w-10 h-10 rounded-md object-cover">
-                                    <span class="font-bold text-[#2C3E35] text-sm md:text-base">${myTrack}</span>
+                            <div class="flex items-center gap-3 border-b border-[#E1E8EE] pb-2 last:border-0 last:pb-0">
+                                <img src="${album.cover}" class="w-10 h-10 rounded-lg object-cover shrink-0">
+                                <div class="flex-1 min-w-0">
+                                    <span class="block font-bold text-[#1A2B3C] text-sm truncate">${myTrack}</span>
+                                    <span class="block text-[10px] text-[#748A9D] truncate">《${album.title}》</span>
                                 </div>
-                                <span class="text-xs text-[#5A7D64] font-medium hidden md:inline">《${album.title}》</span>
                             </div>
                         `;
                     }
 
-                    // 我的選擇列表 (深綠背景版)
+                    // 我的選擇
                     myHtml += `
-                        <div class="flex items-center gap-3">
-                            <img src="${album.cover}" class="w-8 h-8 rounded object-cover shadow-sm">
-                            <span class="text-sm font-medium truncate">${myTrack}</span>
+                        <div class="flex items-center gap-2">
+                            <img src="${album.cover}" class="w-7 h-7 rounded-[4px] object-cover shrink-0 opacity-90">
+                            <span class="text-xs font-medium truncate">${myTrack}</span>
                         </div>
                     `;
 
-                    // 他的選擇列表 (淺灰綠背景版)
+                    // 他的選擇
                     friendHtml += `
-                        <div class="flex items-center gap-3">
-                            <span class="text-stone-400 text-xs font-bold w-3">${index + 1}</span>
-                            <img src="${album.cover}" class="w-8 h-8 rounded object-cover shadow-sm">
-                            <span class="text-sm font-medium truncate text-[#2C3E35]">${friendTrack}</span>
+                        <div class="flex items-center gap-2">
+                            <span class="text-[#A6B9C8] text-[10px] font-bold w-2 shrink-0">${index + 1}</span>
+                            <img src="${album.cover}" class="w-7 h-7 rounded-[4px] object-cover shrink-0">
+                            <span class="text-xs font-medium truncate text-[#455E75]">${friendTrack}</span>
                         </div>
                     `;
                 });
 
                 if (matchCount === 0) {
-                    commonHtml = `<p class="text-sm text-stone-500 italic">這次沒有選到同一首歌，不過品味各異也是一種浪漫。</p>`;
-                    matchedCovers.push(chenAlbums[0].cover); // 若無交集，預設顯示第一張專輯封面
+                    commonHtml = `<p class="text-xs text-[#748A9D] font-medium text-center py-2">品味各異，也是一種獨特。</p>`;
+                    matchedCovers.push(chenAlbums[0].cover); 
                 }
 
-                // 更新文字 DOM 內容
                 document.getElementById('commonChoicesList').innerHTML = commonHtml;
                 document.getElementById('myChoicesList').innerHTML = myHtml;
                 document.getElementById('friendChoicesList').innerHTML = friendHtml;
 
-                // ==========================================
-                // 5. 拼貼圖 (Collage) 生成邏輯
-                // ==========================================
-                const topCoverGrid = document.getElementById('topCoverGrid');
-                
-                // 依照數量決定網格的直行與橫列 (Column & Row)
-                let gridColsClass = 'grid-cols-1';
-                if (matchedCovers.length >= 2 && matchedCovers.length <= 4) gridColsClass = 'grid-cols-2';
-                else if (matchedCovers.length >= 5) gridColsClass = 'grid-cols-3';
+                // 扇形展開邏輯 (適應手機螢幕，角度與間距縮小)
+                const topCoverContainer = document.getElementById('topCoverContainer');
+                let stackHtml = '';
+                const totalCovers = matchedCovers.length;
 
-                let gridRowsClass = 'grid-rows-1';
-                if (matchedCovers.length === 3 || matchedCovers.length === 4) gridRowsClass = 'grid-rows-2';
-                else if (matchedCovers.length === 5 || matchedCovers.length === 6) gridRowsClass = 'grid-rows-2';
-                else if (matchedCovers.length >= 7) gridRowsClass = 'grid-rows-3';
+                matchedCovers.forEach((coverUrl, idx) => {
+                    const zIndex = idx;
+                    const offsetIndex = idx - (totalCovers - 1) / 2; 
+                    const rotate = offsetIndex * 6;     
+                    const translateX = offsetIndex * 12; 
 
-                // 重新賦予網格排列的 class
-                topCoverGrid.className = `w-24 h-24 md:w-32 md:h-32 rounded-xl shadow-md border border-stone-100 overflow-hidden shrink-0 grid gap-[1px] bg-stone-200 ${gridColsClass} ${gridRowsClass}`;
-
-                // 塞入圖片 (object-cover 確保圖片能填滿每一格，不會被壓扁)
-                let gridInnerHtml = '';
-                matchedCovers.forEach(coverUrl => {
-                    gridInnerHtml += `<img src="${coverUrl}" class="w-full h-full object-cover">`;
+                    stackHtml += `
+                        <div class="absolute w-16 h-16 sm:w-20 sm:h-20 transition-all duration-300 hover:-translate-y-2 hover:scale-105 active:scale-105"
+                             style="transform: translateX(${translateX}px) rotate(${rotate}deg); z-index: ${zIndex};"
+                             onmouseenter="this.style.zIndex=50" 
+                             onmouseleave="this.style.zIndex=${zIndex}"
+                             ontouchstart="this.style.zIndex=50"
+                             ontouchend="this.style.zIndex=${zIndex}">
+                            <img src="${coverUrl}" class="w-full h-full rounded-xl object-cover shadow-[0_2px_8px_rgba(0,0,0,0.12)] border-[2px] border-white">
+                        </div>
+                    `;
                 });
-                topCoverGrid.innerHTML = gridInnerHtml;
+                topCoverContainer.innerHTML = stackHtml;
 
-
-                // 更新上方資訊與百分比
+                // 數據更新
                 const matchRate = Math.round((matchCount / total) * 100);
                 document.getElementById('matchPercentage').textContent = `${matchRate}%`;
-                document.getElementById('commonCountLabel').textContent = `共同選擇 ${matchCount}/${total}`;
+                document.getElementById('commonCountLabel').textContent = `${matchCount}/${total}`;
 
-                // 根據百分比給予對應引言
                 const quoteEl = document.getElementById('matchQuote');
-                if (matchRate === 100) quoteEl.textContent = "“抽絲剝繭，發現你是如此的特別，好像除了我沒人能把你看透。”";
-                else if (matchRate >= 40) quoteEl.textContent = "“我從你的話語之間 才發現 你和我之間 不需要語言”";
-                else if (matchRate > 0) quoteEl.textContent = "“為什麼你總沉迷 某種神奇的幻想”";
-                else quoteEl.textContent = "“你擁有你的 我擁有我的 姿態”";
+                if (matchRate === 100) quoteEl.textContent = "“好像除了我，沒人能把你看透”";
+                else if (matchRate >= 40) quoteEl.textContent = "“你和我之間，不需要語言”";
+                else if (matchRate > 0) quoteEl.textContent = "“為什麼你總沉迷，某種神奇的幻想”";
+                else quoteEl.textContent = "“你擁有你的，我擁有我的，姿態”";
 
                 document.getElementById('resultArea').classList.remove('hidden');
-                document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
+                setTimeout(() => {
+                    document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
 
             } catch (e) {
-                alert("代碼解析失敗，請確認代碼是否完整或格式正確。");
+                alert("解析失敗，請確認代碼是否完整！");
             }
         };
     </script>
