@@ -6,113 +6,178 @@
     <title>陳綺貞 - 默契考驗</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
+        /* Y2K 網格背景與字體設定 */
         body {
-            background-color: #F6F8FA;
-            color: #1A2B3C;
+            background-color: #E8F0FE;
+            background-image: 
+              linear-gradient(rgba(0, 85, 255, 0.15) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(0, 85, 255, 0.15) 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: #002266;
+            font-family: 'Verdana', 'Tahoma', sans-serif;
             -webkit-tap-highlight-color: transparent;
         }
-        /* 隱藏原生捲軸但保持可滾動 */
         ::-webkit-scrollbar { display: none; }
         textarea { resize: none; }
         
-        /* 自訂 select 箭頭，配色改為藍灰色系 */
+        /* 復古立體膠囊按鈕 */
+        .y2k-btn {
+            background: linear-gradient(180deg, #66A3FF 0%, #0044CC 100%);
+            border: 2px solid #002266;
+            box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.6), 0 4px 0 #002266;
+            border-radius: 999px;
+            transition: all 0.1s ease;
+        }
+        .y2k-btn:active {
+            transform: translateY(4px);
+            box-shadow: inset 0 2px 5px rgba(255, 255, 255, 0.6), 0 0px 0 #002266;
+        }
+
+        /* 復古視窗卡片 */
+        .y2k-window {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(8px);
+            border: 2px solid #0044CC;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0, 68, 204, 0.2), inset 0 0 0 2px rgba(255,255,255,0.9);
+        }
+
+        /* 內凹輸入框 */
+        .y2k-input {
+            background-color: #FFFFFF;
+            border: 2px solid #88B8FF;
+            box-shadow: inset 2px 2px 4px rgba(0, 34, 102, 0.15);
+            border-radius: 8px;
+        }
+        .y2k-input:focus {
+            border-color: #0044CC;
+            outline: none;
+        }
+
+        /* 自訂 select 箭頭 */
         select {
             appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23899CAE' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%230044CC'%3e%3cpolygon points='6,9 18,9 12,16'/%3e%3c/svg%3e");
             background-repeat: no-repeat;
             background-position: right 0.5rem center;
-            background-size: 1em;
+            background-size: 0.8rem;
+        }
+
+        /* 像素點陣字體裝飾 */
+        .pixel-text {
+            font-family: 'Courier New', Courier, monospace;
+            letter-spacing: -0.5px;
         }
     </style>
 </head>
-<body class="min-h-screen pb-20 antialiased font-sans">
+<body class="min-h-screen pb-20 antialiased">
 
-    <!-- 將最大寬度限制在手機/平版尺寸，讓排版更緊湊 -->
-    <div class="max-w-lg mx-auto px-5 py-8 space-y-10">
+    <div class="max-w-lg mx-auto px-4 py-8 space-y-8">
         
         <!-- Header -->
         <header class="text-center space-y-2 pt-4">
-            <h1 class="text-2xl font-black tracking-widest text-[#1A2B3C]">陳綺貞默契考驗</h1>
-            <p class="text-[#748A9D] text-xs font-medium tracking-wide">在每張專輯中，挑出你最愛的唯一</p>
+            <div class="inline-block bg-[#0044CC] text-[#00FFFF] px-3 py-1 rounded-full text-[10px] font-bold mb-2 border border-[#002266] tracking-widest pixel-text">
+                SYS.VER 1.0 // MUSIC_MATCH
+            </div>
+            <h1 class="text-2xl font-black text-[#002266] tracking-widest" style="text-shadow: 2px 2px 0px #88B8FF;">
+                陳綺貞默契考驗
+            </h1>
+            <p class="text-[#0044CC] text-xs font-bold tracking-wide">在每張專輯中，挑出你最愛的唯一</p>
         </header>
 
         <!-- 第一區：選擇區 -->
-        <section class="space-y-6">
+        <section class="space-y-5">
+            
             <!-- 暱稱輸入 -->
-            <div class="bg-white p-1 rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-[#E1E8EE] flex items-center">
-                <div class="px-4 text-sm font-bold text-[#455E75]">你的代號</div>
-                <input type="text" id="userName" placeholder="請輸入..." class="flex-1 bg-transparent py-3 px-2 text-sm focus:outline-none text-[#1A2B3C] placeholder-[#A6B9C8]">
+            <div class="y2k-window p-3 flex items-center gap-3">
+                <div class="bg-[#002266] text-white px-3 py-1.5 rounded-md text-xs font-bold border border-[#0044CC]">
+                    USER_ID
+                </div>
+                <input type="text" id="userName" placeholder="請輸入代號..." class="y2k-input flex-1 py-2 px-3 text-sm font-bold text-[#002266] placeholder-[#88B8FF]">
             </div>
 
             <!-- 專輯列表容器 -->
             <div id="albumContainer" class="flex flex-col gap-3">
-                <!-- 由 JavaScript 渲染橫向列表 -->
+                <!-- 由 JavaScript 渲染 -->
             </div>
 
-            <button id="generateCodeBtn" class="w-full bg-[#1A2B3C] active:bg-[#0D1721] active:scale-[0.98] text-white font-bold py-4 rounded-2xl transition-all shadow-md mt-6 text-sm tracking-wide">
-                產生默契代碼
+            <button id="generateCodeBtn" class="w-full y2k-btn text-white font-black py-3.5 mt-4 text-sm tracking-widest">
+                GENERATE / 產生代碼
             </button>
 
             <!-- 代碼顯示區 -->
-            <div id="codeResultArea" class="hidden bg-white p-5 rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.03)] border border-[#E1E8EE] space-y-3 transition-all">
-                <p class="text-xs font-bold text-[#455E75]">你的代碼已生成：</p>
+            <div id="codeResultArea" class="hidden y2k-window p-4 space-y-3">
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-[#00FF00] shadow-[0_0_5px_#00FF00]"></span>
+                    <p class="text-[11px] font-black text-[#002266] tracking-widest pixel-text">CODE_READY</p>
+                </div>
                 <div class="relative">
-                    <textarea id="generatedCode" readonly class="w-full bg-[#EEF2F6] rounded-xl p-3 pr-20 text-[10px] font-mono h-20 focus:outline-none text-[#455E75]"></textarea>
-                    <button id="copyCodeBtn" class="absolute bottom-2 right-2 bg-[#3B719F] active:bg-[#2A5275] text-white px-3 py-1.5 rounded-lg text-xs font-bold transition-colors shadow-sm">
-                        複製
+                    <textarea id="generatedCode" readonly class="w-full y2k-input p-3 pr-20 text-[10px] font-mono h-20 text-[#0044CC]"></textarea>
+                    <button id="copyCodeBtn" class="absolute bottom-2 right-2 bg-gradient-to-b from-[#00FFFF] to-[#00AACC] border border-[#002266] text-[#002266] px-3 py-1.5 rounded-lg text-xs font-black shadow-[inset_0_1px_2px_rgba(255,255,255,0.8)] active:transform active:translate-y-1">
+                        COPY
                     </button>
                 </div>
             </div>
         </section>
 
         <!-- 第二區：比對區 -->
-        <section class="space-y-4 pt-8 border-t border-[#E1E8EE]">
-            <h2 class="text-sm font-black text-[#1A2B3C] tracking-wide pl-1">進行比對</h2>
+        <section class="space-y-4 pt-6 border-t-2 border-[#88B8FF] border-dashed">
+            <h2 class="text-sm font-black text-[#002266] tracking-wide flex items-center gap-2">
+                <span class="text-[#0044CC]">></span> 進行比對
+            </h2>
             <div class="flex flex-col gap-3">
-                <input type="text" id="friendCode" placeholder="貼上他的代碼..." class="w-full bg-white border border-[#E1E8EE] shadow-[0_2px_12px_rgba(0,0,0,0.03)] rounded-2xl px-5 py-4 text-sm focus:outline-none focus:border-[#3B719F] placeholder-[#A6B9C8]">
-                <button id="compareBtn" class="w-full bg-[#3B719F] active:bg-[#2A5275] active:scale-[0.98] text-white py-4 rounded-2xl font-bold transition-all shadow-md text-sm tracking-wide">
-                    看結果
+                <input type="text" id="friendCode" placeholder="貼上他的代碼..." class="y2k-input w-full px-4 py-3 text-sm font-bold text-[#002266] placeholder-[#88B8FF]">
+                <button id="compareBtn" class="w-full y2k-btn text-white py-3.5 font-black text-sm tracking-widest">
+                    ANALYZE / 看結果
                 </button>
             </div>
         </section>
 
         <!-- 第三區：結果展示區 -->
-        <section id="resultArea" class="hidden pt-10 mt-10 border-t border-[#E1E8EE]">
-            <h2 class="text-xl font-black mb-6 tracking-wide text-center" id="resultMainTitle">默契結果</h2>
+        <section id="resultArea" class="hidden pt-8 mt-8 border-t-2 border-[#88B8FF]">
             
-            <div class="flex items-center justify-between mb-8 overflow-visible">
-                <div class="flex-1">
-                    <h1 class="text-6xl font-black tracking-tighter text-[#1A2B3C] leading-none" id="matchPercentage">44%</h1>
-                    <p class="text-xs text-[#748A9D] mt-2 font-medium leading-relaxed pr-2" id="matchQuote">“無數時間線無盡可能性終於交織”</p>
+            <div class="y2k-window bg-gradient-to-br from-[#FFFFFF] to-[#E8F0FE] p-5 mb-6 relative overflow-hidden">
+                <div class="flex justify-between items-start mb-2">
+                    <h2 class="text-sm font-black text-[#0044CC] tracking-widest pixel-text" id="resultMainTitle">MATCH_RESULT</h2>
+                    <span class="bg-[#002266] text-[#00FFFF] px-2 py-0.5 rounded text-[9px] font-bold border border-[#0044CC]">100% COMPLETE</span>
                 </div>
-                <!-- 扇形封面容器 -->
-                <div id="topCoverContainer" class="relative w-28 h-28 shrink-0 flex justify-center items-center">
-                    <!-- 封面將透過 JavaScript 扇形渲染 -->
+                
+                <div class="flex items-center justify-between">
+                    <div class="flex-1 pr-2 z-10">
+                        <h1 class="text-6xl font-black text-[#002266] tracking-tighter" style="text-shadow: 2px 2px 0px #88B8FF;" id="matchPercentage">44%</h1>
+                        <p class="text-xs text-[#0044CC] mt-2 font-bold leading-relaxed border-l-2 border-[#00FFFF] pl-2" id="matchQuote">“無數時間線無盡可能性終於交織”</p>
+                    </div>
+                    <!-- 扇形封面容器 -->
+                    <div id="topCoverContainer" class="relative w-28 h-28 shrink-0 flex justify-center items-center z-10">
+                        <!-- 封面將透過 JavaScript 扇形渲染 -->
+                    </div>
                 </div>
+                <!-- Y2K 裝飾圓 -->
+                <div class="absolute -right-10 -bottom-10 w-32 h-32 border-[10px] border-[#E8F0FE] rounded-full opacity-50"></div>
             </div>
 
             <!-- 共同選擇 -->
-            <div class="bg-white rounded-3xl p-5 shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-[#E1E8EE] mb-4">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-[#1A2B3C] text-sm">共同選擇</h3>
-                    <span class="bg-[#E3EDF6] text-[#2D5880] px-2 py-1 rounded-md text-[10px] font-black" id="commonCountLabel">4/7</span>
+            <div class="y2k-window p-4 mb-4">
+                <div class="flex justify-between items-center mb-4 border-b border-[#88B8FF] pb-2">
+                    <h3 class="font-black text-[#002266] text-xs tracking-wide">共同選擇</h3>
+                    <span class="bg-[#00FFFF] text-[#002266] border border-[#002266] px-2 py-0.5 rounded-md text-[10px] font-black pixel-text" id="commonCountLabel">4/7</span>
                 </div>
-                <div id="commonChoicesList" class="space-y-3">
+                <div id="commonChoicesList" class="space-y-2">
                     <!-- 共同選擇清單 -->
                 </div>
             </div>
 
             <!-- 雙邊對比 -->
             <div class="grid grid-cols-2 gap-3">
-                <div class="bg-[#3B719F] rounded-3xl p-4 text-white shadow-md">
-                    <h3 class="font-bold mb-4 opacity-90 text-xs tracking-wide" id="myColumnTitle">我的選擇</h3>
+                <div class="bg-[#0044CC] border-2 border-[#002266] rounded-xl p-3 text-white shadow-[inset_0_0_10px_rgba(0,0,0,0.2)]">
+                    <h3 class="font-bold mb-3 text-[11px] tracking-wide text-[#00FFFF] border-b border-[#002266] pb-1" id="myColumnTitle">我的選擇</h3>
                     <div id="myChoicesList" class="space-y-3">
                         <!-- 我的選擇 -->
                     </div>
                 </div>
 
-                <div class="bg-[#EEF2F6] rounded-3xl p-4 text-[#1A2B3C] border border-[#E1E8EE]">
-                    <h3 class="font-bold mb-4 opacity-90 text-xs tracking-wide" id="friendColumnTitle">他的選擇</h3>
+                <div class="bg-[#E8F0FE] border-2 border-[#88B8FF] rounded-xl p-3 text-[#002266] shadow-[inset_0_0_10px_rgba(255,255,255,0.8)]">
+                    <h3 class="font-bold mb-3 text-[11px] tracking-wide border-b border-[#88B8FF] pb-1" id="friendColumnTitle">他的選擇</h3>
                     <div id="friendChoicesList" class="space-y-3">
                         <!-- 他的選擇 -->
                     </div>
@@ -208,20 +273,19 @@
             }
         ];
 
-        // 渲染清單式選擇區
         const albumContainer = document.getElementById('albumContainer');
         chenAlbums.forEach(album => {
-            let optionsHtml = '<option value="">未選擇</option>';
+            let optionsHtml = '<option value="">-- 請選擇單曲 --</option>';
             album.tracks.forEach(track => {
                 optionsHtml += `<option value="${track.id}">${track.name}</option>`;
             });
 
             const cardHtml = `
-                <div class="bg-white p-2.5 rounded-2xl shadow-[0_2px_10px_rgba(0,0,0,0.02)] border border-[#E1E8EE] flex gap-3 items-center">
-                    <img src="${album.cover}" alt="${album.title}" class="w-14 h-14 rounded-xl object-cover border border-stone-100 shrink-0">
+                <div class="y2k-window p-2 flex gap-3 items-center shadow-[0_4px_10px_rgba(0,34,102,0.1)]">
+                    <img src="${album.cover}" alt="${album.title}" class="w-14 h-14 rounded-lg object-cover border-2 border-[#88B8FF] shrink-0">
                     <div class="flex-1 min-w-0 pr-1">
-                        <h3 class="font-bold text-xs text-[#1A2B3C] truncate">${album.title}</h3>
-                        <select data-album-id="${album.id}" class="album-select mt-1 w-full bg-[#EEF2F6] border-none py-1.5 px-2 rounded-lg text-xs text-[#455E75] font-medium outline-none">
+                        <h3 class="font-bold text-[13px] text-[#002266] truncate mb-1">${album.title}</h3>
+                        <select data-album-id="${album.id}" class="album-select w-full y2k-input py-1.5 px-2 text-[11px] font-bold text-[#0044CC]">
                             ${optionsHtml}
                         </select>
                     </div>
@@ -238,7 +302,6 @@
             return "未選擇";
         }
 
-        // 產生代碼
         document.getElementById('generateCodeBtn').onclick = function() {
             const userName = document.getElementById('userName').value.trim() || "我";
             const selects = document.querySelectorAll('.album-select');
@@ -263,23 +326,19 @@
             document.getElementById('codeResultArea').classList.remove('hidden');
         };
 
-        // 快捷複製按鈕
         document.getElementById('copyCodeBtn').onclick = function() {
             const codeInput = document.getElementById('generatedCode');
             codeInput.select();
             codeInput.setSelectionRange(0, 99999);
             navigator.clipboard.writeText(codeInput.value).then(() => {
                 const btn = document.getElementById('copyCodeBtn');
-                btn.textContent = "已複製！";
-                btn.classList.add("bg-[#1A2B3C]");
+                btn.textContent = "COPIED";
                 setTimeout(() => {
-                    btn.textContent = "複製";
-                    btn.classList.remove("bg-[#1A2B3C]");
+                    btn.textContent = "COPY";
                 }, 2000);
             }).catch(() => alert("請手動複製！"));
         };
 
-        // 比對邏輯
         document.getElementById('compareBtn').onclick = function() {
             const myName = document.getElementById('userName').value.trim() || "你";
             const friendCode = document.getElementById('friendCode').value.trim();
@@ -309,7 +368,7 @@
                 const friendName = friendData.n;
                 const friendTracks = friendData.t;
 
-                document.getElementById('resultMainTitle').textContent = `${myName} 與 ${friendName}`;
+                document.getElementById('resultMainTitle').textContent = `${myName} x ${friendName}`;
                 document.getElementById('myColumnTitle').textContent = `${myName}`;
                 document.getElementById('friendColumnTitle').textContent = `${friendName}`;
 
@@ -325,41 +384,38 @@
                     const friendTrack = friendTracks[album.id] ? getTrackName(friendTracks[album.id]) : "未選擇";
                     const isMatch = (myTracks[album.id] === friendTracks[album.id] && myTracks[album.id] !== undefined);
 
-                    // 共同選擇
                     if (isMatch) {
                         matchCount++;
                         matchedCovers.push(album.cover); 
                         commonHtml += `
-                            <div class="flex items-center gap-3 border-b border-[#E1E8EE] pb-2 last:border-0 last:pb-0">
-                                <img src="${album.cover}" class="w-10 h-10 rounded-lg object-cover shrink-0">
+                            <div class="flex items-center gap-3 bg-[#E8F0FE] p-2 rounded-lg border border-[#88B8FF]">
+                                <img src="${album.cover}" class="w-10 h-10 rounded border border-[#0044CC] object-cover shrink-0">
                                 <div class="flex-1 min-w-0">
-                                    <span class="block font-bold text-[#1A2B3C] text-sm truncate">${myTrack}</span>
-                                    <span class="block text-[10px] text-[#748A9D] truncate">《${album.title}》</span>
+                                    <span class="block font-bold text-[#002266] text-xs truncate mb-0.5">${myTrack}</span>
+                                    <span class="block text-[9px] font-bold text-[#0044CC] truncate pixel-text">ALBUM_${index + 1}</span>
                                 </div>
                             </div>
                         `;
                     }
 
-                    // 我的選擇
                     myHtml += `
                         <div class="flex items-center gap-2">
-                            <img src="${album.cover}" class="w-7 h-7 rounded-[4px] object-cover shrink-0 opacity-90">
-                            <span class="text-xs font-medium truncate">${myTrack}</span>
+                            <img src="${album.cover}" class="w-7 h-7 rounded border border-[#00FFFF] object-cover shrink-0 opacity-90">
+                            <span class="text-[11px] font-bold truncate text-[#E8F0FE]">${myTrack}</span>
                         </div>
                     `;
 
-                    // 他的選擇
                     friendHtml += `
                         <div class="flex items-center gap-2">
-                            <span class="text-[#A6B9C8] text-[10px] font-bold w-2 shrink-0">${index + 1}</span>
-                            <img src="${album.cover}" class="w-7 h-7 rounded-[4px] object-cover shrink-0">
-                            <span class="text-xs font-medium truncate text-[#455E75]">${friendTrack}</span>
+                            <span class="text-[#88B8FF] text-[9px] font-bold w-3 shrink-0 pixel-text">0${index + 1}</span>
+                            <img src="${album.cover}" class="w-7 h-7 rounded border border-[#88B8FF] object-cover shrink-0">
+                            <span class="text-[11px] font-bold truncate text-[#0044CC]">${friendTrack}</span>
                         </div>
                     `;
                 });
 
                 if (matchCount === 0) {
-                    commonHtml = `<p class="text-xs text-[#748A9D] font-medium text-center py-2">品味各異，也是一種獨特。</p>`;
+                    commonHtml = `<p class="text-xs text-[#0044CC] font-bold text-center py-2 pixel-text">NO MATCH FOUND</p>`;
                     matchedCovers.push(chenAlbums[0].cover); 
                 }
 
@@ -367,7 +423,6 @@
                 document.getElementById('myChoicesList').innerHTML = myHtml;
                 document.getElementById('friendChoicesList').innerHTML = friendHtml;
 
-                // 扇形展開邏輯 (適應手機螢幕，角度與間距縮小)
                 const topCoverContainer = document.getElementById('topCoverContainer');
                 let stackHtml = '';
                 const totalCovers = matchedCovers.length;
@@ -379,19 +434,18 @@
                     const translateX = offsetIndex * 12; 
 
                     stackHtml += `
-                        <div class="absolute w-16 h-16 sm:w-20 sm:h-20 transition-all duration-300 hover:-translate-y-2 hover:scale-105 active:scale-105"
+                        <div class="absolute w-16 h-16 sm:w-20 sm:h-20 transition-all duration-300 hover:-translate-y-2 hover:scale-110 active:scale-110"
                              style="transform: translateX(${translateX}px) rotate(${rotate}deg); z-index: ${zIndex};"
                              onmouseenter="this.style.zIndex=50" 
                              onmouseleave="this.style.zIndex=${zIndex}"
                              ontouchstart="this.style.zIndex=50"
                              ontouchend="this.style.zIndex=${zIndex}">
-                            <img src="${coverUrl}" class="w-full h-full rounded-xl object-cover shadow-[0_2px_8px_rgba(0,0,0,0.12)] border-[2px] border-white">
+                            <img src="${coverUrl}" class="w-full h-full rounded-lg object-cover shadow-[0_4px_10px_rgba(0,34,102,0.3)] border-2 border-white">
                         </div>
                     `;
                 });
                 topCoverContainer.innerHTML = stackHtml;
 
-                // 數據更新
                 const matchRate = Math.round((matchCount / total) * 100);
                 document.getElementById('matchPercentage').textContent = `${matchRate}%`;
                 document.getElementById('commonCountLabel').textContent = `${matchCount}/${total}`;
