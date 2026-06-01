@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>陳綺貞 - 專輯全曲目默契考驗</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* 自訂背景底色與字體顏色，貼近原圖質感 */
+        body {
+            background-color: #FDFCF8;
+            color: #2C3E35;
+        }
+        /* 美化滾動條 */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    </style>
+</head>
+<body class="min-h-screen py-10 px-4">
+
+    <div class="max-w-3xl mx-auto bg-white rounded-2xl shadow-sm border border-stone-100 p-6 md:p-10 space-y-10">
+        
+        <header class="text-center space-y-2 border-b border-stone-100 pb-8">
+            <h1 class="text-2xl font-bold tracking-wider">陳綺貞：全專輯默契考驗</h1>
+            <p class="text-stone-500 text-sm">在每一張專輯中，挑選一首你最愛的歌曲，並與他比較。</p>
+        </header>
+
+        <section class="space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center gap-4 bg-[#F8F9F7] p-4 rounded-xl">
+                <label class="font-medium whitespace-nowrap text-[#2C3E35]">你的代號：</label>
+                <input type="text" id="userName" placeholder="請輸入名稱..." class="flex-1 bg-transparent border-b border-[#2C3E35]/20 px-2 py-1 focus:outline-none focus:border-[#2C3E35]">
+            </div>
+
+            <div id="albumContainer" class="grid grid-cols-2 md:grid-cols-3 gap-4 lg:gap-6">
+                <!-- 專輯卡片會由 JavaScript 渲染在這裡 -->
+            </div>
+
+            <button id="generateCodeBtn" class="w-full bg-[#2C3E35] hover:bg-[#1f2b25] text-white font-medium py-3 rounded-xl transition mt-6">
+                產生默契代碼
+            </button>
+
+            <div id="codeResultArea" class="hidden bg-[#F8F9F7] p-4 rounded-xl space-y-2">
+                <p class="text-sm font-medium text-[#2C3E35]">請將下方代碼複製並傳送給比對者：</p>
+                <textarea id="generatedCode" readonly class="w-full bg-white border border-[#2C3E35]/10 rounded-lg p-3 text-xs font-mono h-24 focus:outline-none"></textarea>
+            </div>
+        </section>
+
+        <section class="space-y-4 pt-6 border-t border-stone-100">
+            <h2 class="text-lg font-bold text-[#2C3E35]">進行默契比對</h2>
+            <div class="flex flex-col md:flex-row gap-3">
+                <input type="text" id="friendCode" placeholder="請貼上他的代碼..." class="flex-1 border border-stone-300 rounded-xl px-4 py-3 focus:outline-none focus:border-[#5A7D64]">
+                <button id="compareBtn" class="bg-[#5A7D64] hover:bg-[#4a6853] text-white px-8 py-3 rounded-xl font-medium transition whitespace-nowrap">
+                    開始比對
+                </button>
+            </div>
+        </section>
+
+        <section id="resultArea" class="hidden pt-10 mt-10 border-t border-stone-200">
+            <h2 class="text-2xl font-bold mb-8 tracking-wide text-[#2C3E35]" id="resultMainTitle">陳綺貞 默契結果</h2>
+            
+            <div class="flex justify-between items-start mb-6">
+                <div class="flex-1 pr-4">
+                    <h1 class="text-6xl md:text-7xl font-extrabold text-[#111827] tracking-tighter" id="matchPercentage">44%</h1>
+                    <p class="text-sm md:text-base text-stone-600 mt-3 font-medium leading-relaxed" id="matchQuote">“無數時間線無盡可能性終於交織”</p>
+                </div>
+                <!-- 改為可動態切割的拼貼容器 -->
+                <div id="topCoverGrid" class="w-24 h-24 md:w-32 md:h-32 rounded-xl shadow-md border border-stone-100 overflow-hidden shrink-0 grid gap-[1px] bg-stone-100">
+                    <!-- 封面圖片將由 JavaScript 動態填入 -->
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <span class="bg-[#E4EDE8] text-[#3D5B46] px-3 py-1.5 rounded-md text-sm font-bold" id="commonCountLabel">共同選擇 4/7</span>
+            </div>
+
+            <div class="bg-[#EEF4F0] rounded-2xl p-5 md:p-6 mb-6">
+                <h3 class="font-bold text-[#2C3E35] mb-4">你們都選了</h3>
+                <div id="commonChoicesList" class="space-y-4">
+                    <!-- 共同選擇清單 -->
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 md:gap-4">
+                <div class="bg-[#587D65] rounded-2xl p-4 md:p-5 text-white">
+                    <h3 class="font-bold mb-4 opacity-90 text-sm md:text-base" id="myColumnTitle">我的選擇</h3>
+                    <div id="myChoicesList" class="space-y-3">
+                        <!-- 我的選擇列表 -->
+                    </div>
+                </div>
+
+                <div class="bg-[#F4F7F5] rounded-2xl p-4 md:p-5 text-[#2C3E35]">
+                    <h3 class="font-bold mb-4 opacity-90 text-sm md:text-base" id="friendColumnTitle">他的選擇</h3>
+                    <div id="friendChoicesList" class="space-y-3">
+                        <!-- 他的選擇列表 -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // ==========================================
+        // 1. 資料庫：陳綺貞全專輯設定區
+        // ==========================================
+        const chenAlbums = [
+            {
+                id: "album_01", title: "讓我想一想", year: "1998",
+                cover: "https://i.meee.com.tw/Z9O3qXW.jpg",
+                tracks: [
+                    { id: "t01_01", name: "讓我想一想" }, { id: "t01_02", name: "微涼的你" },
+                    { id: "t01_03", name: "會不會" }, { id: "t01_04", name: "情歌" },
+                    { id: "t01_05", name: "和你在一起" }, { id: "t01_06", name: "嫉妒" },
+                    { id: "t01_07", name: "孤島" }, { id: "t01_08", name: "孩子" },
+                    { id: "t01_09", name: "天使" }, { id: "t01_10", name: "漫漫長夜" }
+                ]
+            },
+            {
+                id: "album_02", title: "還是會寂寞", year: "2000",
+                cover: "https://i.meee.com.tw/IjFYPaq.jpg",
+                tracks: [
+                    { id: "t02_01", name: "越洋電話" }, { id: "t02_02", name: "我的驕傲無可救藥" },
+                    { id: "t02_03", name: "還是會寂寞" }, { id: "t02_04", name: "下午三點" },
+                    { id: "t02_05", name: "溫室花朵" }, { id: "t02_06", name: "午餐的約會" },
+                    { id: "t02_07", name: "等待" }, { id: "t02_08", name: "慢歌3" },
+                    { id: "t02_09", name: "告訴我" }, { id: "t02_10", name: "慢歌1" }, { id: "t02_11", name: "靈感" }
+                ]
+            },
+            {
+                id: "album_03", title: "Groupies 吉他手", year: "2002",
+                cover: "https://i.meee.com.tw/Y9wVsSX.jpg",
+                tracks: [
+                    { id: "t03_01", name: "我親愛的偏執狂" }, { id: "t03_02", name: "太聰明" },
+                    { id: "t03_03", name: "小步舞曲" }, { id: "t03_04", name: "1234567" },
+                    { id: "t03_05", name: "隨便說說" }, { id: "t03_06", name: "躺在你的衣櫃 (Guitar Version)" },
+                    { id: "t03_07", name: "A Practice" }, { id: "t03_08", name: "吉他手" },
+                    { id: "t03_09", name: "黑眼圈" }, { id: "t03_10", name: "就算全世界與我為敵" },
+                    { id: "t03_11", name: "小塵埃" }, { id: "t03_12", name: "不應該" }, { id: "t03_13", name: "躺在你的衣櫃 (Piano Version)" }
+                ]
+            },
+            {
+                id: "album_04", title: "華麗的冒險", year: "2005",
+                cover: "https://i.meee.com.tw/zsIZNHo.jpg",
+                tracks: [
+                    { id: "t04_01", name: "旅行的意義" }, { id: "t04_02", name: "腐朽" },
+                    { id: "t04_03", name: "Sentimental Kills" }, { id: "t04_04", name: "華麗的冒險" },
+                    { id: "t04_05", name: "太多" }, { id: "t04_06", name: "花的姿態" },
+                    { id: "t04_07", name: "Self" }, { id: "t04_08", name: "80%完美的日子" },
+                    { id: "t04_09", name: "表面的和平" }, { id: "t04_10", name: "靜靜的生活" },
+                    { id: "t04_11", name: "最初的起點" }
+                ]
+            },
+            {
+                id: "album_05", title: "太陽", year: "2009",
+                cover: "https://i.meee.com.tw/YfCvUc4.jpg",
+                tracks: [
+                    { id: "t05_01", name: "手的預言" }, { id: "t05_02", name: "狂戀" },
+                    { id: "t05_03", name: "太陽" }, { id: "t05_04", name: "魚" },
+                    { id: "t05_05", name: "距離" }, { id: "t05_06", name: "倔強愛情的勝利" },
+                    { id: "t05_07", name: "失敗者的飛翔" }, { id: "t05_08", name: "下個星期去英國" },
+                    { id: "t05_09", name: "另一種平靜" }, { id: "t05_10", name: "煙火" },
+                    { id: "t05_11", name: "一首歌，讓你帶回去" }
+                ]
+            },
+            {
+                id: "album_06", title: "時間的歌", year: "2013",
+                cover: "https://i.meee.com.tw/dod7gVW.jpg",
+                tracks: [
+                    { id: "t06_01", name: "時間的歌" }, { id: "t06_02", name: "漣漪" },
+                    { id: "t06_03", name: "柏拉圖式的愛情" }, { id: "t06_04", name: "Peace & Revolution" },
+                    { id: "t06_05", name: "雨水一盒" }, { id: "t06_06", name: "秋天蒙太奇" },
+                    { id: "t06_07", name: "流浪者之歌" }, { id: "t06_08", name: "倒數" },
+                    { id: "t06_09", name: "沙漏" }, { id: "t06_10", name: "普魯斯特行動" },
+                    { id: "t06_11", name: "別送我回家" }, { id: "t06_12", name: "家" }
+                ]
+            },
+            {
+                id: "album_07", title: "沙發海", year: "2018",
+                cover: "https://i.meee.com.tw/OZap5Em.jpg",
+                tracks: [
+                    { id: "t07_01", name: "傷害" }, { id: "t07_02", name: "小船" },
+                    { id: "t07_03", name: "殘缺的彩虹" }, { id: "t07_04", name: "台北某個地方" },
+                    { id: "t07_05", name: "沙發海" }, { id: "t07_06", name: "跳舞吧" },
+                    { id: "t07_07", name: "她說" }, { id: "t07_08", name: "華生" },
+                    { id: "t07_09", name: "變色龍" }, { id: "t07_10", name: "觀察者" },
+                    { id: "t07_11", name: "神魂顛倒" }
+                ]
+            }
+        ];
+
+        // ==========================================
+        // 2. 渲染選擇區 UI
+        // ==========================================
+        const albumContainer = document.getElementById('albumContainer');
+
+        chenAlbums.forEach(album => {
+            let optionsHtml = '<option value="">-- 選一首 --</option>';
+            album.tracks.forEach(track => {
+                optionsHtml += `<option value="${track.id}">${track.name}</option>`;
+            });
+
+            const cardHtml = `
+                <div class="bg-white border border-stone-100 rounded-xl overflow-hidden shadow-sm flex flex-col group">
+                    <img src="${album.cover}" alt="${album.title}" class="w-full aspect-square object-cover bg-stone-100 group-hover:scale-105 transition duration-500">
+                    <div class="p-3 flex flex-col flex-1 bg-white relative z-10">
+                        <h3 class="font-bold text-sm text-[#2C3E35] truncate">${album.title}</h3>
+                        <select data-album-id="${album.id}" class="album-select mt-3 w-full border-b border-stone-200 py-1 text-xs focus:outline-none focus:border-[#5A7D64] bg-transparent text-stone-600">
+                            ${optionsHtml}
+                        </select>
+                    </div>
+                </div>
+            `;
+            albumContainer.insertAdjacentHTML('beforeend', cardHtml);
+        });
+
+        // 輔助函數：透過 ID 尋找歌曲名稱
+        function getTrackName(trackId) {
+            for (let album of chenAlbums) {
+                let track = album.tracks.find(t => t.id === trackId);
+                if (track) return track.name;
+            }
+            return "未選擇";
+        }
+
+        // ==========================================
+        // 3. 代碼生成邏輯
+        // ==========================================
+        document.getElementById('generateCodeBtn').onclick = function() {
+            const userName = document.getElementById('userName').value.trim() || "我";
+            const selects = document.querySelectorAll('.album-select');
+            
+            let selectedTracks = {};
+            let isComplete = true;
+
+            selects.forEach(select => {
+                if (!select.value) isComplete = false;
+                selectedTracks[select.dataset.albumId] = select.value;
+            });
+
+            if (!isComplete) {
+                alert("必須在每一張專輯中都選擇一首歌，才能產生代碼。");
+                return;
+            }
+
+            const data = { n: userName, t: selectedTracks };
+            const jsonString = JSON.stringify(data);
+            const base64Code = btoa(encodeURIComponent(jsonString));
+
+            document.getElementById('generatedCode').value = base64Code;
+            document.getElementById('codeResultArea').classList.remove('hidden');
+        };
+
+        // ==========================================
+        // 4. 比對邏輯與結果渲染
+        // ==========================================
+        document.getElementById('compareBtn').onclick = function() {
+            const myName = document.getElementById('userName').value.trim() || "你";
+            const friendCode = document.getElementById('friendCode').value.trim();
+            const selects = document.querySelectorAll('.album-select');
+
+            let myTracks = {};
+            let myComplete = true;
+            selects.forEach(select => {
+                if (!select.value) myComplete = false;
+                myTracks[select.dataset.albumId] = select.value;
+            });
+
+            if (!myComplete) {
+                alert("請先完成你自己的選擇，才能與他進行比對。");
+                return;
+            }
+
+            if (!friendCode) {
+                alert("請貼上他的代碼。");
+                return;
+            }
+
+            try {
+                const decodedString = decodeURIComponent(atob(friendCode));
+                const friendData = JSON.parse(decodedString);
+
+                if (!friendData.n || !friendData.t) throw new Error("無效代碼");
+
+                const friendName = friendData.n;
+                const friendTracks = friendData.t;
+
+                document.getElementById('resultMainTitle').textContent = `${myName} / ${friendName} 默契結果`;
+                document.getElementById('myColumnTitle').textContent = `${myName}的選擇`;
+                document.getElementById('friendColumnTitle').textContent = `${friendName}的選擇`;
+
+                let commonHtml = '';
+                let myHtml = '';
+                let friendHtml = '';
+                let matchCount = 0;
+                let matchedCovers = []; // 用陣列儲存所有共同選擇的封面
+                const total = chenAlbums.length;
+
+                chenAlbums.forEach((album, index) => {
+                    const myTrack = getTrackName(myTracks[album.id]);
+                    const friendTrack = friendTracks[album.id] ? getTrackName(friendTracks[album.id]) : "未選擇";
+                    const isMatch = (myTracks[album.id] === friendTracks[album.id] && myTracks[album.id] !== undefined);
+
+                    // 共同選擇區塊
+                    if (isMatch) {
+                        matchCount++;
+                        matchedCovers.push(album.cover); // 將封面推入陣列
+                        commonHtml += `
+                            <div class="flex items-center justify-between border-b border-[#2C3E35]/10 pb-2 last:border-0 last:pb-0">
+                                <div class="flex items-center gap-3">
+                                    <img src="${album.cover}" class="w-10 h-10 rounded-md object-cover">
+                                    <span class="font-bold text-[#2C3E35] text-sm md:text-base">${myTrack}</span>
+                                </div>
+                                <span class="text-xs text-[#5A7D64] font-medium hidden md:inline">《${album.title}》</span>
+                            </div>
+                        `;
+                    }
+
+                    // 我的選擇列表 (深綠背景版)
+                    myHtml += `
+                        <div class="flex items-center gap-3">
+                            <img src="${album.cover}" class="w-8 h-8 rounded object-cover shadow-sm">
+                            <span class="text-sm font-medium truncate">${myTrack}</span>
+                        </div>
+                    `;
+
+                    // 他的選擇列表 (淺灰綠背景版)
+                    friendHtml += `
+                        <div class="flex items-center gap-3">
+                            <span class="text-stone-400 text-xs font-bold w-3">${index + 1}</span>
+                            <img src="${album.cover}" class="w-8 h-8 rounded object-cover shadow-sm">
+                            <span class="text-sm font-medium truncate text-[#2C3E35]">${friendTrack}</span>
+                        </div>
+                    `;
+                });
+
+                if (matchCount === 0) {
+                    commonHtml = `<p class="text-sm text-stone-500 italic">這次沒有選到同一首歌，不過品味各異也是一種浪漫。</p>`;
+                    matchedCovers.push(chenAlbums[0].cover); // 若無交集，預設顯示第一張專輯封面
+                }
+
+                // 更新文字 DOM 內容
+                document.getElementById('commonChoicesList').innerHTML = commonHtml;
+                document.getElementById('myChoicesList').innerHTML = myHtml;
+                document.getElementById('friendChoicesList').innerHTML = friendHtml;
+
+                // ==========================================
+                // 5. 拼貼圖 (Collage) 生成邏輯
+                // ==========================================
+                const topCoverGrid = document.getElementById('topCoverGrid');
+                
+                // 依照數量決定網格的直行與橫列 (Column & Row)
+                let gridColsClass = 'grid-cols-1';
+                if (matchedCovers.length >= 2 && matchedCovers.length <= 4) gridColsClass = 'grid-cols-2';
+                else if (matchedCovers.length >= 5) gridColsClass = 'grid-cols-3';
+
+                let gridRowsClass = 'grid-rows-1';
+                if (matchedCovers.length === 3 || matchedCovers.length === 4) gridRowsClass = 'grid-rows-2';
+                else if (matchedCovers.length === 5 || matchedCovers.length === 6) gridRowsClass = 'grid-rows-2';
+                else if (matchedCovers.length >= 7) gridRowsClass = 'grid-rows-3';
+
+                // 重新賦予網格排列的 class
+                topCoverGrid.className = `w-24 h-24 md:w-32 md:h-32 rounded-xl shadow-md border border-stone-100 overflow-hidden shrink-0 grid gap-[1px] bg-stone-200 ${gridColsClass} ${gridRowsClass}`;
+
+                // 塞入圖片 (object-cover 確保圖片能填滿每一格，不會被壓扁)
+                let gridInnerHtml = '';
+                matchedCovers.forEach(coverUrl => {
+                    gridInnerHtml += `<img src="${coverUrl}" class="w-full h-full object-cover">`;
+                });
+                topCoverGrid.innerHTML = gridInnerHtml;
+
+
+                // 更新上方資訊與百分比
+                const matchRate = Math.round((matchCount / total) * 100);
+                document.getElementById('matchPercentage').textContent = `${matchRate}%`;
+                document.getElementById('commonCountLabel').textContent = `共同選擇 ${matchCount}/${total}`;
+
+                // 根據百分比給予對應引言
+                const quoteEl = document.getElementById('matchQuote');
+                if (matchRate === 100) quoteEl.textContent = "“抽絲剝繭，發現你是如此的特別，好像除了我沒人能把你看透。”";
+                else if (matchRate >= 40) quoteEl.textContent = "“我從你的話語之間 才發現 你和我之間 不需要語言”";
+                else if (matchRate > 0) quoteEl.textContent = "“為什麼你總沉迷 某種神奇的幻想”";
+                else quoteEl.textContent = "“你擁有你的 我擁有我的 姿態”";
+
+                document.getElementById('resultArea').classList.remove('hidden');
+                document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth' });
+
+            } catch (e) {
+                alert("代碼解析失敗，請確認代碼是否完整或格式正確。");
+            }
+        };
+    </script>
+</body>
+</html>
