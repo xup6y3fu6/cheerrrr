@@ -131,9 +131,11 @@
                     <option value="1">模式：各專輯最愛</option>
                     <option value="2">模式：專輯排行</option>
                     <option value="3">模式：單專歌曲排行</option>
+                    <option value="4">模式：全歌曲大雜燴 TOP10</option>
                 </select>
             </div>
 
+            <!-- 第一階段：進行選擇與排序 -->
             <section class="space-y-3">
                 <div class="glossy-header py-1 text-center text-[11px] tracking-wider">
                     step 1: read this first!
@@ -162,11 +164,17 @@
                             <h2 id="mode3SelectedTitle" class="text-sm font-bold text-[#14496B] mb-2 truncate">專輯名稱</h2>
                             <label class="text-[10px] font-bold text-[#666] block mb-1">選擇你要排行的專輯：</label>
                             <select id="mode3AlbumSelect" class="inset-input w-full py-1.5 px-2 text-[11px] font-bold text-[#333] outline-none cursor-pointer">
-                                </select>
+                                <!-- JS 載入 -->
+                            </select>
                         </div>
                     </div>
                     <ul id="mode3RankList" class="space-y-2">
-                        </ul>
+                        <!-- JS 載入 -->
+                    </ul>
+                </div>
+
+                <div id="mode4Area" class="hidden pt-2 space-y-2">
+                    <!-- JS 載入 -->
                 </div>
 
                 <button id="generateResultBtn" class="crystal-btn w-full py-2 text-xs font-bold tracking-wide mt-2">
@@ -174,6 +182,7 @@
                 </button>
             </section>
 
+            <!-- 單人結果展示區 -->
             <section id="singleResultArea" class="hidden pt-2 border-t border-dashed border-[#BCE0F9]">
                 <div class="glossy-header py-1 text-center text-[11px] tracking-wider mb-3">
                     my profile results
@@ -195,8 +204,10 @@
                 </div>
             </section>
 
+            <!-- 產生代碼與 Step 2 比對區（預設隱藏，產生結果後顯示） -->
             <div id="postResultSection" class="hidden space-y-5 pt-3 border-t border-dashed border-[#BCE0F9]">
                 
+                <!-- 產生代碼 -->
                 <section>
                     <div class="glossy-header py-1 text-center text-[11px] tracking-wider mb-2">
                         my code
@@ -212,6 +223,7 @@
                     </div>
                 </section>
 
+                <!-- 第二階段：比對資料 -->
                 <section class="space-y-3">
                     <div class="glossy-header py-1 text-center text-[11px] tracking-wider">
                         step 2: compare profiles
@@ -225,6 +237,7 @@
                 </section>
             </div>
 
+            <!-- 比對結果展示區 -->
             <section id="resultArea" class="hidden pt-2 border-t border-dashed border-[#BCE0F9]">
                 <div class="glossy-header py-1 text-center text-[11px] tracking-wider mb-3" id="resultMainTitle">
                     match results
@@ -236,7 +249,7 @@
                         <h1 class="text-4xl sm:text-5xl font-black text-[#14496B] tracking-tighter drop-shadow-sm flex items-baseline gap-1" id="matchPercentage">
                             44% <span class="text-lg sm:text-xl font-bold text-[#447293] pb-1">相似</span>
                         </h1>
-                        <p class="text-[10px] text-[#666] mt-1 font-bold italic" id="matchQuote">“X﹏X”</p>
+                        <p class="text-[10px] text-[#666] mt-1 font-bold italic" id="matchQuote">“030”</p>
                     </div>
                     <div id="topCoverContainer" class="relative w-48 h-32 sm:w-64 sm:h-40 shrink-0 flex justify-center items-center">
                     </div>
@@ -292,6 +305,19 @@
                     </div>
                 </div>
 
+                <div id="mode4ResultBlock" class="hidden space-y-3">
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="border border-[#BCE0F9]">
+                            <div class="bg-[#87CEFA] text-[#0E4466] px-2 py-1 text-[10px] font-bold border-b border-[#8FB4D4]" id="myColumnTitle4">我的 TOP10</div>
+                            <div class="p-2 bg-[#F8FBFD] space-y-2" id="myTrackTop10ResultList"></div>
+                        </div>
+                        <div class="border border-[#D0EAFA]">
+                            <div class="bg-[#E8F5FF] text-[#555] px-2 py-1 text-[10px] font-bold border-b border-[#D0EAFA]" id="friendColumnTitle4">他的 TOP10</div>
+                            <div class="p-2 bg-white space-y-2" id="friendTrackTop10ResultList"></div>
+                        </div>
+                    </div>
+                </div>
+
             </section>
 
         </div>
@@ -313,6 +339,7 @@
         const mode1Area = document.getElementById('mode1Area');
         const mode2Area = document.getElementById('mode2Area');
         const mode3Area = document.getElementById('mode3Area');
+        const mode4Area = document.getElementById('mode4Area');
         const singleResultArea = document.getElementById('singleResultArea');
         const postResultSection = document.getElementById('postResultSection');
         const resultArea = document.getElementById('resultArea');
@@ -333,6 +360,20 @@
             { x: 70,  y: 38,  r: 14 }   
         ];
 
+        // 輔助編碼器：將 Track ID 轉為壓縮的雙字元 base36
+        function encodeTrackId(trackId) {
+            for (let aIdx = 0; aIdx < chenAlbums.length; aIdx++) {
+                const tIdx = chenAlbums[aIdx].tracks.findIndex(t => t.id === trackId);
+                if (tIdx !== -1) return aIdx.toString(36) + tIdx.toString(36);
+            }
+            return "00";
+        }
+        function decodeTrackId(twoCharStr) {
+            const aIdx = parseInt(twoCharStr[0], 36);
+            const tIdx = parseInt(twoCharStr[1], 36);
+            return chenAlbums[aIdx]?.tracks[tIdx]?.id || "";
+        }
+
         modeSelect.addEventListener('change', (e) => {
             resultArea.classList.add('hidden');
             singleResultArea.classList.add('hidden');
@@ -340,6 +381,7 @@
             mode1Area.classList.add('hidden');
             mode2Area.classList.add('hidden');
             mode3Area.classList.add('hidden');
+            mode4Area.classList.add('hidden');
 
             if (e.target.value === '1') {
                 modeDescription.textContent = "選出每張專輯中你的最愛<3";
@@ -350,6 +392,9 @@
             } else if (e.target.value === '3') {
                 modeDescription.textContent = "選一張專輯，將裡面的歌從最喜歡排到最不喜歡<3";
                 mode3Area.classList.remove('hidden');
+            } else if (e.target.value === '4') {
+                modeDescription.textContent = "在大雜燴中選出你最愛的 TOP 10 歌曲！<3";
+                mode4Area.classList.remove('hidden');
             }
         });
 
@@ -431,6 +476,32 @@
         });
         renderMode3Tracks(0);
 
+        // ==========================================
+        // 渲染模式 4 (全歌曲大雜燴 TOP10)
+        // ==========================================
+        let globalTracksOptionsHtml = '<option value="">-- select track --</option>';
+        chenAlbums.forEach(album => {
+            globalTracksOptionsHtml += `<optgroup label="《${album.title}》">`;
+            album.tracks.forEach(track => {
+                globalTracksOptionsHtml += `<option value="${track.id}">${track.name}</option>`;
+            });
+            globalTracksOptionsHtml += `</optgroup>`;
+        });
+
+        let mode4ContentHtml = '<div class="space-y-2 bg-[#F8FBFD] p-3 border border-[#BCE0F9] shadow-inner">';
+        for (let i = 1; i <= 10; i++) {
+            mode4ContentHtml += `
+                <div class="flex items-center gap-2">
+                    <span class="text-[10px] font-bold text-[#14496B] w-12 text-right shrink-0">TOP ${i} :</span>
+                    <select class="mode4-select w-full inset-input py-1 px-1.5 text-[11px] text-[#333] cursor-pointer">
+                        ${globalTracksOptionsHtml}
+                    </select>
+                </div>`;
+        }
+        mode4ContentHtml += '</div>';
+        mode4Area.innerHTML = mode4ContentHtml;
+
+
         function getTrackName(trackId) {
             for (let album of chenAlbums) {
                 let track = album.tracks.find(t => t.id === trackId);
@@ -453,6 +524,7 @@
             if (currentMode === '1') modeTitle = "各專輯最愛";
             else if (currentMode === '2') modeTitle = "專輯喜好排行";
             else if (currentMode === '3') modeTitle = "單專歌曲排行";
+            else if (currentMode === '4') modeTitle = "全歌曲大雜燴 TOP10";
 
             document.getElementById('singleResultHeader').innerHTML = `
                 <span class="text-lg sm:text-xl font-bold text-[#447293] block">${userName} 的</span>
@@ -534,6 +606,41 @@
                 displayCovers = [album.cover];
                 dataParts = [currentMode, encodeURIComponent(userName), albumIdx.toString(36), rankStr];
                 document.getElementById('singleListTitle').textContent = `${userName} 的《${album.title}》排行`;
+
+            } else if (currentMode === '4') {
+                const selects = document.querySelectorAll('.mode4-select');
+                let selectedTrackIds = [];
+                let isComplete = true;
+                let tracksStr = "";
+
+                selects.forEach(sel => {
+                    if (!sel.value) isComplete = false;
+                    selectedTrackIds.push(sel.value);
+                    tracksStr += encodeTrackId(sel.value);
+                });
+
+                if (!isComplete) { alert("請填滿你的 TOP 10 歌曲喔！"); return; }
+
+                // 檢查是否重複選擇
+                const uniqCheck = new Set(selectedTrackIds);
+                if (uniqCheck.size !== selectedTrackIds.length) { alert("TOP 10 內有重複選擇的歌曲喔！"); return; }
+
+                dataParts = [currentMode, encodeURIComponent(userName), tracksStr];
+
+                selectedTrackIds.forEach((id, idx) => {
+                    const trackName = getTrackName(id);
+                    const album = chenAlbums.find(a => a.tracks.some(t => t.id === id));
+                    singleHtml += `
+                        <div class="flex items-center gap-2 border-b border-dashed border-[#E0F0FA] pb-1.5 last:border-0 last:pb-0">
+                            <span class="text-[11px] font-bold text-[#8FB4D4] w-5">#${idx+1}</span>
+                            <div class="flex-1 min-w-0">
+                                <span class="block font-bold text-[#14496B] text-[11px] truncate">${trackName}</span>
+                                <span class="block text-[9px] text-[#888] truncate">《${album.title}》</span>
+                            </div>
+                        </div>`;
+                    if (!displayCovers.includes(album.cover)) displayCovers.push(album.cover);
+                });
+                document.getElementById('singleListTitle').textContent = `${userName} 的大雜燴 TOP10`;
             }
 
             document.getElementById('singleChoicesList').innerHTML = singleHtml;
@@ -621,6 +728,12 @@
                             let tIdx = parseInt(parts[3][i], 36);
                             friendData.r.push(albumTracks[tIdx].id);
                         }
+                    } else if (friendData.m === 4) {
+                        friendData.r = [];
+                        for (let i = 0; i < parts[2].length; i += 2) {
+                            const twoChar = parts[2].substring(i, i + 2);
+                            friendData.r.push(decodeTrackId(twoChar));
+                        }
                     }
                 } else {
                     friendData = JSON.parse(decodeURIComponent(decodedStr));
@@ -639,8 +752,8 @@
             if (friendData.m === 1) friendModeTitle = "各專輯最愛";
             else if (friendData.m === 2) friendModeTitle = "專輯喜好排行";
             else if (friendData.m === 3) friendModeTitle = "單專歌曲排行";
+            else if (friendData.m === 4) friendModeTitle = "全歌曲大雜燴 TOP10";
 
-            // 雙人比對標題：次要資訊縮小化
             document.getElementById('matchResultHeader').innerHTML = `
                 <span class="text-[9px] sm:text-[10px] font-bold text-[#666] block leading-tight">${myName} vs. ${friendName} 的</span>
                 <span class="text-[11px] sm:text-xs font-bold text-[#447293] block leading-tight">陳綺貞</span>
@@ -686,7 +799,6 @@
 
                 if (matchCount === 0) { 
                     commonHtml = `<p class="text-[10px] text-[#888] text-center py-2 italic">030</p>`; 
-                    // 當 0% 時，為了美觀依然展示對方的專輯選擇做為散落排版
                     chenAlbums.forEach(album => matchedCovers.push(album.cover));
                 }
 
@@ -699,26 +811,15 @@
 
                 let stackHtml = '';
                 matchedCovers.forEach((coverUrl, idx) => {
-                    if (matchedCovers.length > 1) {
-                        const pos = casualLayouts[idx % casualLayouts.length];
-                        stackHtml += `
-                            <div class="absolute hover:z-50" style="transform: translateX(${pos.x}px) translateY(${pos.y}px) rotate(${pos.r}deg); z-index: ${idx};">
-                                <div class="w-12 h-12 sm:w-16 sm:h-16 transition-all duration-300 hover:-translate-y-3 hover:scale-125 cursor-pointer">
-                                    <div class="p-0.5 sm:p-1 bg-white border border-[#BCE0F9] shadow-md h-full w-full">
-                                        <img src="${coverUrl}" class="w-full h-full object-cover">
-                                    </div>
+                    const pos = casualLayouts[idx % casualLayouts.length];
+                    stackHtml += `
+                        <div class="absolute hover:z-50" style="transform: translateX(${pos.x}px) translateY(${pos.y}px) rotate(${pos.r}deg); z-index: ${idx};">
+                            <div class="w-12 h-12 sm:w-16 sm:h-16 transition-all duration-300 hover:-translate-y-3 hover:scale-125 cursor-pointer">
+                                <div class="p-0.5 sm:p-1 bg-white border border-[#BCE0F9] shadow-md h-full w-full">
+                                    <img src="${coverUrl}" class="w-full h-full object-cover">
                                 </div>
-                            </div>`;
-                    } else {
-                        stackHtml += `
-                            <div class="absolute z-10 hover:z-50">
-                                <div class="w-16 h-16 sm:w-20 sm:h-20 transition-all duration-300 hover:-translate-y-2 hover:scale-110 cursor-pointer">
-                                    <div class="p-1 bg-white border border-[#BCE0F9] shadow-md h-full w-full">
-                                        <img src="${coverUrl}" class="w-full h-full object-cover">
-                                    </div>
-                                </div>
-                            </div>`;
-                    }
+                            </div>
+                        </div>`;
                 });
                 topCoverContainer.innerHTML = stackHtml;
 
@@ -727,6 +828,7 @@
                 document.getElementById('mode1ResultBlock').classList.remove('hidden');
                 document.getElementById('mode2ResultBlock').classList.add('hidden');
                 document.getElementById('mode3ResultBlock').classList.add('hidden');
+                document.getElementById('mode4ResultBlock').classList.add('hidden');
                 modeSelect.value = '1'; modeSelect.dispatchEvent(new Event('change'));
 
             } else if (friendData.m === 2) {
@@ -755,7 +857,6 @@
                     friendHtml += `<div class="flex items-center gap-2 border-b border-dashed border-[#E0F0FA] pb-1 last:border-0"><span class="text-[10px] font-bold text-[#8FB4D4] w-2">${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#D0EAFA] shrink-0 opacity-80"><span class="text-[10px] text-[#666] truncate">${album.title}</span>${tagHtml}</div>`;
                 });
 
-                // 若 0% 時，為了美觀依然展示對方的專輯選擇做為散落排版
                 if (matchCount === 0) {
                     chenAlbums.forEach(album => matchedCovers.push(album.cover));
                 }
@@ -784,6 +885,7 @@
                 document.getElementById('mode2ResultBlock').classList.remove('hidden');
                 document.getElementById('mode1ResultBlock').classList.add('hidden');
                 document.getElementById('mode3ResultBlock').classList.add('hidden');
+                document.getElementById('mode4ResultBlock').classList.add('hidden');
                 modeSelect.value = '2'; modeSelect.dispatchEvent(new Event('change'));
 
             } else if (friendData.m === 3) {
@@ -829,7 +931,6 @@
                 document.getElementById('myTrackRankResultList').innerHTML = myHtml;
                 document.getElementById('friendTrackRankResultList').innerHTML = friendHtml;
 
-                // 無論幾趴，都會放專輯封面
                 topCoverContainer.innerHTML = `
                     <div class="absolute z-10 hover:z-50">
                         <div class="w-28 h-28 sm:w-36 sm:h-36 transition-all duration-300 hover:scale-105 cursor-pointer">
@@ -845,10 +946,78 @@
                 document.getElementById('mode3ResultBlock').classList.remove('hidden');
                 document.getElementById('mode1ResultBlock').classList.add('hidden');
                 document.getElementById('mode2ResultBlock').classList.add('hidden');
+                document.getElementById('mode4ResultBlock').classList.add('hidden');
                 modeSelect.value = '3';
+
+            } else if (friendData.m === 4) {
+                const currentMode = document.getElementById('modeSelect').value;
+                if (currentMode !== '4') {
+                    modeSelect.value = '4'; modeSelect.dispatchEvent(new Event('change'));
+                    alert("對方使用的是「全歌曲大雜燴 TOP10」模式。請先完成你的選擇再比對喔！");
+                    return;
+                }
+
+                const myOrder = Array.from(document.querySelectorAll('.mode4-select')).map(sel => sel.value);
+                const friendOrder = friendData.r;
+
+                let myHtml = '', friendHtml = '', matchCount = 0;
+                let matchedCovers = [];
+
+                myOrder.forEach((id, idx) => {
+                    const trackName = getTrackName(id);
+                    const album = chenAlbums.find(a => a.tracks.some(t => t.id === id));
+                    myHtml += `<div class="flex items-center gap-2 border-b border-dashed border-[#E0F0FA] pb-1 last:border-0"><span class="text-[10px] font-bold text-[#8FB4D4] w-3">${idx+1}</span><span class="text-[10px] text-[#333] truncate">${trackName}</span></div>`;
+                    if (!matchedCovers.includes(album.cover)) matchedCovers.push(album.cover);
+                });
+
+                friendOrder.forEach((id, idx) => {
+                    const trackName = getTrackName(id);
+                    const myIdx = myOrder.indexOf(id);
+                    const diff = (myIdx !== -1) ? Math.abs(myIdx - idx) : -1;
+                    
+                    let tagHtml = '';
+                    if (diff === 0) {
+                        tagHtml = `<span class="bg-[#B8E474] text-[#277015] px-1 rounded text-[8px] ml-auto">同位</span>`;
+                        matchCount++;
+                    } else if (myIdx !== -1) {
+                        tagHtml = `<span class="bg-[#E4D974] text-[#706415] px-1 rounded text-[8px] ml-auto">在榜</span>`;
+                    }
+                    friendHtml += `<div class="flex items-center gap-2 border-b border-dashed border-[#E0F0FA] pb-1 last:border-0"><span class="text-[10px] font-bold text-[#8FB4D4] w-3">${idx+1}</span><span class="text-[10px] text-[#666] truncate">${trackName}</span>${tagHtml}</div>`;
+                });
+
+                if (matchCount === 0) {
+                    chenAlbums.forEach(album => { if(!matchedCovers.includes(album.cover)) matchedCovers.push(album.cover); });
+                }
+
+                document.getElementById('myColumnTitle4').textContent = `${myName} 的 TOP10`;
+                document.getElementById('friendColumnTitle4').textContent = `${friendName} 的 TOP10`;
+                document.getElementById('myTrackTop10ResultList').innerHTML = myHtml;
+                document.getElementById('friendTrackTop10ResultList').innerHTML = friendHtml;
+
+                // 渲染散落排版封面
+                let stackHtml = '';
+                matchedCovers.forEach((coverUrl, idx) => {
+                    const pos = casualLayouts[idx % casualLayouts.length];
+                    stackHtml += `
+                        <div class="absolute hover:z-50" style="transform: translateX(${pos.x}px) translateY(${pos.y}px) rotate(${pos.r}deg); z-index: ${idx};">
+                            <div class="w-12 h-12 sm:w-16 sm:h-16 transition-all duration-300 hover:-translate-y-3 hover:scale-125 cursor-pointer">
+                                <div class="p-0.5 sm:p-1 bg-white border border-[#BCE0F9] shadow-md h-full w-full">
+                                    <img src="${coverUrl}" class="w-full h-full object-cover">
+                                </div>
+                            </div>
+                        </div>`;
+                });
+                topCoverContainer.innerHTML = stackHtml;
+
+                matchRate = Math.round((matchCount / 10) * 100);
+
+                document.getElementById('mode4ResultBlock').classList.remove('hidden');
+                document.getElementById('mode1ResultBlock').classList.add('hidden');
+                document.getElementById('mode2ResultBlock').classList.add('hidden');
+                document.getElementById('mode3ResultBlock').classList.add('hidden');
+                modeSelect.value = '4';
             }
 
-            // 更新%數資訊縮小
             document.getElementById('matchPercentage').innerHTML = `${matchRate}% <span class="text-lg sm:text-xl font-bold text-[#447293] pb-1">相似</span>`;
             
             const quoteEl = document.getElementById('matchQuote');
