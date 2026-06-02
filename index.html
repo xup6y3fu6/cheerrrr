@@ -98,7 +98,7 @@
                     <span class="text-xs font-bold text-[#14496B] drop-shadow-[0_1px_0_#FFF]">Windows Internet Explorer</span>
                 </div>
                 <div class="flex gap-0.5">
-                    <div class="w-6 h-4 bg-gradient-to-b from-[#FFF] to-[#D0EAFA] border border-[#75A9C9] rounded-sm shadow-inner flex justify-center items-end pb-1 text-[#14496B] leading-none">_</div>
+                    <div class="w-6 h-4 bg-gradient-to-b from-[#FFF] to-[#D0EAFA] border border-[#75A9C9] rounded-sm shadow-inner flex justify-center items-center pb-1 text-[#14496B] leading-none">_</div>
                     <div class="w-6 h-4 bg-gradient-to-b from-[#FFF] to-[#D0EAFA] border border-[#75A9C9] rounded-sm shadow-inner flex justify-center items-center text-[#14496B] leading-none text-[10px]">□</div>
                     <div class="w-9 h-4 bg-gradient-to-b from-[#FFAAAA] to-[#DD4444] border border-[#992222] rounded-sm shadow-[inset_0_1px_1px_rgba(255,255,255,0.5)] flex justify-center items-center text-white text-[10px] font-bold">X</div>
                 </div>
@@ -128,7 +128,7 @@
                 </div>
 
                 <select id="modeSelect" class="inset-input w-full py-1.5 px-2 text-[11px] font-bold text-[#14496B] outline-none cursor-pointer">
-                    <option value="1">模式：單曲盲選</option>
+                    <option value="1">模式：各專輯最愛</option>
                     <option value="2">模式：專輯排行</option>
                     <option value="3">模式：單專歌曲排行</option>
                 </select>
@@ -185,10 +185,9 @@
                 
                 <div class="bg-[#F8FBFD] border border-[#D0EAFA] p-4 flex justify-between items-center mb-4 shadow-sm">
                     <div class="flex-1 shrink-0 z-10 pr-2">
-                        <h1 class="text-3xl sm:text-4xl font-bold text-[#14496B] tracking-tight">MY VIBE</h1>
-                        <p class="text-[10px] text-[#666] mt-1 font-bold italic">“這是專屬於我的品味與姿態”</p>
+                        <div id="singleResultHeader" class="tracking-tight mb-2"></div>
+                        <p class="text-[10px] text-[#666] mt-2 font-bold italic">“這是專屬於我的品味與姿態”</p>
                     </div>
-                    <!-- 放大的展示容器，增加高度以容納拉開的間距 -->
                     <div id="singleTopCoverContainer" class="relative w-48 h-32 sm:w-64 sm:h-40 shrink-0 flex justify-center items-center">
                     </div>
                 </div>
@@ -241,10 +240,10 @@
                 
                 <div class="bg-[#F8FBFD] border border-[#D0EAFA] p-4 flex justify-between items-center mb-4 shadow-sm">
                     <div class="flex-1 shrink-0 z-10 pr-2">
-                        <h1 class="text-4xl font-bold text-[#14496B]" id="matchPercentage">44%</h1>
+                        <div id="matchResultHeader" class="tracking-tight mb-2"></div>
+                        <h1 class="text-4xl font-bold text-[#14496B]" id="matchPercentage">44% <span class="text-2xl">相似</span></h1>
                         <p class="text-[10px] text-[#666] mt-1 font-bold italic" id="matchQuote">“030”</p>
                     </div>
-                    <!-- 放大的展示容器，增加高度以容納拉開的間距 -->
                     <div id="topCoverContainer" class="relative w-48 h-32 sm:w-64 sm:h-40 shrink-0 flex justify-center items-center">
                     </div>
                 </div>
@@ -324,22 +323,20 @@
         const postResultSection = document.getElementById('postResultSection');
         const resultArea = document.getElementById('resultArea');
 
-        // Mode 3 元素
         const mode3AlbumSelect = document.getElementById('mode3AlbumSelect');
         const mode3RankList = document.getElementById('mode3RankList');
         const mode3SelectedCover = document.getElementById('mode3SelectedCover');
         const mode3SelectedTitle = document.getElementById('mode3SelectedTitle');
         let mode3Sortable = null;
 
-        // 定義隨興排版參數 (將 y 軸與 x 軸距離拉開，讓上下層更分散)
         const casualLayouts = [
-            { x: -48, y: -30, r: -10 }, // 上 1
-            { x: 0,   y: -38, r: 4 },   // 上 2
-            { x: 48,  y: -26, r: 12 },  // 上 3
-            { x: -70, y: 25,  r: -15 }, // 下 1
-            { x: -25, y: 35,  r: -4 },  // 下 2
-            { x: 25,  y: 30,  r: 6 },   // 下 3
-            { x: 70,  y: 38,  r: 14 }   // 下 4
+            { x: -48, y: -30, r: -10 }, 
+            { x: 0,   y: -38, r: 4 },   
+            { x: 48,  y: -26, r: 12 },  
+            { x: -70, y: 25,  r: -15 }, 
+            { x: -25, y: 35,  r: -4 },  
+            { x: 25,  y: 30,  r: 6 },   
+            { x: 70,  y: 38,  r: 14 }   
         ];
 
         modeSelect.addEventListener('change', (e) => {
@@ -363,7 +360,7 @@
         });
 
         // ==========================================
-        // 渲染模式 1 (單曲盲選)
+        // 渲染模式 1 (各專輯最愛)
         // ==========================================
         const albumContainer = document.getElementById('mode1Area');
         chenAlbums.forEach(album => {
@@ -458,6 +455,17 @@
             let displayCovers = [];
             let dataParts = [];
 
+            let modeTitle = "";
+            if (currentMode === '1') modeTitle = "各專輯最愛";
+            else if (currentMode === '2') modeTitle = "專輯喜好排行";
+            else if (currentMode === '3') modeTitle = "單專歌曲排行";
+
+            document.getElementById('singleResultHeader').innerHTML = `
+                <span class="text-lg sm:text-xl font-bold text-[#447293] block">${userName} 的</span>
+                <span class="text-2xl sm:text-3xl font-extrabold text-[#14496B] block mt-0.5">陳綺貞</span>
+                <span class="text-2xl sm:text-3xl font-extrabold text-[#14496B] block">${modeTitle}</span>
+            `;
+
             if (currentMode === '1') {
                 const selects = document.querySelectorAll('.album-select');
                 let selectedTracks = {};
@@ -489,7 +497,7 @@
                             </div>
                         </div>`;
                 });
-                document.getElementById('singleListTitle').textContent = `${userName} 的盲選結果`;
+                document.getElementById('singleListTitle').textContent = `${userName} 的各專輯最愛`;
 
             } else if (currentMode === '2') {
                 const order = Array.from(rankList.children).map(li => li.dataset.id);
@@ -530,14 +538,12 @@
                 });
                 
                 displayCovers = [album.cover];
-                
                 dataParts = [currentMode, encodeURIComponent(userName), albumIdx.toString(36), rankStr];
                 document.getElementById('singleListTitle').textContent = `${userName} 的《${album.title}》排行`;
             }
 
             document.getElementById('singleChoicesList').innerHTML = singleHtml;
             
-            // 單人：隨興排版 (套用分散距離)
             let stackHtml = '';
             displayCovers.forEach((coverUrl, idx) => {
                 if (displayCovers.length > 1) {
@@ -553,7 +559,7 @@
                 } else {
                     stackHtml += `
                         <div class="absolute z-10 hover:z-50">
-                            <div class="w-16 h-16 sm:w-20 sm:h-20 transition-all duration-300 hover:-translate-y-2 hover:scale-110 cursor-pointer">
+                            <div class="w-28 h-28 sm:w-36 sm:h-36 transition-all duration-300 hover:scale-105 cursor-pointer">
                                 <div class="p-1 bg-white border border-[#BCE0F9] shadow-md h-full w-full">
                                     <img src="${coverUrl}" class="w-full h-full object-cover">
                                 </div>
@@ -563,7 +569,6 @@
             });
             document.getElementById('singleTopCoverContainer').innerHTML = stackHtml;
 
-            // 準備代碼
             const shortCode = btoa(dataParts.join('|'));
             document.getElementById('generatedCode').value = shortCode;
             
@@ -636,6 +641,17 @@
             const topCoverContainer = document.getElementById('topCoverContainer');
             let matchRate = 0;
 
+            let friendModeTitle = "";
+            if (friendData.m === 1) friendModeTitle = "各專輯最愛";
+            else if (friendData.m === 2) friendModeTitle = "專輯喜好排行";
+            else if (friendData.m === 3) friendModeTitle = "單專歌曲排行";
+
+            document.getElementById('matchResultHeader').innerHTML = `
+                <span class="text-sm sm:text-base font-bold text-[#447293] block">${myName} vs. ${friendName} 的</span>
+                <span class="text-xl sm:text-2xl font-extrabold text-[#14496B] block mt-0.5">陳綺貞</span>
+                <span class="text-xl sm:text-2xl font-extrabold text-[#14496B] block">${friendModeTitle}</span>
+            `;
+
             if (friendData.m === 1) {
                 const selects = document.querySelectorAll('.album-select');
                 let myTracks = {}, myComplete = true;
@@ -646,7 +662,7 @@
                 
                 if (!myComplete) { 
                     modeSelect.value = '1'; modeSelect.dispatchEvent(new Event('change'));
-                    alert("對方使用的是「單曲盲選」模式，請先完成你的選擇再比對喔！"); return; 
+                    alert("對方使用的是「各專輯最愛」模式，請先完成你的選擇再比對喔！"); return; 
                 }
 
                 const friendTracks = friendData.t;
@@ -682,7 +698,6 @@
                 document.getElementById('friendChoicesList').innerHTML = friendHtml;
                 document.getElementById('commonCountLabel').textContent = `${matchCount}/${total}`;
 
-                // 雙人比對：隨興排版 (套用分散距離)
                 let stackHtml = '';
                 matchedCovers.forEach((coverUrl, idx) => {
                     if (matchedCovers.length > 1) {
@@ -719,11 +734,13 @@
                 const friendOrder = friendData.r;
                 const myOrder = Array.from(rankList.children).map(li => li.dataset.id);
                 
-                let myHtml = '', friendHtml = '', totalDiff = 0, firstMatch = null;
+                let myHtml = '', friendHtml = '', totalDiff = 0;
+                let matchedCovers = [];
 
                 myOrder.forEach((id, idx) => {
                     const album = chenAlbums.find(a => a.id === id);
                     myHtml += `<div class="flex items-center gap-2 border-b border-dashed border-[#E0F0FA] pb-1 last:border-0"><span class="text-[10px] font-bold text-[#8FB4D4] w-2">${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#8FB4D4] shrink-0"><span class="text-[10px] text-[#333] truncate">${album.title}</span></div>`;
+                    matchedCovers.push(album.cover);
                 });
 
                 friendOrder.forEach((id, idx) => {
@@ -735,7 +752,6 @@
                     let tagHtml = '';
                     if (diff === 0) {
                         tagHtml = `<span class="bg-[#B8E474] text-[#277015] px-1 rounded text-[8px] ml-auto">同位</span>`;
-                        if(!firstMatch) firstMatch = album.cover;
                     }
                     friendHtml += `<div class="flex items-center gap-2 border-b border-dashed border-[#E0F0FA] pb-1 last:border-0"><span class="text-[10px] font-bold text-[#8FB4D4] w-2">${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#D0EAFA] shrink-0 opacity-80"><span class="text-[10px] text-[#666] truncate">${album.title}</span>${tagHtml}</div>`;
                 });
@@ -745,15 +761,20 @@
                 document.getElementById('myRankResultList').innerHTML = myHtml;
                 document.getElementById('friendRankResultList').innerHTML = friendHtml;
 
-                const topCoverUrl = firstMatch || chenAlbums.find(a => a.id === myOrder[0]).cover;
-                topCoverContainer.innerHTML = `
-                    <div class="absolute z-10 hover:z-50">
-                        <div class="w-16 h-16 sm:w-20 sm:h-20 transition-all duration-300 hover:-translate-y-2 hover:scale-110 cursor-pointer">
-                            <div class="p-1 bg-white border border-[#BCE0F9] shadow-md h-full w-full">
-                                <img src="${topCoverUrl}" class="w-full h-full object-cover">
+                // 雙人排行結果展示：同樣改為 3 上 4 下的隨興散落排版
+                let stackHtml = '';
+                matchedCovers.forEach((coverUrl, idx) => {
+                    const pos = casualLayouts[idx % casualLayouts.length];
+                    stackHtml += `
+                        <div class="absolute hover:z-50" style="transform: translateX(${pos.x}px) translateY(${pos.y}px) rotate(${pos.r}deg); z-index: ${idx};">
+                            <div class="w-12 h-12 sm:w-16 sm:h-16 transition-all duration-300 hover:-translate-y-3 hover:scale-125 cursor-pointer">
+                                <div class="p-0.5 sm:p-1 bg-white border border-[#BCE0F9] shadow-md h-full w-full">
+                                    <img src="${coverUrl}" class="w-full h-full object-cover">
+                                </div>
                             </div>
-                        </div>
-                    </div>`;
+                        </div>`;
+                });
+                topCoverContainer.innerHTML = stackHtml;
 
                 const maxDiff = 24; 
                 matchRate = Math.max(0, Math.round((1 - (totalDiff / maxDiff)) * 100));
@@ -808,7 +829,7 @@
 
                 topCoverContainer.innerHTML = `
                     <div class="absolute z-10 hover:z-50">
-                        <div class="w-16 h-16 sm:w-20 sm:h-20 transition-all duration-300 hover:-translate-y-2 hover:scale-110 cursor-pointer">
+                        <div class="w-28 h-28 sm:w-36 sm:h-36 transition-all duration-300 hover:scale-105 cursor-pointer">
                             <div class="p-1 bg-white border border-[#BCE0F9] shadow-md h-full w-full">
                                 <img src="${album.cover}" class="w-full h-full object-cover">
                             </div>
@@ -825,7 +846,8 @@
                 modeSelect.value = '3';
             }
 
-            document.getElementById('matchPercentage').textContent = `${matchRate}%`;
+            document.getElementById('matchPercentage').innerHTML = `${matchRate}% <span class="text-2xl">相似</span>`;
+            
             const quoteEl = document.getElementById('matchQuote');
             if (matchRate === 100) quoteEl.textContent = "“好像除了我，沒人能把你看透”";
             else if (matchRate >= 40) quoteEl.textContent = "“我從你的話語之間，才明白你和我之間，不需要語言”";
