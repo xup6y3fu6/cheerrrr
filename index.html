@@ -134,7 +134,6 @@
                 </select>
             </div>
 
-            <!-- 第一階段：進行選擇與排序 -->
             <section class="space-y-3">
                 <div class="glossy-header py-1 text-center text-[11px] tracking-wider">
                     step 1: read this first!
@@ -163,13 +162,11 @@
                             <h2 id="mode3SelectedTitle" class="text-sm font-bold text-[#14496B] mb-2 truncate">專輯名稱</h2>
                             <label class="text-[10px] font-bold text-[#666] block mb-1">選擇你要排行的專輯：</label>
                             <select id="mode3AlbumSelect" class="inset-input w-full py-1.5 px-2 text-[11px] font-bold text-[#333] outline-none cursor-pointer">
-                                <!-- JS 載入 -->
-                            </select>
+                                </select>
                         </div>
                     </div>
                     <ul id="mode3RankList" class="space-y-2">
-                        <!-- JS 載入 -->
-                    </ul>
+                        </ul>
                 </div>
 
                 <button id="generateResultBtn" class="crystal-btn w-full py-2 text-xs font-bold tracking-wide mt-2">
@@ -177,7 +174,6 @@
                 </button>
             </section>
 
-            <!-- 單人結果展示區 -->
             <section id="singleResultArea" class="hidden pt-2 border-t border-dashed border-[#BCE0F9]">
                 <div class="glossy-header py-1 text-center text-[11px] tracking-wider mb-3">
                     my profile results
@@ -199,10 +195,8 @@
                 </div>
             </section>
 
-            <!-- 產生代碼與 Step 2 比對區（預設隱藏，產生結果後顯示） -->
             <div id="postResultSection" class="hidden space-y-5 pt-3 border-t border-dashed border-[#BCE0F9]">
                 
-                <!-- 產生代碼 -->
                 <section>
                     <div class="glossy-header py-1 text-center text-[11px] tracking-wider mb-2">
                         my code
@@ -218,7 +212,6 @@
                     </div>
                 </section>
 
-                <!-- 第二階段：比對資料 -->
                 <section class="space-y-3">
                     <div class="glossy-header py-1 text-center text-[11px] tracking-wider">
                         step 2: compare profiles
@@ -232,7 +225,6 @@
                 </section>
             </div>
 
-            <!-- 比對結果展示區 -->
             <section id="resultArea" class="hidden pt-2 border-t border-dashed border-[#BCE0F9]">
                 <div class="glossy-header py-1 text-center text-[11px] tracking-wider mb-3" id="resultMainTitle">
                     match results
@@ -240,9 +232,11 @@
                 
                 <div class="bg-[#F8FBFD] border border-[#D0EAFA] p-4 flex justify-between items-center mb-4 shadow-sm">
                     <div class="flex-1 shrink-0 z-10 pr-2">
-                        <div id="matchResultHeader" class="tracking-tight mb-2"></div>
-                        <h1 class="text-4xl font-bold text-[#14496B]" id="matchPercentage">44% <span class="text-2xl">相似</span></h1>
-                        <p class="text-[10px] text-[#666] mt-1 font-bold italic" id="matchQuote">“030”</p>
+                        <div id="matchResultHeader" class="tracking-tight mb-1"></div>
+                        <h1 class="text-4xl sm:text-5xl font-black text-[#14496B] tracking-tighter drop-shadow-sm flex items-baseline gap-1" id="matchPercentage">
+                            44% <span class="text-lg sm:text-xl font-bold text-[#447293] pb-1">相似</span>
+                        </h1>
+                        <p class="text-[10px] text-[#666] mt-1 font-bold italic" id="matchQuote">“X﹏X”</p>
                     </div>
                     <div id="topCoverContainer" class="relative w-48 h-32 sm:w-64 sm:h-40 shrink-0 flex justify-center items-center">
                     </div>
@@ -646,10 +640,11 @@
             else if (friendData.m === 2) friendModeTitle = "專輯喜好排行";
             else if (friendData.m === 3) friendModeTitle = "單專歌曲排行";
 
+            // 雙人比對標題：次要資訊縮小化
             document.getElementById('matchResultHeader').innerHTML = `
-                <span class="text-sm sm:text-base font-bold text-[#447293] block">${myName} vs. ${friendName} 的</span>
-                <span class="text-xl sm:text-2xl font-extrabold text-[#14496B] block mt-0.5">陳綺貞</span>
-                <span class="text-xl sm:text-2xl font-extrabold text-[#14496B] block">${friendModeTitle}</span>
+                <span class="text-[9px] sm:text-[10px] font-bold text-[#666] block leading-tight">${myName} vs. ${friendName} 的</span>
+                <span class="text-[11px] sm:text-xs font-bold text-[#447293] block leading-tight">陳綺貞</span>
+                <span class="text-[11px] sm:text-xs font-bold text-[#447293] block leading-tight">${friendModeTitle}</span>
             `;
 
             if (friendData.m === 1) {
@@ -689,7 +684,11 @@
                     friendHtml += `<div class="flex items-center gap-1.5 border-b border-dashed border-[#E0F0FA] pb-1 last:border-0"><img src="${album.cover}" class="w-5 h-5 object-cover border border-[#D0EAFA] shrink-0 opacity-80"><span class="text-[10px] text-[#666] truncate">${friendTrack}</span></div>`;
                 });
 
-                if (matchCount === 0) { commonHtml = `<p class="text-[10px] text-[#888] text-center py-2 italic">030</p>`; matchedCovers.push(chenAlbums[0].cover); }
+                if (matchCount === 0) { 
+                    commonHtml = `<p class="text-[10px] text-[#888] text-center py-2 italic">030</p>`; 
+                    // 當 0% 時，為了美觀依然展示對方的專輯選擇做為散落排版
+                    chenAlbums.forEach(album => matchedCovers.push(album.cover));
+                }
 
                 document.getElementById('myColumnTitle1').textContent = `${myName} 的選擇`;
                 document.getElementById('friendColumnTitle1').textContent = `${friendName} 的選擇`;
@@ -734,34 +733,38 @@
                 const friendOrder = friendData.r;
                 const myOrder = Array.from(rankList.children).map(li => li.dataset.id);
                 
-                let myHtml = '', friendHtml = '', totalDiff = 0;
+                let myHtml = '', friendHtml = '', matchCount = 0;
                 let matchedCovers = [];
 
                 myOrder.forEach((id, idx) => {
                     const album = chenAlbums.find(a => a.id === id);
                     myHtml += `<div class="flex items-center gap-2 border-b border-dashed border-[#E0F0FA] pb-1 last:border-0"><span class="text-[10px] font-bold text-[#8FB4D4] w-2">${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#8FB4D4] shrink-0"><span class="text-[10px] text-[#333] truncate">${album.title}</span></div>`;
-                    matchedCovers.push(album.cover);
                 });
 
                 friendOrder.forEach((id, idx) => {
                     const album = chenAlbums.find(a => a.id === id);
                     const myIdx = myOrder.indexOf(id);
                     const diff = Math.abs(myIdx - idx);
-                    totalDiff += diff;
                     
                     let tagHtml = '';
                     if (diff === 0) {
                         tagHtml = `<span class="bg-[#B8E474] text-[#277015] px-1 rounded text-[8px] ml-auto">同位</span>`;
+                        matchCount++;
+                        matchedCovers.push(album.cover);
                     }
                     friendHtml += `<div class="flex items-center gap-2 border-b border-dashed border-[#E0F0FA] pb-1 last:border-0"><span class="text-[10px] font-bold text-[#8FB4D4] w-2">${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#D0EAFA] shrink-0 opacity-80"><span class="text-[10px] text-[#666] truncate">${album.title}</span>${tagHtml}</div>`;
                 });
+
+                // 若 0% 時，為了美觀依然展示對方的專輯選擇做為散落排版
+                if (matchCount === 0) {
+                    chenAlbums.forEach(album => matchedCovers.push(album.cover));
+                }
 
                 document.getElementById('myColumnTitle2').textContent = `${myName} 的排行`;
                 document.getElementById('friendColumnTitle2').textContent = `${friendName} 的排行`;
                 document.getElementById('myRankResultList').innerHTML = myHtml;
                 document.getElementById('friendRankResultList').innerHTML = friendHtml;
 
-                // 雙人排行結果展示：同樣改為 3 上 4 下的隨興散落排版
                 let stackHtml = '';
                 matchedCovers.forEach((coverUrl, idx) => {
                     const pos = casualLayouts[idx % casualLayouts.length];
@@ -776,8 +779,7 @@
                 });
                 topCoverContainer.innerHTML = stackHtml;
 
-                const maxDiff = 24; 
-                matchRate = Math.max(0, Math.round((1 - (totalDiff / maxDiff)) * 100));
+                matchRate = Math.round((matchCount / 7) * 100);
 
                 document.getElementById('mode2ResultBlock').classList.remove('hidden');
                 document.getElementById('mode1ResultBlock').classList.add('hidden');
@@ -799,7 +801,7 @@
                 const myOrder = Array.from(mode3RankList.children).map(li => li.dataset.id);
                 const album = chenAlbums[myAlbumIdx];
                 
-                let myHtml = '', friendHtml = '', totalDiff = 0;
+                let myHtml = '', friendHtml = '', matchCount = 0;
 
                 myOrder.forEach((id, idx) => {
                     const track = album.tracks.find(t => t.id === id);
@@ -810,11 +812,11 @@
                     const track = album.tracks.find(t => t.id === id);
                     const myIdx = myOrder.indexOf(id);
                     const diff = Math.abs(myIdx - idx);
-                    totalDiff += diff;
                     
                     let tagHtml = '';
                     if (diff === 0) {
                         tagHtml = `<span class="bg-[#B8E474] text-[#277015] px-1 rounded text-[8px] ml-auto">同位</span>`;
+                        matchCount++;
                     } else if (diff <= 2) {
                         tagHtml = `<span class="bg-[#E4D974] text-[#706415] px-1 rounded text-[8px] ml-auto">相近</span>`;
                     }
@@ -827,6 +829,7 @@
                 document.getElementById('myTrackRankResultList').innerHTML = myHtml;
                 document.getElementById('friendTrackRankResultList').innerHTML = friendHtml;
 
+                // 無論幾趴，都會放專輯封面
                 topCoverContainer.innerHTML = `
                     <div class="absolute z-10 hover:z-50">
                         <div class="w-28 h-28 sm:w-36 sm:h-36 transition-all duration-300 hover:scale-105 cursor-pointer">
@@ -837,8 +840,7 @@
                     </div>`;
 
                 const n = album.tracks.length;
-                const maxDiff = Math.floor((n * n) / 2);
-                matchRate = Math.max(0, Math.round((1 - (totalDiff / maxDiff)) * 100));
+                matchRate = Math.round((matchCount / n) * 100);
 
                 document.getElementById('mode3ResultBlock').classList.remove('hidden');
                 document.getElementById('mode1ResultBlock').classList.add('hidden');
@@ -846,7 +848,8 @@
                 modeSelect.value = '3';
             }
 
-            document.getElementById('matchPercentage').innerHTML = `${matchRate}% <span class="text-2xl">相似</span>`;
+            // 更新%數資訊縮小
+            document.getElementById('matchPercentage').innerHTML = `${matchRate}% <span class="text-lg sm:text-xl font-bold text-[#447293] pb-1">相似</span>`;
             
             const quoteEl = document.getElementById('matchQuote');
             if (matchRate === 100) quoteEl.textContent = "“好像除了我，沒人能把你看透”";
