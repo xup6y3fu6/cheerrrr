@@ -8,15 +8,30 @@
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <style>
         /* ========================================== */
-        /* 背景圖片設定區                             */
+        /* 背景圖片設定區 (修正手機端上下露白問題)        */
         /* ========================================== */
-        body {
-            background-color: #61A4E4; 
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #2B5E91; 
             background-image: url('https://i.meee.com.tw/ph013sW.jpg'); 
             background-size: cover;
             background-position: center center;
             background-repeat: no-repeat;
-            background-attachment: fixed;
+            z-index: -1;
+        }
+
+        body {
             font-family: 'Tahoma', 'Verdana', sans-serif;
             color: #333;
             -webkit-tap-highlight-color: transparent;
@@ -24,62 +39,66 @@
 
         ::-webkit-scrollbar { display: none; }
         .custom-scrollbar::-webkit-scrollbar { height: 4px; width: 4px; display: block; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #BCE0F9; border-radius: 2px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background-color: #8CBDE6; border-radius: 2px; }
         textarea { resize: none; }
 
         .aero-window {
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3), inset 0 0 1px 1px rgba(255, 255, 255, 0.9);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 0 1px 1px rgba(255, 255, 255, 0.9);
             border-radius: 8px;
             padding: 4px;
         }
 
+        /* 經典深藍 Titlebar (致敬 Windows Media Player) */
         .aero-titlebar {
-            background: linear-gradient(to bottom, #F4F9FE 0%, #D6EAF8 45%, #BBD6EE 50%, #D8EBF8 100%);
-            border: 1px solid #8FB4D4;
+            background: linear-gradient(to bottom, #2B76E3 0%, #1551C2 10%, #07359E 45%, #01217A 50%, #07349C 100%);
+            border: 1px solid #001247;
+            border-bottom: 1px solid #5486B6;
             border-radius: 6px 6px 0 0;
         }
 
+        /* 深色水晶標題列 */
         .glossy-header {
-            background: linear-gradient(to bottom, #E8F5FF 0%, #BCE0F9 48%, #87CEFA 50%, #BCE0F9 100%);
-            border: 1px solid #8FB4D4;
+            background: linear-gradient(to bottom, #BCE2FC 0%, #81BAE8 48%, #4FA1E6 50%, #76B4E6 100%);
+            border: 1px solid #4D87B8;
             border-radius: 3px;
-            color: #14496B;
-            text-shadow: 0 1px 0 rgba(255,255,255,0.8);
-            box-shadow: inset 0 1px 0 rgba(255,255,255,0.8);
+            color: #052F6D;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);
         }
 
+        /* 深色水晶按鈕 */
         .crystal-btn {
-            background: linear-gradient(to bottom, #F0F9FF 0%, #D0EAFA 48%, #A8DDF9 50%, #D0EAFA 100%);
-            border: 1px solid #75A9C9;
+            background: linear-gradient(to bottom, #DBEFFF 0%, #9BCBF0 48%, #66ADE6 50%, #9BCBF0 100%);
+            border: 1px solid #4D87B8;
             border-radius: 4px;
-            color: #0E4466;
-            text-shadow: 0 1px 0 #FFF;
-            box-shadow: inset 0 1px 0 #FFF, 0 1px 2px rgba(0,0,0,0.1);
+            color: #052F6D;
+            text-shadow: 0 1px 0 rgba(255,255,255,0.6);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 1px 2px rgba(0,0,0,0.15);
             transition: all 0.1s;
         }
         .crystal-btn:active {
-            background: linear-gradient(to bottom, #A8DDF9 0%, #D0EAFA 100%);
-            box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+            background: linear-gradient(to bottom, #66ADE6 0%, #9BCBF0 100%);
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.3);
         }
 
         .inset-input {
             background: #FFF;
-            border: 1px solid #7F9DB9;
-            box-shadow: inset 2px 2px 3px rgba(0,0,0,0.08);
+            border: 1px solid #5486B6;
+            box-shadow: inset 2px 2px 3px rgba(0,0,0,0.1);
             border-radius: 2px;
         }
         .inset-input:focus {
-            border-color: #3399FF;
+            border-color: #2B76E3;
             outline: none;
         }
 
         select {
             appearance: none;
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2314496B'%3e%3cpolygon points='6,9 18,9 12,16'/%3e%3c/svg%3e");
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23052F6D'%3e%3cpolygon points='6,9 18,9 12,16'/%3e%3c/svg%3e");
             background-repeat: no-repeat;
             background-position: right 0.25rem center;
             background-size: 0.8rem;
@@ -96,40 +115,40 @@
         <div class="aero-titlebar p-2 flex flex-col gap-2 shrink-0">
             <div class="flex items-center justify-between px-1">
                 <div class="flex items-center gap-1.5">
-                    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='%232288DD'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/></svg>" class="w-4 h-4 drop-shadow-sm">
-                    <span class="text-xs font-bold text-[#14496B] drop-shadow-[0_1px_0_#FFF]">Windows Internet Explorer</span>
+                    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='%23FFFFFF'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/></svg>" class="w-4 h-4 drop-shadow-sm">
+                    <span class="text-xs font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.8)]">Windows Internet Explorer</span>
                 </div>
                 <div class="flex gap-0.5">
-                    <div class="w-6 h-4 bg-gradient-to-b from-[#FFF] to-[#D0EAFA] border border-[#75A9C9] rounded-sm shadow-inner flex justify-center items-center pb-1 text-[#14496B] leading-none">_</div>
-                    <div class="w-6 h-4 bg-gradient-to-b from-[#FFF] to-[#D0EAFA] border border-[#75A9C9] rounded-sm shadow-inner flex justify-center items-center text-[#14496B] leading-none text-[10px]">□</div>
-                    <div class="w-9 h-4 bg-gradient-to-b from-[#FFAAAA] to-[#DD4444] border border-[#992222] rounded-sm shadow-[inset_0_1px_1px_rgba(255,255,255,0.5)] flex justify-center items-center text-white text-[10px] font-bold">X</div>
+                    <div class="w-6 h-4 bg-gradient-to-b from-[#6094EB] to-[#1551C2] border border-[#01217A] rounded-sm shadow-inner flex justify-center items-end pb-1 text-white leading-none cursor-pointer">_</div>
+                    <div class="w-6 h-4 bg-gradient-to-b from-[#6094EB] to-[#1551C2] border border-[#01217A] rounded-sm shadow-inner flex justify-center items-center text-white leading-none text-[10px] cursor-pointer">□</div>
+                    <div class="w-9 h-4 bg-gradient-to-b from-[#E86464] to-[#C22323] border border-[#7A0F0F] rounded-sm shadow-[inset_0_1px_1px_rgba(255,255,255,0.5)] flex justify-center items-center text-white text-[10px] font-bold cursor-pointer">X</div>
                 </div>
             </div>
             
-            <div class="bg-[#F8FBFD] border border-[#8FB4D4] p-1 flex gap-1 items-center rounded-sm">
+            <div class="bg-[#B9D7F5] border border-[#5486B6] p-1 flex gap-1 items-center rounded-sm">
                 <div class="flex gap-0.5">
-                    <div class="w-6 h-6 rounded-full bg-gradient-to-b from-[#D0EAFA] to-[#87CEFA] border border-[#5289A5] flex items-center justify-center text-white font-bold shadow-sm text-xs opacity-70">←</div>
-                    <div class="w-6 h-6 rounded-full bg-gradient-to-b from-[#D0EAFA] to-[#87CEFA] border border-[#5289A5] flex items-center justify-center text-white font-bold shadow-sm text-xs opacity-40">→</div>
+                    <div class="w-6 h-6 rounded-full bg-gradient-to-b from-[#87C1F2] to-[#3B89D4] border border-[#194A75] flex items-center justify-center text-white font-bold shadow-sm text-xs opacity-90 cursor-pointer">←</div>
+                    <div class="w-6 h-6 rounded-full bg-gradient-to-b from-[#87C1F2] to-[#3B89D4] border border-[#194A75] flex items-center justify-center text-white font-bold shadow-sm text-xs opacity-50 cursor-not-allowed">→</div>
                 </div>
-                <div class="flex-1 bg-white border border-[#7F9DB9] shadow-inner px-2 py-0.5 text-[11px] text-[#888] flex items-center gap-1.5 h-6">
-                    <span class="text-[#8FB4D4]">🔍</span> https://www.cheerego.com
+                <div class="flex-1 bg-white border border-[#5486B6] shadow-inner px-2 py-0.5 text-[11px] text-[#888] flex items-center gap-1.5 h-6">
+                    <span class="text-[#5486B6]">🔍</span> https://www.cheerego.com
                 </div>
             </div>
         </div>
 
-        <div class="bg-white border-l border-r border-b border-[#8FB4D4] flex-1 overflow-y-auto p-3 space-y-5 rounded-b-md">
+        <div class="bg-white border-l border-r border-b border-[#5486B6] flex-1 overflow-y-auto p-3 space-y-5 rounded-b-md">
             
             <div>
-                <div class="glossy-header py-1 text-center text-[11px] mb-2 tracking-wider">
+                <div class="glossy-header py-1 text-center text-[11px] mb-2 tracking-wider font-bold">
                     welcome to my profile!
                 </div>
                 
-                <div class="border border-[#D0EAFA] bg-[#F4F9FE] p-3 text-xs text-[#555] leading-relaxed shadow-sm mb-3">
-                    <strong class="text-[#14496B] text-sm">表現給我看</strong><br>
+                <div class="border border-[#A6D2F5] bg-[#DFEFFB] p-3 text-xs text-[#555] leading-relaxed shadow-sm mb-3">
+                    <strong class="text-[#052F6D] text-sm">表現給我看</strong><br>
                     <span id="modeDescription">選出每張專輯中你的最愛<3</span>
                 </div>
 
-                <select id="modeSelect" class="inset-input w-full py-1.5 px-2 text-[11px] font-bold text-[#14496B] outline-none cursor-pointer">
+                <select id="modeSelect" class="inset-input w-full py-1.5 px-2 text-[11px] font-bold text-[#052F6D] outline-none cursor-pointer">
                     <option value="1">模式：各專輯最愛</option>
                     <option value="2">模式：專輯排行</option>
                     <option value="3">模式：單專歌曲排行</option>
@@ -137,56 +156,55 @@
                 </select>
             </div>
 
-            <!-- 第一階段：進行選擇與排序 -->
             <section class="space-y-3">
-                <div class="glossy-header py-1 text-center text-[11px] tracking-wider">
+                <div class="glossy-header py-1 text-center text-[11px] tracking-wider font-bold">
                     step 1: read this first!
                 </div>
                 
-                <div class="flex items-center gap-2 bg-[#F8FBFD] p-2 border border-[#E0F0FA]">
-                    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%2366A3FF'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" class="w-8 h-8 p-1 border border-[#BCE0F9] bg-white shadow-sm">
+                <div class="flex items-center gap-2 bg-[#E8F4FC] p-2 border border-[#CBE3F7]">
+                    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%2350A2E8'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" class="w-8 h-8 p-1 border border-[#8CBDE6] bg-white shadow-sm">
                     <div class="flex-1">
-                        <label class="text-[10px] font-bold text-[#14496B] block mb-0.5">你的名字：</label>
+                        <label class="text-[10px] font-bold text-[#052F6D] block mb-0.5">你的名字：</label>
                         <input type="text" id="userName" placeholder="..." class="inset-input w-full py-1 px-2 text-[11px] text-[#333]">
                     </div>
                 </div>
 
-                <div id="mode1Area" class="grid grid-cols-1 gap-2 pt-2"></div>
+                <div id="mode1Area" class="grid grid-cols-1 gap-2 pt-2">
+                </div>
 
                 <div id="mode2Area" class="hidden pt-2">
-                    <ul id="rankList" class="space-y-2"></ul>
+                    <ul id="rankList" class="space-y-2">
+                    </ul>
                 </div>
 
                 <div id="mode3Area" class="hidden pt-2 space-y-3">
-                    <div class="bg-[#F8FBFD] border border-[#BCE0F9] p-3 flex gap-3 items-start shadow-sm rounded-sm">
-                        <img id="mode3SelectedCover" src="" class="w-20 h-20 sm:w-24 sm:h-24 object-cover border border-[#8FB4D4] shrink-0">
+                    <div class="bg-[#E8F4FC] border border-[#8CBDE6] p-3 flex gap-3 items-start shadow-sm rounded-sm">
+                        <img id="mode3SelectedCover" src="" class="w-20 h-20 sm:w-24 sm:h-24 object-cover border border-[#5486B6] shrink-0">
                         <div class="flex-1 min-w-0">
-                            <h2 id="mode3SelectedTitle" class="text-sm font-bold text-[#14496B] mb-2 truncate">專輯名稱</h2>
+                            <h2 id="mode3SelectedTitle" class="text-sm font-bold text-[#052F6D] mb-2 truncate">專輯名稱</h2>
                             <label class="text-[10px] font-bold text-[#666] block mb-1">選擇你要排行的專輯：</label>
                             <select id="mode3AlbumSelect" class="inset-input w-full py-1.5 px-2 text-[11px] font-bold text-[#333] outline-none cursor-pointer">
-                                <!-- JS 載入 -->
-                            </select>
+                                </select>
                         </div>
                     </div>
-                    <ul id="mode3RankList" class="space-y-2"></ul>
+                    <ul id="mode3RankList" class="space-y-2">
+                        </ul>
                 </div>
 
-                <!-- 模式4 全新視覺選曲區 -->
                 <div id="mode4Area" class="hidden pt-2 space-y-3">
-                    <div class="bg-[#F8FBFD] border border-[#BCE0F9] p-2 shadow-sm rounded-sm">
-                        <label class="text-[10px] font-bold text-[#14496B] block mb-1">1. 從專輯中挑選歌曲加入 TOP10：</label>
+                    <div class="bg-[#E8F4FC] border border-[#8CBDE6] p-2 shadow-sm rounded-sm">
+                        <label class="text-[10px] font-bold text-[#052F6D] block mb-1">1. 從專輯中挑選歌曲加入 TOP10：</label>
                         <div class="flex gap-2 overflow-x-auto custom-scrollbar pb-2 pt-1 px-1" id="mode4AlbumTabs"></div>
                         <div class="grid grid-cols-2 gap-1.5 mt-2 max-h-32 overflow-y-auto custom-scrollbar pr-1" id="mode4TrackPool"></div>
                     </div>
                     
-                    <div class="bg-[#F8FBFD] border border-[#BCE0F9] p-2 shadow-sm rounded-sm">
+                    <div class="bg-[#E8F4FC] border border-[#8CBDE6] p-2 shadow-sm rounded-sm">
                         <div class="flex justify-between items-center mb-2">
-                            <label class="text-[10px] font-bold text-[#14496B]">2. 專屬 TOP10 (可拖曳排序)：</label>
-                            <span id="mode4Count" class="text-[10px] font-bold text-red-500 bg-white border border-[#D0EAFA] px-1 rounded-sm">0/10</span>
+                            <label class="text-[10px] font-bold text-[#052F6D]">2. 專屬 TOP10 (可拖曳排序)：</label>
+                            <span id="mode4Count" class="text-[10px] font-bold text-red-500 bg-white border border-[#A6D2F5] px-1 rounded-sm">0/10</span>
                         </div>
-                        <ul id="mode4RankList" class="space-y-1 min-h-[50px] bg-white border border-[#D0EAFA] p-1 rounded-sm">
-                            <!-- JS 載入選入的歌 -->
-                        </ul>
+                        <ul id="mode4RankList" class="space-y-1 min-h-[50px] bg-white border border-[#A6D2F5] p-1 rounded-sm">
+                            </ul>
                     </div>
                 </div>
 
@@ -195,39 +213,35 @@
                 </button>
             </section>
 
-            <!-- 單人結果展示區 -->
-            <section id="singleResultArea" class="hidden pt-2 border-t border-dashed border-[#BCE0F9]">
-                <div class="glossy-header py-1 text-center text-[11px] tracking-wider mb-3">
+            <section id="singleResultArea" class="hidden pt-2 border-t border-dashed border-[#8CBDE6]">
+                <div class="glossy-header py-1 text-center text-[11px] tracking-wider mb-3 font-bold">
                     my profile results
                 </div>
                 
-                <div class="bg-[#F8FBFD] border border-[#D0EAFA] p-3 sm:p-4 flex justify-between items-center mb-4 shadow-sm">
+                <div class="bg-[#E8F4FC] border border-[#A6D2F5] p-3 sm:p-4 flex justify-between items-center mb-4 shadow-sm">
                     <div class="flex-1 z-10 pr-2 min-w-0">
-                        <div id="singleResultHeader" class="tracking-tight mb-1"></div>
+                        <div id="singleResultHeader" class="tracking-tight mb-2"></div>
                         <p class="text-[10px] text-[#666] mt-2 font-bold italic leading-tight pr-1">“這是專屬於我的品味與姿態”</p>
                     </div>
-                    <!-- 縮小的展示容器 -->
                     <div id="singleTopCoverContainer" class="relative w-36 h-28 sm:w-64 sm:h-40 shrink-0 flex justify-center items-center">
                     </div>
                 </div>
 
-                <div class="border border-[#BCE0F9]">
-                    <div class="bg-[#87CEFA] text-[#0E4466] px-2 py-1 text-[10px] font-bold border-b border-[#8FB4D4]" id="singleListTitle">我的清單</div>
-                    <div class="p-2 bg-[#F8FBFD] space-y-2" id="singleChoicesList">
+                <div class="border border-[#8CBDE6]">
+                    <div class="bg-[#50A2E8] text-[#031B40] px-2 py-1 text-[10px] font-bold border-b border-[#5486B6]" id="singleListTitle">我的清單</div>
+                    <div class="p-2 bg-[#E8F4FC] space-y-2" id="singleChoicesList">
                     </div>
                 </div>
             </section>
 
-            <!-- 產生代碼與 Step 2 比對區（預設隱藏，產生結果後顯示） -->
-            <div id="postResultSection" class="hidden space-y-5 pt-3 border-t border-dashed border-[#BCE0F9]">
+            <div id="postResultSection" class="hidden space-y-5 pt-3 border-t border-dashed border-[#8CBDE6]">
                 
-                <!-- 產生代碼 -->
                 <section>
-                    <div class="glossy-header py-1 text-center text-[11px] tracking-wider mb-2">
+                    <div class="glossy-header py-1 text-center text-[11px] tracking-wider mb-2 font-bold">
                         my code
                     </div>
-                    <div class="bg-[#F4F9FE] border border-[#BCE0F9] p-3 shadow-sm">
-                        <p class="text-[10px] font-bold text-[#14496B] mb-1">複製代碼分享給朋友！</p>
+                    <div class="bg-[#DFEFFB] border border-[#8CBDE6] p-3 shadow-sm">
+                        <p class="text-[10px] font-bold text-[#052F6D] mb-1">複製代碼分享給朋友！</p>
                         <div class="relative">
                             <textarea id="generatedCode" readonly class="inset-input w-full p-2 pr-16 text-[10px] font-mono h-12 text-[#555] flex items-center"></textarea>
                             <button id="copyCodeBtn" class="absolute bottom-2 right-2 crystal-btn px-2 py-1 text-[10px]">
@@ -237,9 +251,8 @@
                     </div>
                 </section>
 
-                <!-- 第二階段：比對資料 -->
                 <section class="space-y-3">
-                    <div class="glossy-header py-1 text-center text-[11px] tracking-wider">
+                    <div class="glossy-header py-1 text-center text-[11px] tracking-wider font-bold">
                         step 2: compare profiles
                     </div>
                     <div class="flex flex-col gap-2">
@@ -251,43 +264,39 @@
                 </section>
             </div>
 
-            <!-- 比對結果展示區 -->
-            <section id="resultArea" class="hidden pt-2 border-t border-dashed border-[#BCE0F9]">
-                <div class="glossy-header py-1 text-center text-[11px] tracking-wider mb-3" id="resultMainTitle">
+            <section id="resultArea" class="hidden pt-2 border-t border-dashed border-[#8CBDE6]">
+                <div class="glossy-header py-1 text-center text-[11px] tracking-wider mb-3 font-bold" id="resultMainTitle">
                     match results
                 </div>
                 
-                <div class="bg-[#F8FBFD] border border-[#D0EAFA] p-3 sm:p-4 flex justify-between items-center mb-4 shadow-sm">
+                <div class="bg-[#E8F4FC] border border-[#A6D2F5] p-3 sm:p-4 flex justify-between items-center mb-4 shadow-sm">
                     <div class="flex-1 z-10 pr-2 min-w-0">
-                        <!-- 動態變更標題的容器 -->
-                        <div id="matchResultHeader" class="tracking-tight mb-1"></div>
-                        <!-- 縮小且緊湊的 % 數資訊 -->
-                        <h1 class="text-3xl sm:text-5xl font-black text-[#14496B] tracking-tighter drop-shadow-sm flex items-baseline gap-0.5" id="matchPercentage">
-                            44% <span class="text-base sm:text-xl font-bold text-[#447293] pb-0.5">相似</span>
+                        <div id="matchResultHeader" class="tracking-tight mb-1 truncate"></div>
+                        <h1 class="text-3xl sm:text-4xl font-black text-[#052F6D] tracking-tighter drop-shadow-sm flex items-baseline gap-0.5 whitespace-nowrap" id="matchPercentage">
+                            44% <span class="text-base sm:text-lg font-bold text-[#0E4B8C] pb-0.5">相似</span>
                         </h1>
                         <p class="text-[10px] text-[#666] mt-1 font-bold italic leading-tight pr-1" id="matchQuote">“030”</p>
                     </div>
-                    <!-- 縮小的展示容器 -->
                     <div id="topCoverContainer" class="relative w-36 h-28 sm:w-64 sm:h-40 shrink-0 flex justify-center items-center">
                     </div>
                 </div>
 
                 <div id="mode1ResultBlock" class="hidden space-y-3">
-                    <div class="border border-[#BCE0F9]">
-                        <div class="bg-gradient-to-b from-[#F0F9FF] to-[#D0EAFA] px-2 py-1 border-b border-[#BCE0F9] flex justify-between items-center">
-                            <span class="text-[10px] font-bold text-[#14496B]">你們都選了...</span>
-                            <span class="text-[10px] bg-white border border-[#8FB4D4] px-1 rounded-sm text-[#14496B]" id="commonCountLabel">4/7</span>
+                    <div class="border border-[#8CBDE6]">
+                        <div class="bg-gradient-to-b from-[#DFEFFB] to-[#A6D2F5] px-2 py-1 border-b border-[#8CBDE6] flex justify-between items-center">
+                            <span class="text-[10px] font-bold text-[#052F6D]">你們都選了...</span>
+                            <span class="text-[10px] bg-white border border-[#5486B6] px-1 rounded-sm text-[#052F6D]" id="commonCountLabel">4/7</span>
                         </div>
                         <div class="p-2 bg-white space-y-2" id="commonChoicesList"></div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-2">
-                        <div class="border border-[#BCE0F9]">
-                            <div class="bg-[#87CEFA] text-[#0E4466] px-2 py-1 text-[10px] font-bold border-b border-[#8FB4D4]" id="myColumnTitle1">我的選擇</div>
-                            <div class="p-2 bg-[#F8FBFD] space-y-2" id="myChoicesList"></div>
+                        <div class="border border-[#8CBDE6]">
+                            <div class="bg-[#50A2E8] text-[#031B40] px-2 py-1 text-[10px] font-bold border-b border-[#5486B6]" id="myColumnTitle1">我的選擇</div>
+                            <div class="p-2 bg-[#E8F4FC] space-y-2" id="myChoicesList"></div>
                         </div>
-                        <div class="border border-[#D0EAFA]">
-                            <div class="bg-[#E8F5FF] text-[#555] px-2 py-1 text-[10px] font-bold border-b border-[#D0EAFA]" id="friendColumnTitle1">他的選擇</div>
+                        <div class="border border-[#A6D2F5]">
+                            <div class="bg-[#DBEEFF] text-[#555] px-2 py-1 text-[10px] font-bold border-b border-[#A6D2F5]" id="friendColumnTitle1">他的選擇</div>
                             <div class="p-2 bg-white space-y-2" id="friendChoicesList"></div>
                         </div>
                     </div>
@@ -295,50 +304,49 @@
 
                 <div id="mode2ResultBlock" class="hidden space-y-3">
                     <div class="grid grid-cols-2 gap-2">
-                        <div class="border border-[#BCE0F9]">
-                            <div class="bg-[#87CEFA] text-[#0E4466] px-2 py-1 text-[10px] font-bold border-b border-[#8FB4D4]" id="myColumnTitle2">我的排行</div>
-                            <div class="p-2 bg-[#F8FBFD] space-y-2" id="myRankResultList"></div>
+                        <div class="border border-[#8CBDE6]">
+                            <div class="bg-[#50A2E8] text-[#031B40] px-2 py-1 text-[10px] font-bold border-b border-[#5486B6]" id="myColumnTitle2">我的排行</div>
+                            <div class="p-2 bg-[#E8F4FC] space-y-2" id="myRankResultList"></div>
                         </div>
-                        <div class="border border-[#D0EAFA]">
-                            <div class="bg-[#E8F5FF] text-[#555] px-2 py-1 text-[10px] font-bold border-b border-[#D0EAFA]" id="friendColumnTitle2">他的排行</div>
+                        <div class="border border-[#A6D2F5]">
+                            <div class="bg-[#DBEEFF] text-[#555] px-2 py-1 text-[10px] font-bold border-b border-[#A6D2F5]" id="friendColumnTitle2">他的排行</div>
                             <div class="p-2 bg-white space-y-2" id="friendRankResultList"></div>
                         </div>
                     </div>
                 </div>
 
                 <div id="mode3ResultBlock" class="hidden space-y-3">
-                    <div class="bg-[#F0F9FF] px-2 py-1 border border-[#BCE0F9] text-[11px] font-bold text-[#14496B] text-center" id="mode3ResultAlbumName">
+                    <div class="bg-[#DFEFFB] px-2 py-1 border border-[#8CBDE6] text-[11px] font-bold text-[#052F6D] text-center" id="mode3ResultAlbumName">
                         專輯名稱
                     </div>
                     <div class="grid grid-cols-2 gap-2">
-                        <div class="border border-[#BCE0F9]">
-                            <div class="bg-[#87CEFA] text-[#0E4466] px-2 py-1 text-[10px] font-bold border-b border-[#8FB4D4]" id="myColumnTitle3">我的排行</div>
-                            <div class="p-2 bg-[#F8FBFD] space-y-2" id="myTrackRankResultList"></div>
+                        <div class="border border-[#8CBDE6]">
+                            <div class="bg-[#50A2E8] text-[#031B40] px-2 py-1 text-[10px] font-bold border-b border-[#5486B6]" id="myColumnTitle3">我的排行</div>
+                            <div class="p-2 bg-[#E8F4FC] space-y-2" id="myTrackRankResultList"></div>
                         </div>
-                        <div class="border border-[#D0EAFA]">
-                            <div class="bg-[#E8F5FF] text-[#555] px-2 py-1 text-[10px] font-bold border-b border-[#D0EAFA]" id="friendColumnTitle3">他的排行</div>
+                        <div class="border border-[#A6D2F5]">
+                            <div class="bg-[#DBEEFF] text-[#555] px-2 py-1 text-[10px] font-bold border-b border-[#A6D2F5]" id="friendColumnTitle3">他的排行</div>
                             <div class="p-2 bg-white space-y-2" id="friendTrackRankResultList"></div>
                         </div>
                     </div>
                 </div>
 
-                <!-- 模式 4 的結果區塊 -->
                 <div id="mode4ResultBlock" class="hidden space-y-3">
-                    <div class="border border-[#BCE0F9]">
-                        <div class="bg-gradient-to-b from-[#F0F9FF] to-[#D0EAFA] px-2 py-1 border-b border-[#BCE0F9] flex justify-between items-center">
-                            <span class="text-[10px] font-bold text-[#14496B]">你們都選了...</span>
-                            <span class="text-[10px] bg-white border border-[#8FB4D4] px-1 rounded-sm text-[#14496B]" id="mode4CommonCountLabel"></span>
+                    <div class="border border-[#8CBDE6]">
+                        <div class="bg-gradient-to-b from-[#DFEFFB] to-[#A6D2F5] px-2 py-1 border-b border-[#8CBDE6] flex justify-between items-center">
+                            <span class="text-[10px] font-bold text-[#052F6D]">你們都選了...</span>
+                            <span class="text-[10px] bg-white border border-[#5486B6] px-1 rounded-sm text-[#052F6D]" id="mode4CommonCountLabel"></span>
                         </div>
                         <div class="p-2 bg-white space-y-2" id="mode4CommonChoicesList"></div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-2">
-                        <div class="border border-[#BCE0F9]">
-                            <div class="bg-[#87CEFA] text-[#0E4466] px-2 py-1 text-[10px] font-bold border-b border-[#8FB4D4]" id="myColumnTitle4">我的 TOP10</div>
-                            <div class="p-1 sm:p-2 bg-[#F8FBFD] space-y-1" id="myTrackTop10ResultList"></div>
+                        <div class="border border-[#8CBDE6]">
+                            <div class="bg-[#50A2E8] text-[#031B40] px-2 py-1 text-[10px] font-bold border-b border-[#5486B6]" id="myColumnTitle4">我的 TOP10</div>
+                            <div class="p-1 sm:p-2 bg-[#E8F4FC] space-y-1" id="myTrackTop10ResultList"></div>
                         </div>
-                        <div class="border border-[#D0EAFA]">
-                            <div class="bg-[#E8F5FF] text-[#555] px-2 py-1 text-[10px] font-bold border-b border-[#D0EAFA]" id="friendColumnTitle4">他的 TOP10</div>
+                        <div class="border border-[#A6D2F5]">
+                            <div class="bg-[#DBEEFF] text-[#555] px-2 py-1 text-[10px] font-bold border-b border-[#A6D2F5]" id="friendColumnTitle4">他的 TOP10</div>
                             <div class="p-1 sm:p-2 bg-white space-y-1" id="friendTrackTop10ResultList"></div>
                         </div>
                     </div>
@@ -447,7 +455,7 @@
             });
             const cardHtml = `
                 <div class="flex items-center gap-2 border-b border-dashed border-[#D0EAFA] pb-2 last:border-0 last:pb-0">
-                    <div class="p-0.5 bg-white border border-[#BCE0F9] shadow-sm shrink-0">
+                    <div class="p-0.5 bg-white border border-[#8CBDE6] shadow-sm shrink-0">
                         <img src="${album.cover}" class="w-12 h-12 object-cover">
                     </div>
                     <div class="flex-1 min-w-0">
@@ -468,11 +476,11 @@
         regularAlbums.forEach(album => {
             const li = document.createElement('li');
             li.dataset.id = album.id;
-            li.className = 'flex items-center gap-3 bg-white p-2 border border-[#BCE0F9] shadow-sm rounded cursor-grab active:cursor-grabbing';
+            li.className = 'flex items-center gap-3 bg-white p-2 border border-[#8CBDE6] shadow-sm rounded cursor-grab active:cursor-grabbing';
             li.innerHTML = `
-                <span class="text-[#8FB4D4] font-bold text-lg px-2 select-none">☰</span>
-                <img src="${album.cover}" class="w-10 h-10 object-cover border border-[#D0EAFA]">
-                <span class="text-xs font-bold text-[#14496B]">${album.title}</span>
+                <span class="text-[#5486B6] font-bold text-lg px-2 select-none">☰</span>
+                <img src="${album.cover}" class="w-10 h-10 object-cover border border-[#A6D2F5]">
+                <span class="text-xs font-bold text-[#052F6D]">${album.title}</span>
             `;
             rankList.appendChild(li);
         });
@@ -498,11 +506,11 @@
                 const li = document.createElement('li');
                 li.dataset.id = track.id;
                 li.dataset.originalIdx = idx;
-                li.className = 'flex items-center gap-3 bg-white p-2 border border-[#BCE0F9] shadow-sm rounded cursor-grab active:cursor-grabbing';
+                li.className = 'flex items-center gap-3 bg-white p-2 border border-[#8CBDE6] shadow-sm rounded cursor-grab active:cursor-grabbing';
                 li.innerHTML = `
-                    <span class="text-[#8FB4D4] font-bold text-lg px-2 select-none">☰</span>
+                    <span class="text-[#5486B6] font-bold text-lg px-2 select-none">☰</span>
                     <span class="text-[10px] text-[#888] font-mono">Tr.${String(idx+1).padStart(2,'0')}</span>
-                    <span class="text-xs font-bold text-[#14496B] truncate">${track.name}</span>
+                    <span class="text-xs font-bold text-[#052F6D] truncate">${track.name}</span>
                 `;
                 mode3RankList.appendChild(li);
             });
@@ -528,14 +536,14 @@
             chenAlbums.forEach((album, idx) => {
                 const img = document.createElement('img');
                 img.src = album.cover;
-                img.className = "w-10 h-10 shrink-0 object-cover border-[1.5px] cursor-pointer transition-all rounded-sm " + (idx === 0 ? "border-[#14496B] shadow-md scale-105" : "border-transparent opacity-70 hover:opacity-100");
+                img.className = "w-10 h-10 shrink-0 object-cover border-[1.5px] cursor-pointer transition-all rounded-sm " + (idx === 0 ? "border-[#052F6D] shadow-md scale-105" : "border-transparent opacity-70 hover:opacity-100");
                 img.onclick = () => {
                     Array.from(mode4AlbumTabs.children).forEach(child => {
-                        child.classList.remove('border-[#14496B]', 'shadow-md', 'scale-105');
+                        child.classList.remove('border-[#052F6D]', 'shadow-md', 'scale-105');
                         child.classList.add('border-transparent', 'opacity-70');
                     });
                     img.classList.remove('border-transparent', 'opacity-70');
-                    img.classList.add('border-[#14496B]', 'shadow-md', 'scale-105');
+                    img.classList.add('border-[#052F6D]', 'shadow-md', 'scale-105');
                     renderMode4Pool(idx);
                 };
                 mode4AlbumTabs.appendChild(img);
@@ -548,8 +556,8 @@
             mode4TrackPool.innerHTML = '';
             album.tracks.forEach(track => {
                 const btn = document.createElement('button');
-                btn.className = "flex items-center text-left px-2 py-1.5 text-[10px] text-[#14496B] font-bold bg-white border border-[#BCE0F9] hover:bg-[#E8F5FF] rounded-sm transition-colors shadow-sm cursor-pointer";
-                btn.innerHTML = `<span class="mr-1.5 text-[#8FB4D4] font-black">+</span><span class="truncate flex-1">${track.name}</span>`;
+                btn.className = "flex items-center text-left px-2 py-1.5 text-[10px] text-[#052F6D] font-bold bg-white border border-[#8CBDE6] hover:bg-[#DBEEFF] rounded-sm transition-colors shadow-sm cursor-pointer";
+                btn.innerHTML = `<span class="mr-1.5 text-[#5486B6] font-black">+</span><span class="truncate flex-1">${track.name}</span>`;
                 btn.onclick = () => {
                     if (mode4SelectedTracks.length >= 10) { alert("榜單已經填滿 10 首歌囉！"); return; }
                     if (mode4SelectedTracks.find(t => t.id === track.id)) { alert("這首歌已經在榜單中了喔！"); return; }
@@ -565,18 +573,18 @@
             mode4SelectedTracks.forEach((item, index) => {
                 const li = document.createElement('li');
                 li.dataset.id = item.id;
-                li.className = "flex items-center gap-2 p-1.5 border border-[#E0F0FA] bg-[#F8FBFD] rounded-sm shadow-sm cursor-grab active:cursor-grabbing";
+                li.className = "flex items-center gap-2 p-1.5 border border-[#CBE3F7] bg-[#E8F4FC] rounded-sm shadow-sm cursor-grab active:cursor-grabbing";
                 li.innerHTML = `
-                    <span class="text-[#8FB4D4] font-bold text-[10px] px-1 select-none">☰</span>
-                    <span class="text-[10px] font-black text-[#14496B] w-3">${index + 1}</span>
-                    <img src="${item.cover}" class="w-6 h-6 object-cover border border-[#8FB4D4] shrink-0">
+                    <span class="text-[#5486B6] font-bold text-[10px] px-1 select-none">☰</span>
+                    <span class="text-[10px] font-black text-[#052F6D] w-3">${index + 1}</span>
+                    <img src="${item.cover}" class="w-6 h-6 object-cover border border-[#5486B6] shrink-0">
                     <span class="text-[10px] font-bold text-[#333] flex-1 truncate">${item.name}</span>
                     <button class="text-red-400 hover:text-red-600 font-bold px-2 text-[10px]" onclick="removeMode4Track('${item.id}')">✕</button>
                 `;
                 mode4RankList.appendChild(li);
             });
             mode4Count.textContent = `${mode4SelectedTracks.length}/10`;
-            mode4Count.className = mode4SelectedTracks.length === 10 ? "text-[10px] font-bold text-[#277015] bg-[#EAF5D5] border border-[#B8E474] px-1 rounded-sm" : "text-[10px] font-bold text-red-500 bg-white border border-[#D0EAFA] px-1 rounded-sm";
+            mode4Count.className = mode4SelectedTracks.length === 10 ? "text-[10px] font-bold text-[#277015] bg-[#EAF5D5] border border-[#B8E474] px-1 rounded-sm" : "text-[10px] font-bold text-red-500 bg-white border border-[#A6D2F5] px-1 rounded-sm";
         }
 
         window.removeMode4Track = function(trackId) {
@@ -620,9 +628,9 @@
             else if (currentMode === '4') modeTitle = "全歌曲 TOP10";
 
             document.getElementById('singleResultHeader').innerHTML = `
-                <span class="text-lg sm:text-xl font-bold text-[#447293] block leading-tight">${userName} 的</span>
-                <span class="text-2xl sm:text-3xl font-extrabold text-[#14496B] block leading-tight mt-0.5">陳綺貞</span>
-                <span class="text-2xl sm:text-3xl font-extrabold text-[#14496B] block leading-tight">${modeTitle}</span>
+                <span class="text-lg sm:text-xl font-bold text-[#0E4B8C] block leading-tight">${userName} 的</span>
+                <span class="text-2xl sm:text-3xl font-extrabold text-[#052F6D] block leading-tight mt-0.5">陳綺貞</span>
+                <span class="text-2xl sm:text-3xl font-extrabold text-[#052F6D] block leading-tight">${modeTitle}</span>
             `;
 
             if (currentMode === '1') {
@@ -640,10 +648,10 @@
                         const myTrack = getTrackName(select.value);
                         displayCovers.push(album.cover);
                         singleHtml += `
-                            <div class="flex items-center gap-2 border-b border-dashed border-[#E0F0FA] pb-1.5 last:border-0 last:pb-0">
-                                <img src="${album.cover}" class="w-8 h-8 object-cover border border-[#8FB4D4] shrink-0">
+                            <div class="flex items-center gap-2 border-b border-dashed border-[#CBE3F7] pb-1.5 last:border-0 last:pb-0">
+                                <img src="${album.cover}" class="w-8 h-8 object-cover border border-[#5486B6] shrink-0">
                                 <div class="flex-1 min-w-0">
-                                    <span class="block font-bold text-[#14496B] text-[11px] truncate">${myTrack}</span>
+                                    <span class="block font-bold text-[#052F6D] text-[11px] truncate">${myTrack}</span>
                                     <span class="block text-[9px] text-[#888] truncate">《${album.title}》</span>
                                 </div>
                             </div>`;
@@ -664,10 +672,10 @@
                     const album = chenAlbums[albumIdx];
                     displayCovers.push(album.cover);
                     singleHtml += `
-                        <div class="flex items-center gap-2 border-b border-dashed border-[#E0F0FA] pb-1.5 last:border-0 last:pb-0">
-                            <span class="text-[11px] font-bold text-[#8FB4D4] w-3">${idx+1}</span>
-                            <img src="${album.cover}" class="w-8 h-8 object-cover border border-[#8FB4D4] shrink-0">
-                            <span class="text-[11px] font-bold text-[#14496B] truncate">${album.title}</span>
+                        <div class="flex items-center gap-2 border-b border-dashed border-[#CBE3F7] pb-1.5 last:border-0 last:pb-0">
+                            <span class="text-[11px] font-bold text-[#5486B6] w-3">${idx+1}</span>
+                            <img src="${album.cover}" class="w-8 h-8 object-cover border border-[#5486B6] shrink-0">
+                            <span class="text-[11px] font-bold text-[#052F6D] truncate">${album.title}</span>
                         </div>`;
                 });
                 dataParts = [currentMode, encodeURIComponent(userName), rankStr];
@@ -685,10 +693,10 @@
                     const track = album.tracks[origIdx];
                     
                     singleHtml += `
-                        <div class="flex items-center gap-2 border-b border-dashed border-[#E0F0FA] pb-1.5 last:border-0 last:pb-0">
-                            <span class="text-[11px] font-bold text-[#8FB4D4] w-3">${idx+1}</span>
+                        <div class="flex items-center gap-2 border-b border-dashed border-[#CBE3F7] pb-1.5 last:border-0 last:pb-0">
+                            <span class="text-[11px] font-bold text-[#5486B6] w-3">${idx+1}</span>
                             <div class="flex-1 min-w-0">
-                                <span class="block font-bold text-[#14496B] text-[11px] truncate">${track.name}</span>
+                                <span class="block font-bold text-[#052F6D] text-[11px] truncate">${track.name}</span>
                             </div>
                         </div>`;
                 });
@@ -703,11 +711,11 @@
                 mode4SelectedTracks.forEach((item, idx) => {
                     tracksStr += encodeTrackId(item.id);
                     singleHtml += `
-                        <div class="flex items-center gap-2 border-b border-dashed border-[#E0F0FA] pb-1.5 last:border-0 last:pb-0">
-                            <span class="text-[11px] font-bold text-[#8FB4D4] w-4">#${idx+1}</span>
-                            <img src="${item.cover}" class="w-8 h-8 object-cover border border-[#8FB4D4] shrink-0">
+                        <div class="flex items-center gap-2 border-b border-dashed border-[#CBE3F7] pb-1.5 last:border-0 last:pb-0">
+                            <span class="text-[11px] font-bold text-[#5486B6] w-4">#${idx+1}</span>
+                            <img src="${item.cover}" class="w-8 h-8 object-cover border border-[#5486B6] shrink-0">
                             <div class="flex-1 min-w-0">
-                                <span class="block font-bold text-[#14496B] text-[11px] truncate">${item.name}</span>
+                                <span class="block font-bold text-[#052F6D] text-[11px] truncate">${item.name}</span>
                             </div>
                         </div>`;
                     if (!displayCovers.includes(item.cover)) displayCovers.push(item.cover);
@@ -725,7 +733,7 @@
                     stackHtml += `
                         <div class="absolute hover:z-50" style="transform: translate(${pos.x}%, ${pos.y}%) rotate(${pos.r}deg); z-index: ${idx};">
                             <div class="w-11 h-11 sm:w-16 sm:h-16 transition-all duration-300 hover:-translate-y-3 hover:scale-125 cursor-pointer">
-                                <div class="p-0.5 sm:p-1 bg-white border border-[#BCE0F9] shadow-md h-full w-full">
+                                <div class="p-0.5 sm:p-1 bg-white border border-[#8CBDE6] shadow-md h-full w-full">
                                     <img src="${coverUrl}" class="w-full h-full object-cover">
                                 </div>
                             </div>
@@ -734,7 +742,7 @@
                     stackHtml += `
                         <div class="absolute z-10 hover:z-50">
                             <div class="w-24 h-24 sm:w-36 sm:h-36 transition-all duration-300 hover:scale-105 cursor-pointer">
-                                <div class="p-1 bg-white border border-[#BCE0F9] shadow-md h-full w-full">
+                                <div class="p-1 bg-white border border-[#8CBDE6] shadow-md h-full w-full">
                                     <img src="${coverUrl}" class="w-full h-full object-cover">
                                 </div>
                             </div>
@@ -827,10 +835,11 @@
             else if (friendData.m === 3) friendModeTitle = "單專歌曲排行";
             else if (friendData.m === 4) friendModeTitle = "全歌曲 TOP10";
 
+            // 雙人比對標題：次要資訊縮小化
             document.getElementById('matchResultHeader').innerHTML = `
                 <span class="text-[9px] sm:text-[10px] font-bold text-[#666] block leading-tight">${myName} vs. ${friendName} 的</span>
-                <span class="text-[11px] sm:text-xs font-bold text-[#447293] block leading-tight">陳綺貞</span>
-                <span class="text-[11px] sm:text-xs font-bold text-[#447293] block leading-tight">${friendModeTitle}</span>
+                <span class="text-[11px] sm:text-xs font-bold text-[#0E4B8C] block leading-tight">陳綺貞</span>
+                <span class="text-[11px] sm:text-xs font-bold text-[#0E4B8C] block leading-tight">${friendModeTitle}</span>
             `;
 
             if (friendData.m === 1) {
@@ -858,16 +867,16 @@
                     if (isMatch) {
                         matchCount++; matchedCovers.push(album.cover); 
                         commonHtml += `
-                            <div class="flex items-center gap-2 border-b border-dashed border-[#E0F0FA] pb-1.5 last:border-0 last:pb-0">
-                                <div class="p-0.5 bg-white border border-[#BCE0F9] shadow-sm shrink-0"><img src="${album.cover}" class="w-8 h-8 object-cover"></div>
+                            <div class="flex items-center gap-2 border-b border-dashed border-[#CBE3F7] pb-1.5 last:border-0 last:pb-0">
+                                <div class="p-0.5 bg-white border border-[#8CBDE6] shadow-sm shrink-0"><img src="${album.cover}" class="w-8 h-8 object-cover"></div>
                                 <div class="flex-1 min-w-0">
-                                    <span class="block font-bold text-[#14496B] text-[11px] truncate">${myTrack}</span>
+                                    <span class="block font-bold text-[#052F6D] text-[11px] truncate">${myTrack}</span>
                                     <span class="block text-[9px] text-[#888] truncate">《${album.title}》</span>
                                 </div>
                             </div>`;
                     }
-                    myHtml += `<div class="flex items-center gap-1.5 border border-dashed ${isMatch ? "bg-[#D0EAFA] border-[#8FB4D4] shadow-inner" : "border-transparent border-b-[#E0F0FA] bg-transparent"} p-1 mb-1 rounded-sm"><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#8FB4D4] shrink-0"><span class="text-[10px] text-[#333] truncate flex-1">${myTrack}</span></div>`;
-                    friendHtml += `<div class="flex items-center gap-1.5 border border-dashed ${isMatch ? "bg-[#D0EAFA] border-[#8FB4D4] shadow-inner" : "border-transparent border-b-[#E0F0FA] bg-transparent"} p-1 mb-1 rounded-sm"><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#D0EAFA] shrink-0 opacity-80"><span class="text-[10px] text-[#666] truncate flex-1">${friendTrack}</span></div>`;
+                    myHtml += `<div class="flex items-center gap-1.5 border border-dashed ${isMatch ? "bg-[#A6D2F5] border-[#5486B6] shadow-inner" : "border-transparent border-b-[#CBE3F7] bg-transparent"} p-1 mb-1 rounded-sm"><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#5486B6] shrink-0"><span class="text-[10px] text-[#333] truncate flex-1">${myTrack}</span></div>`;
+                    friendHtml += `<div class="flex items-center gap-1.5 border border-dashed ${isMatch ? "bg-[#A6D2F5] border-[#5486B6] shadow-inner" : "border-transparent border-b-[#CBE3F7] bg-transparent"} p-1 mb-1 rounded-sm"><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#A6D2F5] shrink-0 opacity-80"><span class="text-[10px] text-[#666] truncate flex-1">${friendTrack}</span></div>`;
                 });
 
                 if (matchCount === 0) { 
@@ -889,7 +898,7 @@
                         stackHtml += `
                             <div class="absolute hover:z-50" style="transform: translate(${pos.x}%, ${pos.y}%) rotate(${pos.r}deg); z-index: ${idx};">
                                 <div class="w-11 h-11 sm:w-16 sm:h-16 transition-all duration-300 hover:-translate-y-3 hover:scale-125 cursor-pointer">
-                                    <div class="p-0.5 sm:p-1 bg-white border border-[#BCE0F9] shadow-md h-full w-full">
+                                    <div class="p-0.5 sm:p-1 bg-white border border-[#8CBDE6] shadow-md h-full w-full">
                                         <img src="${coverUrl}" class="w-full h-full object-cover">
                                     </div>
                                 </div>
@@ -898,7 +907,7 @@
                         stackHtml += `
                             <div class="absolute z-10 hover:z-50">
                                 <div class="w-24 h-24 sm:w-36 sm:h-36 transition-all duration-300 hover:scale-105 cursor-pointer">
-                                    <div class="p-1 bg-white border border-[#BCE0F9] shadow-md h-full w-full">
+                                    <div class="p-1 bg-white border border-[#8CBDE6] shadow-md h-full w-full">
                                         <img src="${coverUrl}" class="w-full h-full object-cover">
                                     </div>
                                 </div>
@@ -926,8 +935,8 @@
                 myOrder.forEach((id, idx) => {
                     const album = regularAlbums.find(a => a.id === id);
                     const diff = friendOrder.indexOf(id) === idx ? 0 : -1;
-                    const bgClass = diff === 0 ? "bg-[#D0EAFA] border-[#8FB4D4] shadow-inner" : "border-transparent border-b-[#E0F0FA] bg-transparent";
-                    myHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#8FB4D4] w-2 text-center">${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#8FB4D4] shrink-0"><span class="text-[10px] text-[#333] truncate flex-1">${album.title}</span></div>`;
+                    const bgClass = diff === 0 ? "bg-[#A6D2F5] border-[#5486B6] shadow-inner" : "border-transparent border-b-[#CBE3F7] bg-transparent";
+                    myHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#5486B6] w-2 text-center">${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#5486B6] shrink-0"><span class="text-[10px] text-[#333] truncate flex-1">${album.title}</span></div>`;
                 });
 
                 friendOrder.forEach((id, idx) => {
@@ -938,8 +947,8 @@
                         matchCount++;
                         matchedCovers.push(album.cover);
                     }
-                    const bgClass = diff === 0 ? "bg-[#D0EAFA] border-[#8FB4D4] shadow-inner" : "border-transparent border-b-[#E0F0FA] bg-transparent";
-                    friendHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#8FB4D4] w-2 text-center">${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#D0EAFA] shrink-0 opacity-80"><span class="text-[10px] text-[#666] truncate flex-1">${album.title}</span></div>`;
+                    const bgClass = diff === 0 ? "bg-[#A6D2F5] border-[#5486B6] shadow-inner" : "border-transparent border-b-[#CBE3F7] bg-transparent";
+                    friendHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#5486B6] w-2 text-center">${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#A6D2F5] shrink-0 opacity-80"><span class="text-[10px] text-[#666] truncate flex-1">${album.title}</span></div>`;
                 });
 
                 if (matchCount === 0) {
@@ -957,7 +966,7 @@
                     stackHtml += `
                         <div class="absolute hover:z-50" style="transform: translate(${pos.x}%, ${pos.y}%) rotate(${pos.r}deg); z-index: ${idx};">
                             <div class="w-11 h-11 sm:w-16 sm:h-16 transition-all duration-300 hover:-translate-y-3 hover:scale-125 cursor-pointer">
-                                <div class="p-0.5 sm:p-1 bg-white border border-[#BCE0F9] shadow-md h-full w-full">
+                                <div class="p-0.5 sm:p-1 bg-white border border-[#8CBDE6] shadow-md h-full w-full">
                                     <img src="${coverUrl}" class="w-full h-full object-cover">
                                 </div>
                             </div>
@@ -993,16 +1002,16 @@
                 myOrder.forEach((id, idx) => {
                     const track = album.tracks.find(t => t.id === id);
                     const diff = friendOrder.indexOf(id) === idx ? 0 : -1;
-                    const bgClass = diff === 0 ? "bg-[#D0EAFA] border-[#8FB4D4] shadow-inner" : "border-transparent border-b-[#E0F0FA] bg-transparent";
-                    myHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#8FB4D4] w-4 text-center">${idx+1}</span><span class="text-[10px] text-[#333] truncate flex-1">${track.name}</span></div>`;
+                    const bgClass = diff === 0 ? "bg-[#A6D2F5] border-[#5486B6] shadow-inner" : "border-transparent border-b-[#CBE3F7] bg-transparent";
+                    myHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#5486B6] w-4 text-center">${idx+1}</span><span class="text-[10px] text-[#333] truncate flex-1">${track.name}</span></div>`;
                 });
 
                 friendOrder.forEach((id, idx) => {
                     const track = album.tracks.find(t => t.id === id);
                     const diff = myOrder.indexOf(id) === idx ? 0 : -1;
                     if (diff === 0) matchCount++;
-                    const bgClass = diff === 0 ? "bg-[#D0EAFA] border-[#8FB4D4] shadow-inner" : "border-transparent border-b-[#E0F0FA] bg-transparent";
-                    friendHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#8FB4D4] w-4 text-center">${idx+1}</span><span class="text-[10px] text-[#666] truncate flex-1">${track.name}</span></div>`;
+                    const bgClass = diff === 0 ? "bg-[#A6D2F5] border-[#5486B6] shadow-inner" : "border-transparent border-b-[#CBE3F7] bg-transparent";
+                    friendHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#5486B6] w-4 text-center">${idx+1}</span><span class="text-[10px] text-[#666] truncate flex-1">${track.name}</span></div>`;
                 });
 
                 document.getElementById('mode3ResultAlbumName').textContent = `《${album.title}》歌曲排行比對`;
@@ -1014,7 +1023,7 @@
                 topCoverContainer.innerHTML = `
                     <div class="absolute z-10 hover:z-50">
                         <div class="w-24 h-24 sm:w-36 sm:h-36 transition-all duration-300 hover:scale-105 cursor-pointer">
-                            <div class="p-1 bg-white border border-[#BCE0F9] shadow-md h-full w-full">
+                            <div class="p-1 bg-white border border-[#8CBDE6] shadow-md h-full w-full">
                                 <img src="${album.cover}" class="w-full h-full object-cover">
                             </div>
                         </div>
@@ -1058,10 +1067,10 @@
                         const trackName = getTrackName(id);
                         const album = chenAlbums.find(a => a.tracks.some(t => t.id === id));
                         commonHtml += `
-                            <div class="flex items-center gap-2 border-b border-dashed border-[#E0F0FA] pb-1.5 last:border-0 last:pb-0">
-                                <div class="p-0.5 bg-white border border-[#BCE0F9] shadow-sm shrink-0"><img src="${album.cover}" class="w-8 h-8 object-cover"></div>
+                            <div class="flex items-center gap-2 border-b border-dashed border-[#CBE3F7] pb-1.5 last:border-0 last:pb-0">
+                                <div class="p-0.5 bg-white border border-[#8CBDE6] shadow-sm shrink-0"><img src="${album.cover}" class="w-8 h-8 object-cover"></div>
                                 <div class="flex-1 min-w-0">
-                                    <span class="block font-bold text-[#14496B] text-[11px] truncate">${trackName}</span>
+                                    <span class="block font-bold text-[#052F6D] text-[11px] truncate">${trackName}</span>
                                     <span class="block text-[9px] text-[#888] truncate">《${album.title}》</span>
                                 </div>
                             </div>`;
@@ -1073,12 +1082,12 @@
                     const trackName = getTrackName(id);
                     const album = chenAlbums.find(a => a.tracks.some(t => t.id === id));
                     const isMatch = commonTracks.includes(id);
-                    const bgClass = isMatch ? "bg-[#D0EAFA] border-[#8FB4D4] shadow-inner" : "bg-transparent border-transparent border-b-[#E0F0FA]";
+                    const bgClass = isMatch ? "bg-[#A6D2F5] border-[#5486B6] shadow-inner" : "bg-transparent border-transparent border-b-[#CBE3F7]";
                     
                     if (friendOrder.indexOf(id) === idx) matchCount++; // 同位才加分
                     if (isMatch && !matchedCovers.includes(album.cover)) matchedCovers.push(album.cover);
 
-                    myHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#8FB4D4] w-4 text-center">#${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#8FB4D4] shrink-0"><span class="text-[10px] text-[#333] truncate flex-1">${trackName}</span></div>`;
+                    myHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#5486B6] w-4 text-center">#${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#5486B6] shrink-0"><span class="text-[10px] text-[#333] truncate flex-1">${trackName}</span></div>`;
                 });
 
                 let friendHtml = '';
@@ -1086,8 +1095,8 @@
                     const trackName = getTrackName(id);
                     const album = chenAlbums.find(a => a.tracks.some(t => t.id === id));
                     const isMatch = commonTracks.includes(id);
-                    const bgClass = isMatch ? "bg-[#D0EAFA] border-[#8FB4D4] shadow-inner" : "bg-transparent border-transparent border-b-[#E0F0FA]";
-                    friendHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#8FB4D4] w-4 text-center">#${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#D0EAFA] shrink-0 opacity-80"><span class="text-[10px] text-[#666] truncate flex-1">${trackName}</span></div>`;
+                    const bgClass = isMatch ? "bg-[#A6D2F5] border-[#5486B6] shadow-inner" : "bg-transparent border-transparent border-b-[#CBE3F7]";
+                    friendHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#5486B6] w-4 text-center">#${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#A6D2F5] shrink-0 opacity-80"><span class="text-[10px] text-[#666] truncate flex-1">${trackName}</span></div>`;
                 });
 
                 document.getElementById('myColumnTitle4').textContent = `${myName} 的 TOP10`;
@@ -1103,7 +1112,7 @@
                     stackHtml += `
                         <div class="absolute hover:z-50" style="transform: translate(${pos.x}%, ${pos.y}%) rotate(${pos.r}deg); z-index: ${idx};">
                             <div class="w-11 h-11 sm:w-16 sm:h-16 transition-all duration-300 hover:-translate-y-3 hover:scale-125 cursor-pointer">
-                                <div class="p-0.5 sm:p-1 bg-white border border-[#BCE0F9] shadow-md h-full w-full">
+                                <div class="p-0.5 sm:p-1 bg-white border border-[#8CBDE6] shadow-md h-full w-full">
                                     <img src="${coverUrl}" class="w-full h-full object-cover">
                                 </div>
                             </div>
@@ -1120,7 +1129,8 @@
                 modeSelect.value = '4';
             }
 
-            document.getElementById('matchPercentage').innerHTML = `${matchRate}% <span class="text-lg sm:text-xl font-bold text-[#447293] pb-0.5">相似</span>`;
+            // 更新%數資訊並縮小字體與間距
+            document.getElementById('matchPercentage').innerHTML = `${matchRate}%<span class="text-sm sm:text-base font-bold text-[#0E4B8C] pb-0.5">相似</span>`;
             
             const quoteEl = document.getElementById('matchQuote');
             if (matchRate === 100) quoteEl.textContent = "“好像除了我，沒人能把你看透”";
