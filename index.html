@@ -130,6 +130,7 @@
                 <select id="modeSelect" class="inset-input w-full py-1.5 px-2 text-[11px] font-bold text-[#14496B] outline-none cursor-pointer">
                     <option value="1">模式：單曲盲選</option>
                     <option value="2">模式：專輯排行</option>
+                    <option value="3">模式：單專歌曲排行</option>
                 </select>
             </div>
 
@@ -154,6 +155,20 @@
                     </ul>
                 </div>
 
+                <div id="mode3Area" class="hidden pt-2 space-y-3">
+                    <div class="bg-[#F8FBFD] border border-[#BCE0F9] p-3 flex gap-3 items-start shadow-sm rounded-sm">
+                        <img id="mode3SelectedCover" src="" class="w-20 h-20 sm:w-24 sm:h-24 object-cover border border-[#8FB4D4] shrink-0">
+                        <div class="flex-1 min-w-0">
+                            <h2 id="mode3SelectedTitle" class="text-sm font-bold text-[#14496B] mb-2 truncate">專輯名稱</h2>
+                            <label class="text-[10px] font-bold text-[#666] block mb-1">選擇你要排行的專輯：</label>
+                            <select id="mode3AlbumSelect" class="inset-input w-full py-1.5 px-2 text-[11px] font-bold text-[#333] outline-none cursor-pointer">
+                                </select>
+                        </div>
+                    </div>
+                    <ul id="mode3RankList" class="space-y-2">
+                        </ul>
+                </div>
+
                 <button id="generateResultBtn" class="crystal-btn w-full py-2 text-xs font-bold tracking-wide mt-2">
                     產生結果
                 </button>
@@ -164,12 +179,12 @@
                     my profile results
                 </div>
                 
-                <div class="bg-[#F8FBFD] border border-[#D0EAFA] p-4 flex justify-between items-start mb-4 shadow-sm">
-                    <div class="flex-1">
+                <div class="bg-[#F8FBFD] border border-[#D0EAFA] p-4 flex flex-col sm:flex-row justify-center sm:justify-between items-center gap-4 mb-4 shadow-sm">
+                    <div class="w-full sm:flex-1 shrink-0 z-10 text-center sm:text-left">
                         <h1 class="text-3xl sm:text-4xl font-bold text-[#14496B] tracking-tight">MY VIBE</h1>
                         <p class="text-[10px] text-[#666] mt-1 font-bold italic">“這是專屬於我的品味與姿態”</p>
                     </div>
-                    <div id="singleTopCoverContainer" class="relative w-24 h-20 shrink-0 flex justify-center mt-2">
+                    <div id="singleTopCoverContainer" class="relative w-full h-28 sm:w-64 sm:h-32 shrink-0 flex justify-center items-center mt-2 sm:mt-0">
                     </div>
                 </div>
 
@@ -215,12 +230,12 @@
                     match results
                 </div>
                 
-                <div class="bg-[#F8FBFD] border border-[#D0EAFA] p-4 flex justify-between items-start mb-4 shadow-sm">
-                    <div class="flex-1">
+                <div class="bg-[#F8FBFD] border border-[#D0EAFA] p-4 flex flex-col sm:flex-row justify-center sm:justify-between items-center gap-4 mb-4 shadow-sm">
+                    <div class="w-full sm:flex-1 shrink-0 z-10 text-center sm:text-left">
                         <h1 class="text-4xl font-bold text-[#14496B]" id="matchPercentage">44%</h1>
                         <p class="text-[10px] text-[#666] mt-1 font-bold italic" id="matchQuote">“030”</p>
                     </div>
-                    <div id="topCoverContainer" class="relative w-24 h-20 shrink-0 flex justify-center mt-2">
+                    <div id="topCoverContainer" class="relative w-full h-28 sm:w-64 sm:h-32 shrink-0 flex justify-center items-center mt-2 sm:mt-0">
                     </div>
                 </div>
 
@@ -257,6 +272,23 @@
                         </div>
                     </div>
                 </div>
+
+                <div id="mode3ResultBlock" class="hidden space-y-3">
+                    <div class="bg-[#F0F9FF] px-2 py-1 border border-[#BCE0F9] text-[11px] font-bold text-[#14496B] text-center" id="mode3ResultAlbumName">
+                        專輯名稱
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="border border-[#BCE0F9]">
+                            <div class="bg-[#87CEFA] text-[#0E4466] px-2 py-1 text-[10px] font-bold border-b border-[#8FB4D4]" id="myColumnTitle3">我的排行</div>
+                            <div class="p-2 bg-[#F8FBFD] space-y-2" id="myTrackRankResultList"></div>
+                        </div>
+                        <div class="border border-[#D0EAFA]">
+                            <div class="bg-[#E8F5FF] text-[#555] px-2 py-1 text-[10px] font-bold border-b border-[#D0EAFA]" id="friendColumnTitle3">他的排行</div>
+                            <div class="p-2 bg-white space-y-2" id="friendTrackRankResultList"></div>
+                        </div>
+                    </div>
+                </div>
+
             </section>
 
         </div>
@@ -277,26 +309,41 @@
         const modeDescription = document.getElementById('modeDescription');
         const mode1Area = document.getElementById('mode1Area');
         const mode2Area = document.getElementById('mode2Area');
+        const mode3Area = document.getElementById('mode3Area');
         const singleResultArea = document.getElementById('singleResultArea');
         const postResultSection = document.getElementById('postResultSection');
         const resultArea = document.getElementById('resultArea');
+
+        // Mode 3 元素
+        const mode3AlbumSelect = document.getElementById('mode3AlbumSelect');
+        const mode3RankList = document.getElementById('mode3RankList');
+        const mode3SelectedCover = document.getElementById('mode3SelectedCover');
+        const mode3SelectedTitle = document.getElementById('mode3SelectedTitle');
+        let mode3Sortable = null;
 
         modeSelect.addEventListener('change', (e) => {
             resultArea.classList.add('hidden');
             singleResultArea.classList.add('hidden');
             postResultSection.classList.add('hidden');
+            mode1Area.classList.add('hidden');
+            mode2Area.classList.add('hidden');
+            mode3Area.classList.add('hidden');
+
             if (e.target.value === '1') {
                 modeDescription.textContent = "選出每張專輯中你的最愛<3";
                 mode1Area.classList.remove('hidden');
-                mode2Area.classList.add('hidden');
-            } else {
+            } else if (e.target.value === '2') {
                 modeDescription.textContent = "排列所有專輯，最喜歡到最底<3";
-                mode1Area.classList.add('hidden');
                 mode2Area.classList.remove('hidden');
+            } else if (e.target.value === '3') {
+                modeDescription.textContent = "選一張專輯，將裡面的歌從最喜歡排到最不喜歡<3";
+                mode3Area.classList.remove('hidden');
             }
         });
 
-        // 渲染單曲盲選
+        // ==========================================
+        // 渲染模式 1 (單曲盲選)
+        // ==========================================
         const albumContainer = document.getElementById('mode1Area');
         chenAlbums.forEach(album => {
             let optionsHtml = '<option value="">-- select track --</option>';
@@ -319,7 +366,9 @@
             albumContainer.insertAdjacentHTML('beforeend', cardHtml);
         });
 
-        // 渲染專輯排行
+        // ==========================================
+        // 渲染模式 2 (專輯排行)
+        // ==========================================
         const rankList = document.getElementById('rankList');
         chenAlbums.forEach(album => {
             const li = document.createElement('li');
@@ -334,6 +383,42 @@
         });
         new Sortable(rankList, { animation: 150 });
 
+        // ==========================================
+        // 渲染模式 3 (單專歌曲排行)
+        // ==========================================
+        let m3OptionsHtml = '';
+        chenAlbums.forEach((album, idx) => {
+            m3OptionsHtml += `<option value="${idx}">${album.title}</option>`;
+        });
+        mode3AlbumSelect.innerHTML = m3OptionsHtml;
+
+        function renderMode3Tracks(albumIndex) {
+            const album = chenAlbums[albumIndex];
+            mode3SelectedCover.src = album.cover;
+            mode3SelectedTitle.textContent = album.title;
+            mode3RankList.innerHTML = '';
+            
+            album.tracks.forEach((track, idx) => {
+                const li = document.createElement('li');
+                li.dataset.id = track.id;
+                li.dataset.originalIdx = idx;
+                li.className = 'flex items-center gap-3 bg-white p-2 border border-[#BCE0F9] shadow-sm rounded cursor-grab active:cursor-grabbing';
+                li.innerHTML = `
+                    <span class="text-[#8FB4D4] font-bold text-lg px-2 select-none">☰</span>
+                    <span class="text-[10px] text-[#888] font-mono">Tr.${String(idx+1).padStart(2,'0')}</span>
+                    <span class="text-xs font-bold text-[#14496B] truncate">${track.name}</span>
+                `;
+                mode3RankList.appendChild(li);
+            });
+            if (mode3Sortable) mode3Sortable.destroy();
+            mode3Sortable = new Sortable(mode3RankList, { animation: 150 });
+        }
+
+        mode3AlbumSelect.addEventListener('change', (e) => {
+            renderMode3Tracks(e.target.value);
+        });
+        renderMode3Tracks(0); // 初始載入第一張
+
         function getTrackName(trackId) {
             for (let album of chenAlbums) {
                 let track = album.tracks.find(t => t.id === trackId);
@@ -342,11 +427,12 @@
             return "未選擇";
         }
 
-        // 共用產生結果、生成代碼 & 顯示後續步驟區塊
+        // ==========================================
+        // 產生結果 & 代碼
+        // ==========================================
         document.getElementById('generateResultBtn').onclick = function() {
             const userName = document.getElementById('userName').value.trim() || "我";
             const currentMode = document.getElementById('modeSelect').value;
-            let data = { n: userName };
             let singleHtml = '';
             let displayCovers = [];
             let dataParts = [];
@@ -368,11 +454,8 @@
                 
                 if (!isComplete) { alert("每張專輯都要選一首歌ㄛ！"); return; }
                 
-                data.m = 1;
-                data.t = selectedTracks;
                 dataParts = [currentMode, encodeURIComponent(userName), tracksStr];
 
-                // 產生單人清單 (單曲)
                 chenAlbums.forEach(album => {
                     const myTrack = getTrackName(selectedTracks[album.id]);
                     displayCovers.push(album.cover);
@@ -387,7 +470,7 @@
                 });
                 document.getElementById('singleListTitle').textContent = `${userName} 的盲選結果`;
 
-            } else {
+            } else if (currentMode === '2') {
                 const order = Array.from(rankList.children).map(li => li.dataset.id);
                 let rankStr = "";
                 order.forEach((id, idx) => {
@@ -402,21 +485,68 @@
                             <span class="text-[11px] font-bold text-[#14496B] truncate">${album.title}</span>
                         </div>`;
                 });
-                data.m = 2;
-                data.r = order;
                 dataParts = [currentMode, encodeURIComponent(userName), rankStr];
                 document.getElementById('singleListTitle').textContent = `${userName} 的專輯排行`;
+
+            } else if (currentMode === '3') {
+                const albumIdx = parseInt(mode3AlbumSelect.value, 10);
+                const album = chenAlbums[albumIdx];
+                const orderItems = Array.from(mode3RankList.children);
+                let rankStr = "";
+                
+                orderItems.forEach((li, idx) => {
+                    const origIdx = parseInt(li.dataset.originalIdx, 10);
+                    rankStr += origIdx.toString(36);
+                    const track = album.tracks[origIdx];
+                    
+                    singleHtml += `
+                        <div class="flex items-center gap-2 border-b border-dashed border-[#E0F0FA] pb-1.5 last:border-0 last:pb-0">
+                            <span class="text-[11px] font-bold text-[#8FB4D4] w-3">${idx+1}</span>
+                            <div class="flex-1 min-w-0">
+                                <span class="block font-bold text-[#14496B] text-[11px] truncate">${track.name}</span>
+                            </div>
+                        </div>`;
+                });
+                
+                // 僅放置單張圖片
+                displayCovers = [album.cover];
+                
+                dataParts = [currentMode, encodeURIComponent(userName), albumIdx.toString(36), rankStr];
+                document.getElementById('singleListTitle').textContent = `${userName} 的《${album.title}》排行`;
             }
 
-            // 更新單人展示區內容
             document.getElementById('singleChoicesList').innerHTML = singleHtml;
             
             // 單人扇形封面
             let stackHtml = '';
             displayCovers.forEach((coverUrl, idx) => {
-                const offsetIndex = idx - (displayCovers.length - 1) / 2; 
-                const rotate = offsetIndex * 6, translateX = offsetIndex * 8; 
-                stackHtml += `<div class="absolute w-14 h-14 sm:w-16 sm:h-16 transition-all duration-300 hover:-translate-y-2 hover:scale-110" style="transform: translateX(${translateX}px) rotate(${rotate}deg); z-index: ${idx};"><div class="p-0.5 bg-white border border-[#BCE0F9] shadow-md h-full w-full"><img src="${coverUrl}" class="w-full h-full object-cover"></div></div>`;
+                if (displayCovers.length > 1) {
+                    const offsetIndex = idx - (displayCovers.length - 1) / 2; 
+                    // 降低旋轉角度避免角角互相遮擋，加大水平位移拉開距離
+                    const rotate = offsetIndex * 6; 
+                    const translateX = offsetIndex * 30; 
+                    const translateY = Math.abs(offsetIndex) * 4; 
+                    
+                    // 利用 hover:z-50 加上 group-hover:scale 讓指標懸停時被遮擋的照片立刻彈到最上層
+                    stackHtml += `
+                        <div class="absolute hover:z-50 group" style="transform: translateX(${translateX}px) translateY(${translateY}px) rotate(${rotate}deg); z-index: ${idx};">
+                            <div class="w-14 h-14 sm:w-20 sm:h-20 transition-all duration-300 group-hover:-translate-y-6 group-hover:scale-125 cursor-pointer shadow-md">
+                                <div class="p-1 bg-white border border-[#BCE0F9] h-full w-full">
+                                    <img src="${coverUrl}" class="w-full h-full object-cover">
+                                </div>
+                            </div>
+                        </div>`;
+                } else {
+                    // 單張模式 (模式 3) 放得更大
+                    stackHtml += `
+                        <div class="absolute z-10">
+                            <div class="w-20 h-20 sm:w-28 sm:h-28 transition-all duration-300 hover:-translate-y-2 hover:scale-110 shadow-md">
+                                <div class="p-1 bg-white border border-[#BCE0F9] h-full w-full">
+                                    <img src="${coverUrl}" class="w-full h-full object-cover">
+                                </div>
+                            </div>
+                        </div>`;
+                }
             });
             document.getElementById('singleTopCoverContainer').innerHTML = stackHtml;
 
@@ -424,16 +554,13 @@
             const shortCode = btoa(dataParts.join('|'));
             document.getElementById('generatedCode').value = shortCode;
             
-            // 切換顯示狀態：打開單人結果，並顯示下方的代碼區與比對區
             document.getElementById('singleResultArea').classList.remove('hidden');
             document.getElementById('postResultSection').classList.remove('hidden');
             resultArea.classList.add('hidden');
             
-            // 自動往下滾動
             setTimeout(() => { document.getElementById('singleResultArea').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
         };
 
-        // 共用複製代碼
         document.getElementById('copyCodeBtn').onclick = function() {
             const codeInput = document.getElementById('generatedCode');
             codeInput.select();
@@ -445,7 +572,9 @@
             }).catch(() => alert("請手動複製！"));
         };
 
-        // 共用比對代碼 (雙人模式)
+        // ==========================================
+        // 比對資料與結果計算
+        // ==========================================
         document.getElementById('compareBtn').onclick = function() {
             const myName = document.getElementById('userName').value.trim() || "你";
             const friendCode = document.getElementById('friendCode').value.trim();
@@ -471,6 +600,14 @@
                         for (let i = 0; i < parts[2].length; i++) {
                             let aIdx = parseInt(parts[2][i], 36);
                             friendData.r.push(chenAlbums[aIdx].id);
+                        }
+                    } else if (friendData.m === 3) {
+                        friendData.a = parseInt(parts[2], 36);
+                        friendData.r = [];
+                        const albumTracks = chenAlbums[friendData.a].tracks;
+                        for (let i = 0; i < parts[3].length; i++) {
+                            let tIdx = parseInt(parts[3][i], 36);
+                            friendData.r.push(albumTracks[tIdx].id);
                         }
                     }
                 } else {
@@ -532,11 +669,33 @@
                 document.getElementById('friendChoicesList').innerHTML = friendHtml;
                 document.getElementById('commonCountLabel').textContent = `${matchCount}/${total}`;
 
+                // 雙人比對的扇形封面
                 let stackHtml = '';
                 matchedCovers.forEach((coverUrl, idx) => {
-                    const offsetIndex = idx - (matchedCovers.length - 1) / 2; 
-                    const rotate = offsetIndex * 8, translateX = offsetIndex * 10; 
-                    stackHtml += `<div class="absolute w-14 h-14 sm:w-16 sm:h-16 transition-all duration-300 hover:-translate-y-2 hover:scale-110" style="transform: translateX(${translateX}px) rotate(${rotate}deg); z-index: ${idx};"><div class="p-0.5 bg-white border border-[#BCE0F9] shadow-md h-full w-full"><img src="${coverUrl}" class="w-full h-full object-cover"></div></div>`;
+                    if (matchedCovers.length > 1) {
+                        const offsetIndex = idx - (matchedCovers.length - 1) / 2; 
+                        const rotate = offsetIndex * 6; 
+                        const translateX = offsetIndex * 30; 
+                        const translateY = Math.abs(offsetIndex) * 4; 
+                        
+                        stackHtml += `
+                            <div class="absolute hover:z-50 group" style="transform: translateX(${translateX}px) translateY(${translateY}px) rotate(${rotate}deg); z-index: ${idx};">
+                                <div class="w-14 h-14 sm:w-20 sm:h-20 transition-all duration-300 group-hover:-translate-y-6 group-hover:scale-125 cursor-pointer shadow-md">
+                                    <div class="p-1 bg-white border border-[#BCE0F9] h-full w-full">
+                                        <img src="${coverUrl}" class="w-full h-full object-cover">
+                                    </div>
+                                </div>
+                            </div>`;
+                    } else {
+                        stackHtml += `
+                            <div class="absolute z-10">
+                                <div class="w-20 h-20 sm:w-28 sm:h-28 transition-all duration-300 hover:-translate-y-2 hover:scale-110 shadow-md">
+                                    <div class="p-1 bg-white border border-[#BCE0F9] h-full w-full">
+                                        <img src="${coverUrl}" class="w-full h-full object-cover">
+                                    </div>
+                                </div>
+                            </div>`;
+                    }
                 });
                 topCoverContainer.innerHTML = stackHtml;
 
@@ -544,6 +703,7 @@
                 
                 document.getElementById('mode1ResultBlock').classList.remove('hidden');
                 document.getElementById('mode2ResultBlock').classList.add('hidden');
+                document.getElementById('mode3ResultBlock').classList.add('hidden');
                 modeSelect.value = '1'; modeSelect.dispatchEvent(new Event('change'));
 
             } else if (friendData.m === 2) {
@@ -577,14 +737,83 @@
                 document.getElementById('friendRankResultList').innerHTML = friendHtml;
 
                 const topCoverUrl = firstMatch || chenAlbums.find(a => a.id === myOrder[0]).cover;
-                topCoverContainer.innerHTML = `<div class="absolute w-16 h-16"><div class="p-0.5 bg-white border border-[#BCE0F9] shadow-md h-full w-full"><img src="${topCoverUrl}" class="w-full h-full object-cover"></div></div>`;
+                topCoverContainer.innerHTML = `
+                    <div class="absolute z-10">
+                        <div class="w-20 h-20 sm:w-28 sm:h-28 transition-all duration-300 hover:-translate-y-2 hover:scale-110 shadow-md">
+                            <div class="p-1 bg-white border border-[#BCE0F9] h-full w-full">
+                                <img src="${topCoverUrl}" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                    </div>`;
 
                 const maxDiff = 24; 
                 matchRate = Math.max(0, Math.round((1 - (totalDiff / maxDiff)) * 100));
 
                 document.getElementById('mode2ResultBlock').classList.remove('hidden');
                 document.getElementById('mode1ResultBlock').classList.add('hidden');
+                document.getElementById('mode3ResultBlock').classList.add('hidden');
                 modeSelect.value = '2'; modeSelect.dispatchEvent(new Event('change'));
+
+            } else if (friendData.m === 3) {
+                const currentMode = document.getElementById('modeSelect').value;
+                const myAlbumIdx = parseInt(mode3AlbumSelect.value, 10);
+                
+                if (currentMode !== '3' || myAlbumIdx !== friendData.a) {
+                    modeSelect.value = '3'; modeSelect.dispatchEvent(new Event('change'));
+                    mode3AlbumSelect.value = friendData.a; mode3AlbumSelect.dispatchEvent(new Event('change'));
+                    alert(`對方使用的是「單專歌曲排行」模式，並且選擇了《${chenAlbums[friendData.a].title}》。請先為這張專輯排序再比對喔！`);
+                    return;
+                }
+
+                const friendOrder = friendData.r;
+                const myOrder = Array.from(mode3RankList.children).map(li => li.dataset.id);
+                const album = chenAlbums[myAlbumIdx];
+                
+                let myHtml = '', friendHtml = '', totalDiff = 0;
+
+                myOrder.forEach((id, idx) => {
+                    const track = album.tracks.find(t => t.id === id);
+                    myHtml += `<div class="flex items-center gap-2 border-b border-dashed border-[#E0F0FA] pb-1 last:border-0"><span class="text-[10px] font-bold text-[#8FB4D4] w-3">${idx+1}</span><span class="text-[10px] text-[#333] truncate">${track.name}</span></div>`;
+                });
+
+                friendOrder.forEach((id, idx) => {
+                    const track = album.tracks.find(t => t.id === id);
+                    const myIdx = myOrder.indexOf(id);
+                    const diff = Math.abs(myIdx - idx);
+                    totalDiff += diff;
+                    
+                    let tagHtml = '';
+                    if (diff === 0) {
+                        tagHtml = `<span class="bg-[#B8E474] text-[#277015] px-1 rounded text-[8px] ml-auto">同位</span>`;
+                    } else if (diff <= 2) {
+                        tagHtml = `<span class="bg-[#E4D974] text-[#706415] px-1 rounded text-[8px] ml-auto">相近</span>`;
+                    }
+                    friendHtml += `<div class="flex items-center gap-2 border-b border-dashed border-[#E0F0FA] pb-1 last:border-0"><span class="text-[10px] font-bold text-[#8FB4D4] w-3">${idx+1}</span><span class="text-[10px] text-[#666] truncate">${track.name}</span>${tagHtml}</div>`;
+                });
+
+                document.getElementById('mode3ResultAlbumName').textContent = `《${album.title}》歌曲排行比對`;
+                document.getElementById('myColumnTitle3').textContent = `${myName} 的排行`;
+                document.getElementById('friendColumnTitle3').textContent = `${friendName} 的排行`;
+                document.getElementById('myTrackRankResultList').innerHTML = myHtml;
+                document.getElementById('friendTrackRankResultList').innerHTML = friendHtml;
+
+                topCoverContainer.innerHTML = `
+                    <div class="absolute z-10">
+                        <div class="w-20 h-20 sm:w-28 sm:h-28 transition-all duration-300 hover:-translate-y-2 hover:scale-110 shadow-md">
+                            <div class="p-1 bg-white border border-[#BCE0F9] h-full w-full">
+                                <img src="${album.cover}" class="w-full h-full object-cover">
+                            </div>
+                        </div>
+                    </div>`;
+
+                const n = album.tracks.length;
+                const maxDiff = Math.floor((n * n) / 2);
+                matchRate = Math.max(0, Math.round((1 - (totalDiff / maxDiff)) * 100));
+
+                document.getElementById('mode3ResultBlock').classList.remove('hidden');
+                document.getElementById('mode1ResultBlock').classList.add('hidden');
+                document.getElementById('mode2ResultBlock').classList.add('hidden');
+                modeSelect.value = '3';
             }
 
             document.getElementById('matchPercentage').textContent = `${matchRate}%`;
@@ -594,7 +823,6 @@
             else if (matchRate > 0) quoteEl.textContent = "“為什麼你總沉迷，某種神奇的幻想”";
             else quoteEl.textContent = "“你擁有你的，我擁有我的，姿態”";
 
-            // 隱藏單人結果，顯示雙人結果
             document.getElementById('singleResultArea').classList.add('hidden');
             document.getElementById('resultArea').classList.remove('hidden');
             setTimeout(() => { document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
