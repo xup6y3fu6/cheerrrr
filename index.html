@@ -137,6 +137,7 @@
                 </select>
             </div>
 
+            <!-- 第一階段：進行選擇與排序 -->
             <section class="space-y-3">
                 <div class="glossy-header py-1 text-center text-[11px] tracking-wider">
                     step 1: read this first!
@@ -150,12 +151,10 @@
                     </div>
                 </div>
 
-                <div id="mode1Area" class="grid grid-cols-1 gap-2 pt-2">
-                </div>
+                <div id="mode1Area" class="grid grid-cols-1 gap-2 pt-2"></div>
 
                 <div id="mode2Area" class="hidden pt-2">
-                    <ul id="rankList" class="space-y-2">
-                    </ul>
+                    <ul id="rankList" class="space-y-2"></ul>
                 </div>
 
                 <div id="mode3Area" class="hidden pt-2 space-y-3">
@@ -165,13 +164,14 @@
                             <h2 id="mode3SelectedTitle" class="text-sm font-bold text-[#14496B] mb-2 truncate">專輯名稱</h2>
                             <label class="text-[10px] font-bold text-[#666] block mb-1">選擇你要排行的專輯：</label>
                             <select id="mode3AlbumSelect" class="inset-input w-full py-1.5 px-2 text-[11px] font-bold text-[#333] outline-none cursor-pointer">
-                                </select>
+                                <!-- JS 載入 -->
+                            </select>
                         </div>
                     </div>
-                    <ul id="mode3RankList" class="space-y-2">
-                        </ul>
+                    <ul id="mode3RankList" class="space-y-2"></ul>
                 </div>
 
+                <!-- 模式4 全新視覺選曲區 -->
                 <div id="mode4Area" class="hidden pt-2 space-y-3">
                     <div class="bg-[#F8FBFD] border border-[#BCE0F9] p-2 shadow-sm rounded-sm">
                         <label class="text-[10px] font-bold text-[#14496B] block mb-1">1. 從專輯中挑選歌曲加入 TOP10：</label>
@@ -185,7 +185,8 @@
                             <span id="mode4Count" class="text-[10px] font-bold text-red-500 bg-white border border-[#D0EAFA] px-1 rounded-sm">0/10</span>
                         </div>
                         <ul id="mode4RankList" class="space-y-1 min-h-[50px] bg-white border border-[#D0EAFA] p-1 rounded-sm">
-                            </ul>
+                            <!-- JS 載入選入的歌 -->
+                        </ul>
                     </div>
                 </div>
 
@@ -194,17 +195,19 @@
                 </button>
             </section>
 
+            <!-- 單人結果展示區 -->
             <section id="singleResultArea" class="hidden pt-2 border-t border-dashed border-[#BCE0F9]">
                 <div class="glossy-header py-1 text-center text-[11px] tracking-wider mb-3">
                     my profile results
                 </div>
                 
-                <div class="bg-[#F8FBFD] border border-[#D0EAFA] p-4 flex justify-between items-center mb-4 shadow-sm">
-                    <div class="flex-1 shrink-0 z-10 pr-2 min-w-0">
-                        <div id="singleResultHeader" class="tracking-tight mb-2"></div>
-                        <p class="text-[10px] text-[#666] mt-2 font-bold italic truncate">“這是專屬於我的品味與姿態”</p>
+                <div class="bg-[#F8FBFD] border border-[#D0EAFA] p-3 sm:p-4 flex justify-between items-center mb-4 shadow-sm">
+                    <div class="flex-1 z-10 pr-2 min-w-0">
+                        <div id="singleResultHeader" class="tracking-tight mb-1"></div>
+                        <p class="text-[10px] text-[#666] mt-2 font-bold italic leading-tight pr-1">“這是專屬於我的品味與姿態”</p>
                     </div>
-                    <div id="singleTopCoverContainer" class="relative w-48 h-32 sm:w-64 sm:h-40 shrink-0 flex justify-center items-center">
+                    <!-- 縮小的展示容器 -->
+                    <div id="singleTopCoverContainer" class="relative w-36 h-28 sm:w-64 sm:h-40 shrink-0 flex justify-center items-center">
                     </div>
                 </div>
 
@@ -215,8 +218,10 @@
                 </div>
             </section>
 
+            <!-- 產生代碼與 Step 2 比對區（預設隱藏，產生結果後顯示） -->
             <div id="postResultSection" class="hidden space-y-5 pt-3 border-t border-dashed border-[#BCE0F9]">
                 
+                <!-- 產生代碼 -->
                 <section>
                     <div class="glossy-header py-1 text-center text-[11px] tracking-wider mb-2">
                         my code
@@ -232,6 +237,7 @@
                     </div>
                 </section>
 
+                <!-- 第二階段：比對資料 -->
                 <section class="space-y-3">
                     <div class="glossy-header py-1 text-center text-[11px] tracking-wider">
                         step 2: compare profiles
@@ -245,20 +251,24 @@
                 </section>
             </div>
 
+            <!-- 比對結果展示區 -->
             <section id="resultArea" class="hidden pt-2 border-t border-dashed border-[#BCE0F9]">
                 <div class="glossy-header py-1 text-center text-[11px] tracking-wider mb-3" id="resultMainTitle">
                     match results
                 </div>
                 
-                <div class="bg-[#F8FBFD] border border-[#D0EAFA] p-4 flex justify-between items-center mb-4 shadow-sm">
-                    <div class="flex-1 shrink-0 z-10 pr-2 min-w-0">
-                        <div id="matchResultHeader" class="tracking-tight mb-1 truncate"></div>
-                        <h1 class="text-3xl sm:text-4xl font-black text-[#14496B] tracking-tighter drop-shadow-sm flex items-baseline gap-0.5 whitespace-nowrap" id="matchPercentage">
-                            44% <span class="text-base sm:text-lg font-bold text-[#447293] pb-0.5">相似</span>
+                <div class="bg-[#F8FBFD] border border-[#D0EAFA] p-3 sm:p-4 flex justify-between items-center mb-4 shadow-sm">
+                    <div class="flex-1 z-10 pr-2 min-w-0">
+                        <!-- 動態變更標題的容器 -->
+                        <div id="matchResultHeader" class="tracking-tight mb-1"></div>
+                        <!-- 縮小且緊湊的 % 數資訊 -->
+                        <h1 class="text-3xl sm:text-5xl font-black text-[#14496B] tracking-tighter drop-shadow-sm flex items-baseline gap-0.5" id="matchPercentage">
+                            44% <span class="text-base sm:text-xl font-bold text-[#447293] pb-0.5">相似</span>
                         </h1>
-                        <p class="text-[10px] text-[#666] mt-1 font-bold italic truncate" id="matchQuote">“030”</p>
+                        <p class="text-[10px] text-[#666] mt-1 font-bold italic leading-tight pr-1" id="matchQuote">“030”</p>
                     </div>
-                    <div id="topCoverContainer" class="relative w-48 h-32 sm:w-64 sm:h-40 shrink-0 flex justify-center items-center">
+                    <!-- 縮小的展示容器 -->
+                    <div id="topCoverContainer" class="relative w-36 h-28 sm:w-64 sm:h-40 shrink-0 flex justify-center items-center">
                     </div>
                 </div>
 
@@ -312,6 +322,7 @@
                     </div>
                 </div>
 
+                <!-- 模式 4 的結果區塊 -->
                 <div id="mode4ResultBlock" class="hidden space-y-3">
                     <div class="border border-[#BCE0F9]">
                         <div class="bg-gradient-to-b from-[#F0F9FF] to-[#D0EAFA] px-2 py-1 border-b border-[#BCE0F9] flex justify-between items-center">
@@ -373,15 +384,15 @@
         const mode3SelectedTitle = document.getElementById('mode3SelectedTitle');
         let mode3Sortable = null;
 
-        // 隨興排版參數百分比設定
+        // 手機與桌機等比例縮放的散落排版設定
         const casualLayouts = [
-            { x: -100, y: -60, r: -10 },
-            { x: 0,    y: -75, r: 4 },
-            { x: 100,  y: -50, r: 12 },
-            { x: -145, y: 45,  r: -15 },
-            { x: -50,  y: 65,  r: -4 },
-            { x: 50,   y: 55,  r: 6 },
-            { x: 145,  y: 70,  r: 14 }
+            { x: -90,  y: -50, r: -10 }, 
+            { x: 0,    y: -65, r: 4 },   
+            { x: 90,   y: -45, r: 12 },  
+            { x: -120, y: 35,  r: -15 }, 
+            { x: -40,  y: 55,  r: -4 },  
+            { x: 40,   y: 45,  r: 6 },   
+            { x: 120,  y: 60,  r: 14 }   
         ];
 
         // 歌曲編碼器 (2字元)，保持對應完整 chenAlbums 確保 EP 也能解碼
@@ -502,7 +513,7 @@
         mode3AlbumSelect.addEventListener('change', (e) => {
             renderMode3Tracks(e.target.value);
         });
-        renderMode3Tracks(0);
+        renderMode3Tracks(0); 
 
         // ==========================================
         // 渲染模式 4 (全歌曲大雜燴 TOP10 視覺化選區)
@@ -616,7 +627,6 @@
 
             if (currentMode === '1') {
                 const selects = document.querySelectorAll('.album-select');
-                let selectedTracks = {};
                 let isComplete = true;
                 let tracksStr = "";
                 
@@ -714,7 +724,7 @@
                     const pos = casualLayouts[idx % casualLayouts.length];
                     stackHtml += `
                         <div class="absolute hover:z-50" style="transform: translate(${pos.x}%, ${pos.y}%) rotate(${pos.r}deg); z-index: ${idx};">
-                            <div class="w-12 h-12 sm:w-16 sm:h-16 transition-all duration-300 hover:-translate-y-3 hover:scale-125 cursor-pointer">
+                            <div class="w-11 h-11 sm:w-16 sm:h-16 transition-all duration-300 hover:-translate-y-3 hover:scale-125 cursor-pointer">
                                 <div class="p-0.5 sm:p-1 bg-white border border-[#BCE0F9] shadow-md h-full w-full">
                                     <img src="${coverUrl}" class="w-full h-full object-cover">
                                 </div>
@@ -723,7 +733,7 @@
                 } else {
                     stackHtml += `
                         <div class="absolute z-10 hover:z-50">
-                            <div class="w-28 h-28 sm:w-36 sm:h-36 transition-all duration-300 hover:scale-105 cursor-pointer">
+                            <div class="w-24 h-24 sm:w-36 sm:h-36 transition-all duration-300 hover:scale-105 cursor-pointer">
                                 <div class="p-1 bg-white border border-[#BCE0F9] shadow-md h-full w-full">
                                     <img src="${coverUrl}" class="w-full h-full object-cover">
                                 </div>
@@ -878,7 +888,7 @@
                         const pos = casualLayouts[idx % casualLayouts.length];
                         stackHtml += `
                             <div class="absolute hover:z-50" style="transform: translate(${pos.x}%, ${pos.y}%) rotate(${pos.r}deg); z-index: ${idx};">
-                                <div class="w-12 h-12 sm:w-16 sm:h-16 transition-all duration-300 hover:-translate-y-3 hover:scale-125 cursor-pointer">
+                                <div class="w-11 h-11 sm:w-16 sm:h-16 transition-all duration-300 hover:-translate-y-3 hover:scale-125 cursor-pointer">
                                     <div class="p-0.5 sm:p-1 bg-white border border-[#BCE0F9] shadow-md h-full w-full">
                                         <img src="${coverUrl}" class="w-full h-full object-cover">
                                     </div>
@@ -887,7 +897,7 @@
                     } else {
                         stackHtml += `
                             <div class="absolute z-10 hover:z-50">
-                                <div class="w-16 h-16 sm:w-20 sm:h-20 transition-all duration-300 hover:-translate-y-2 hover:scale-110 cursor-pointer">
+                                <div class="w-24 h-24 sm:w-36 sm:h-36 transition-all duration-300 hover:scale-105 cursor-pointer">
                                     <div class="p-1 bg-white border border-[#BCE0F9] shadow-md h-full w-full">
                                         <img src="${coverUrl}" class="w-full h-full object-cover">
                                     </div>
@@ -946,7 +956,7 @@
                     const pos = casualLayouts[idx % casualLayouts.length];
                     stackHtml += `
                         <div class="absolute hover:z-50" style="transform: translate(${pos.x}%, ${pos.y}%) rotate(${pos.r}deg); z-index: ${idx};">
-                            <div class="w-12 h-12 sm:w-16 sm:h-16 transition-all duration-300 hover:-translate-y-3 hover:scale-125 cursor-pointer">
+                            <div class="w-11 h-11 sm:w-16 sm:h-16 transition-all duration-300 hover:-translate-y-3 hover:scale-125 cursor-pointer">
                                 <div class="p-0.5 sm:p-1 bg-white border border-[#BCE0F9] shadow-md h-full w-full">
                                     <img src="${coverUrl}" class="w-full h-full object-cover">
                                 </div>
@@ -1003,7 +1013,7 @@
 
                 topCoverContainer.innerHTML = `
                     <div class="absolute z-10 hover:z-50">
-                        <div class="w-28 h-28 sm:w-36 sm:h-36 transition-all duration-300 hover:scale-105 cursor-pointer">
+                        <div class="w-24 h-24 sm:w-36 sm:h-36 transition-all duration-300 hover:scale-105 cursor-pointer">
                             <div class="p-1 bg-white border border-[#BCE0F9] shadow-md h-full w-full">
                                 <img src="${album.cover}" class="w-full h-full object-cover">
                             </div>
@@ -1092,7 +1102,7 @@
                     const pos = casualLayouts[idx % casualLayouts.length];
                     stackHtml += `
                         <div class="absolute hover:z-50" style="transform: translate(${pos.x}%, ${pos.y}%) rotate(${pos.r}deg); z-index: ${idx};">
-                            <div class="w-12 h-12 sm:w-16 sm:h-16 transition-all duration-300 hover:-translate-y-3 hover:scale-125 cursor-pointer">
+                            <div class="w-11 h-11 sm:w-16 sm:h-16 transition-all duration-300 hover:-translate-y-3 hover:scale-125 cursor-pointer">
                                 <div class="p-0.5 sm:p-1 bg-white border border-[#BCE0F9] shadow-md h-full w-full">
                                     <img src="${coverUrl}" class="w-full h-full object-cover">
                                 </div>
@@ -1110,8 +1120,7 @@
                 modeSelect.value = '4';
             }
 
-            // 更新%數資訊並縮小字體層級
-            document.getElementById('matchPercentage').innerHTML = `${matchRate}% <span class="text-base sm:text-lg font-bold text-[#447293] pb-0.5">相似</span>`;
+            document.getElementById('matchPercentage').innerHTML = `${matchRate}% <span class="text-lg sm:text-xl font-bold text-[#447293] pb-0.5">相似</span>`;
             
             const quoteEl = document.getElementById('matchQuote');
             if (matchRate === 100) quoteEl.textContent = "“好像除了我，沒人能把你看透”";
