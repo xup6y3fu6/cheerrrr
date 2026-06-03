@@ -69,13 +69,37 @@
             flex-direction: column;
         }
 
+        /* 隱藏主視窗捲軸 */
         ::-webkit-scrollbar { display: none; }
-        .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; display: block; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { 
-            background: linear-gradient(to bottom, #7AC5FF, #2596FF);
-            border-radius: 3px; 
-            box-shadow: inset 0 0 2px rgba(255,255,255,0.8);
+        
+        /* 強制顯示藍色自訂捲軸 */
+        .custom-scrollbar {
+            scrollbar-color: #2098FF rgba(180, 215, 245, 0.6);
+            scrollbar-width: thin;
         }
+        .custom-scrollbar::-webkit-scrollbar { 
+            height: 8px; 
+            width: 8px; 
+            display: block !important; 
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(180, 215, 245, 0.6);
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb { 
+            background: #2098FF; 
+            border-radius: 4px; 
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        /* 將捲軸移至左側，避免與右側拖曳把手衝突 */
+        .scroll-left {
+            direction: rtl;
+        }
+        .scroll-left > * {
+            direction: ltr;
+        }
+
         textarea { resize: none; }
 
         .aero-titlebar {
@@ -205,11 +229,11 @@
             
             <div>
                 <marquee scrollamount="3" class="text-[10px] text-[#004FFF] font-bold mb-1 tracking-widest bg-gradient-to-r from-transparent via-[rgba(208,234,250,0.6)] to-transparent py-0.5 rounded-sm">
-                    ₍^ >ヮ<^₎ .ᐟ.ᐟ我愛你 我愛你 ᓚ₍つ^..^₎っ♥ 我用盡所有美好夢想 /ᐠ > ˕ <マ 不想和別人享用 ( ,,⩌'︿'⩌,,) 你每一個小動作 ૮ ྀིᴗ͈ .ᴗ͈ ྀིა 
+                    ₍^ >ヮ<^₎ .ᐟ.ᐟ我愛你 我愛你 ᓚ₍つ^..^₎っෆ 我用盡所有美好夢想 /ᐠ > ˕ <マ 不想和別人享用 ( ,,⩌'︿'⩌,,) 你每一個小動作 ૮ ྀིᴗ͈ .ᴗ͈ ྀིა 
                 </marquee>
 
                 <div class="glossy-header engraved-text py-1 text-center text-[11px] mb-2 tracking-wider font-bold">
-                    ♥₊°🌈✩₊° 想要聽你說 你都怎麼過 °₊✩🌈°₊♥
+                    ෆ₊°🌈✩₊° 想要聽你說 你都怎麼過 °₊✩🌈°₊ෆ
                 </div>
                 
                 <div class="border border-[#A6D2F5] jelly-box p-3 text-xs text-[#335577] leading-relaxed mb-3 rounded-sm">
@@ -218,7 +242,7 @@
                 </div>
 
                 <select id="modeSelect" class="inset-input w-full py-1.5 px-2 text-[11px] font-bold outline-none cursor-pointer">
-                    <option value="1">模式：各專輯最愛ᓚ₍つ^..^₎っ♥</option>
+                    <option value="1">模式：各專輯最愛ᓚ₍つ^..^₎っෆ</option>
                     <option value="2">模式：全專輯排行 ≽^-⩊-^≼</option>
                     <option value="3">模式：單專歌曲排行 ₍^ >⩊< ^₎Ⳋ</option>
                     <option value="4">模式：全歌曲TOP10 ദ്ദി/ᐠ - ⩊ -マ.ᐟ</option>
@@ -241,7 +265,7 @@
                 <div id="mode1Area" class="grid grid-cols-1 gap-2 pt-2"></div>
 
                 <div id="mode2Area" class="hidden pt-2">
-                    <ul id="rankList" class="space-y-2 max-h-[45vh] overflow-y-auto custom-scrollbar pr-2 pl-1 pb-1"></ul>
+                    <ul id="rankList" class="space-y-2 max-h-[45vh] overflow-y-auto custom-scrollbar scroll-left pl-1 pr-1 pb-1"></ul>
                 </div>
 
                 <div id="mode3Area" class="hidden pt-2 space-y-3">
@@ -254,14 +278,16 @@
                             </select>
                         </div>
                     </div>
-                    <ul id="mode3RankList" class="space-y-2 max-h-[45vh] overflow-y-auto custom-scrollbar pr-2 pl-1 pb-1"></ul>
+                    <ul id="mode3RankList" class="space-y-2 max-h-[45vh] overflow-y-auto custom-scrollbar scroll-left pl-1 pr-1 pb-1"></ul>
                 </div>
 
                 <div id="mode4Area" class="hidden pt-2 space-y-3">
                     <div class="jelly-box p-2 rounded-sm">
                         <label class="text-[10px] font-bold text-[#004499] block mb-1">1. 從專輯中挑選歌曲加入 TOP10：</label>
                         <div class="flex gap-2 overflow-x-auto custom-scrollbar pb-2 pt-1 px-1" id="mode4AlbumTabs"></div>
-                        <div class="grid grid-cols-2 gap-1.5 mt-2 max-h-32 overflow-y-auto custom-scrollbar pr-1" id="mode4TrackPool"></div>
+                        <div class="max-h-32 overflow-y-auto custom-scrollbar scroll-left mt-2 pl-1 pr-1">
+                            <div class="grid grid-cols-2 gap-1.5" id="mode4TrackPool" style="direction: ltr;"></div>
+                        </div>
                     </div>
                     
                     <div class="jelly-box p-2 rounded-sm">
@@ -269,7 +295,7 @@
                             <label class="text-[10px] font-bold text-[#004499]">2. TOP10 (排序)：</label>
                             <span id="mode4Count" class="text-[10px] font-bold text-red-500 bg-[rgba(255,255,255,0.8)] border border-[#D0EAFA] px-1 rounded-sm">0/10</span>
                         </div>
-                        <ul id="mode4RankList" class="space-y-1 min-h-[50px] max-h-[45vh] overflow-y-auto custom-scrollbar pr-2 pl-1 pb-1 bg-[rgba(255,255,255,0.6)] border border-[#D0EAFA] rounded-sm shadow-inner">
+                        <ul id="mode4RankList" class="space-y-1 min-h-[50px] max-h-[45vh] overflow-y-auto custom-scrollbar scroll-left pl-1 pr-1 pb-1 bg-[rgba(255,255,255,0.6)] border border-[#D0EAFA] rounded-sm shadow-inner">
                         </ul>
                     </div>
                 </div>
@@ -506,7 +532,7 @@
                 modeDescription.textContent = "你對陳綺貞專輯裡曲目的喜好 ♪";
                 mode3Area.classList.remove('hidden');
             } else if (e.target.value === '4') {
-                modeDescription.textContent = "你的陳綺貞TOP10歌曲！ ♪";
+                modeDescription.textContent = "你的陳綺貞TOP10歌曲 ♪";
                 mode4Area.classList.remove('hidden');
             }
         });
@@ -710,6 +736,8 @@
                 <span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight mt-0.5 drop-shadow-md">陳綺貞</span>
             `;
 
+            let prefixTitle = `M${currentMode}`;
+
             if (currentMode === '1') {
                 resultHeaderHtml += `<span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md">各專輯最愛</span>`;
             } else if (currentMode === '2') {
@@ -721,6 +749,7 @@
                     <span class="text-xl sm:text-2xl font-extrabold text-[#005A9E] block leading-tight drop-shadow-md mt-0.5">《${albumTitle}》</span>
                     <span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md mt-0.5">喜好排行</span>
                 `;
+                prefixTitle = `M3(${albumTitle})`;
             } else if (currentMode === '4') {
                 resultHeaderHtml += `<span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md">TOP10</span>`;
             }
@@ -850,7 +879,8 @@
             document.getElementById('singleTopCoverContainer').innerHTML = stackHtml;
 
             const shortCode = btoa(dataParts.join('|'));
-            document.getElementById('generatedCode').value = shortCode;
+            const finalCode = `CHEER-${prefixTitle}-${shortCode}`;
+            document.getElementById('generatedCode').value = finalCode;
             
             document.getElementById('singleResultArea').classList.remove('hidden');
             document.getElementById('postResultSection').classList.remove('hidden');
@@ -875,13 +905,16 @@
         // ==========================================
         document.getElementById('compareBtn').onclick = function() {
             const myName = document.getElementById('userName').value.trim() || "你";
-            const friendCode = document.getElementById('friendCode').value.trim();
+            const friendCodeInput = document.getElementById('friendCode').value.trim();
 
-            if (!friendCode) { alert("請貼上他的代碼！"); return; }
+            if (!friendCodeInput) { alert("請貼上他的代碼！"); return; }
+            
+            // 移除可能帶有專輯名稱的前綴標示
+            const cleanCode = friendCodeInput.replace(/^CHEER-M\d.*?-/, '');
 
             let friendData = {};
             try {
-                const decodedStr = atob(friendCode);
+                const decodedStr = atob(cleanCode);
                 if (decodedStr.includes('|')) {
                     const parts = decodedStr.split('|');
                     friendData.m = parseInt(parts[0], 10);
