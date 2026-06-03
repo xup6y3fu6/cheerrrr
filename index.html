@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>表現給我看</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
@@ -15,20 +17,21 @@
         }
 
         html::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #4B97FF;
-    background-image: url('bg.jpg'); 
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    z-index: -1;
-    filter: saturate(1.2) contrast(1.1);
-}
+            content: "";
+            position: fixed;
+            /* 將邊界向外延伸，強制覆蓋所有藍色邊界 */
+            top: -50px;
+            left: -50px;
+            right: -50px;
+            bottom: -50px;
+            background-color: #4B97FF;
+            background-image: url('bg.jpg'); 
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            z-index: -1;
+            filter: saturate(1.2) contrast(1.1);
+        }
 
         body {
             height: 100vh;
@@ -45,9 +48,6 @@
             overflow: hidden;
             background-color: transparent;
         }
-
-        /* 新寫法 — 掛在 html 上，完全脫離 safe area 的影響 */
-
 
         /* 視窗本體設定 */
         body {
@@ -78,7 +78,7 @@
         ::-webkit-scrollbar { display: none; }
         .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; display: block; }
         .custom-scrollbar::-webkit-scrollbar-thumb { 
-            background: linear-gradient(to bottom, #7AC5FF, #2596FF); 
+            background: linear-gradient(to bottom, #7AC5FF, #2596FF);
             border-radius: 3px; 
             box-shadow: inset 0 0 2px rgba(255,255,255,0.8);
         }
@@ -215,7 +215,7 @@
             
             <div>
                 <marquee scrollamount="3" class="text-[10px] text-[#004FFF] font-bold mb-1 tracking-widest bg-gradient-to-r from-transparent via-[rgba(208,234,250,0.6)] to-transparent py-0.5 rounded-sm">
-                    ₍^ >ヮ<^₎ .ᐟ.ᐟ我愛你 我愛你 ᓚ₍つ^. .^₎っ♥ 我用盡所有美好夢想 /ᐠ > ˕ <マ 不想和別人享用 ( ,,⩌'︿'⩌,,) 你每一個小動作 ૮ ྀིᴗ͈ . ᴗ͈ ྀིა 
+                    ₍^ >ヮ<^₎ .ᐟ.ᐟ我愛你 我愛你 ᓚ₍つ^..^₎っ♥ 我用盡所有美好夢想 /ᐠ > ˕ <マ 不想和別人享用 ( ,,⩌'︿'⩌,,) 你每一個小動作 ૮ ྀིᴗ͈ .ᴗ͈ ྀིა 
                 </marquee>
 
                 <div class="glossy-header engraved-text py-1 text-center text-[11px] mb-2 tracking-wider font-bold">
@@ -228,7 +228,7 @@
                 </div>
 
                 <select id="modeSelect" class="inset-input w-full py-1.5 px-2 text-[11px] font-bold outline-none cursor-pointer">
-                    <option value="1">模式：各專輯最愛ᓚ₍つ^. .^₎っ♥</option>
+                    <option value="1">模式：各專輯最愛ᓚ₍つ^..^₎っ♥</option>
                     <option value="2">模式：全專輯排行 ≽^-⩊-^≼</option>
                     <option value="3">模式：單專歌曲排行 ₍^ >⩊< ^₎Ⳋ</option>
                     <option value="4">模式：全歌曲TOP10 ദ്ദി/ᐠ - ⩊ -マ.ᐟ</option>
@@ -261,7 +261,7 @@
                             <h2 id="mode3SelectedTitle" class="text-sm font-bold text-[#004499] mb-2 truncate">專輯名稱</h2>
                             <label class="text-[10px] font-bold text-[#557799] block mb-1">選擇你想排行的專輯：</label>
                             <select id="mode3AlbumSelect" class="inset-input w-full py-1.5 px-2 text-[11px] font-bold outline-none cursor-pointer">
-                                </select>
+                            </select>
                         </div>
                     </div>
                     <ul id="mode3RankList" class="space-y-2"></ul>
@@ -280,7 +280,7 @@
                             <span id="mode4Count" class="text-[10px] font-bold text-red-500 bg-[rgba(255,255,255,0.8)] border border-[#D0EAFA] px-1 rounded-sm">0/10</span>
                         </div>
                         <ul id="mode4RankList" class="space-y-1 min-h-[50px] bg-[rgba(255,255,255,0.6)] border border-[#D0EAFA] p-1 rounded-sm shadow-inner">
-                            </ul>
+                        </ul>
                     </div>
                 </div>
 
@@ -443,7 +443,6 @@
             { id: "album_07", title: "沙發海", year: "2018", cover: "沙發.jpg", isEp: false, tracks: [{ id: "t07_01", name: "傷害" }, { id: "t07_02", name: "小船" }, { id: "t07_03", name: "殘缺的彩虹" }, { id: "t07_04", name: "台北某個地方" }, { id: "t07_05", name: "沙發海" }, { id: "t07_06", name: "跳舞吧" }, { id: "t07_07", name: "他說" }, { id: "t07_08", name: "華生" }, { id: "t07_09", name: "變色龍" }, { id: "t07_10", name: "觀察者" }, { id: "t07_11", name: "神魂顛倒" }] },
             
             // ▼ 預留 EP / 單曲欄位，帶有 isEp: true 標記，會在 1、2、3 模式被隱藏 ▼
-            
             { id: "ep_01", title: "CHEER", year: "2005", cover: "精選.jpg", isEp: true, tracks: [{ id: "ep_01", name: "九份的咖啡店" }, { id: "ep_01", name: "雨天的尾巴(滬尾小情歌)" }] },
             { id: "ep_02", title: "After 17 - Single", year: "2004", cover: "17.jpg", isEp: true, tracks: [{ id: "ep02_01", name: "After 17" }, { id: "ep02_02", name: "小小校歌" }] },
             { id: "ep_03", title: "夏季練習曲世界巡迴現場錄音", year: "2004", cover: "夏季.jpg", isEp: true, tracks: [{ id: "ep03_01", name: "（失明前）我想記得的四十七件事" }] },
@@ -453,7 +452,7 @@
             { id: "ep_07", title: "偶然與巧合 - Single", year: "2014", cover: "偶然.jpg", isEp: true, tracks: [{ id: "ep07_01", name: "偶然與巧合" }, { id: "ep07_02", name: "海浪" }] },
             { id: "ep_08", title: "夏天蒙太奇 - Single", year: "2023", cover: "夏天.jpg", isEp: true, tracks: [{ id: "ep08_01", name: "夏天蒙太奇" }] },
         ];
-
+        
         // 過濾出正規專輯
         const regularAlbums = chenAlbums.filter(a => !a.isEp);
 
@@ -491,6 +490,7 @@
             }
             return "00";
         }
+
         function decodeTrackId(twoCharStr) {
             const aIdx = parseInt(twoCharStr[0], 36);
             const tIdx = parseInt(twoCharStr[1], 36);
@@ -626,6 +626,7 @@
                     img.classList.add('border-[#004FFF]', 'shadow-md', 'scale-105');
                     renderMode4Pool(idx);
                 };
+                
                 mode4AlbumTabs.appendChild(img);
             });
             renderMode4Pool(0);
@@ -664,7 +665,8 @@
                 mode4RankList.appendChild(li);
             });
             mode4Count.textContent = `${mode4SelectedTracks.length}/10`;
-            mode4Count.className = mode4SelectedTracks.length === 10 ? "text-[10px] font-bold text-[#0078D7] bg-[#BCE4FF] border border-[#66BFFF] px-1 rounded-sm shadow-sm" : "text-[10px] font-bold text-red-500 bg-[rgba(255,255,255,0.8)] border border-[#A6D2F5] px-1 rounded-sm shadow-sm";
+            mode4Count.className = mode4SelectedTracks.length === 10 ?
+                "text-[10px] font-bold text-[#0078D7] bg-[#BCE4FF] border border-[#66BFFF] px-1 rounded-sm shadow-sm" : "text-[10px] font-bold text-red-500 bg-[rgba(255,255,255,0.8)] border border-[#A6D2F5] px-1 rounded-sm shadow-sm";
         }
 
         window.removeMode4Track = function(trackId) {
@@ -759,7 +761,7 @@
                             </div>`;
                     }
                 });
-                
+
                 if (!isComplete) { alert("每張專輯都要選一首歌ㄛ！"); return; }
                 
                 dataParts = [currentMode, encodeURIComponent(userName), tracksStr];
@@ -772,6 +774,7 @@
                     const albumIdx = chenAlbums.findIndex(a => a.id === id); 
                     rankStr += albumIdx.toString(36);
                     const album = chenAlbums[albumIdx];
+                    
                     displayCovers.push(album.cover);
                     singleHtml += `
                         <div class="flex items-center gap-2 border-b border-dashed border-[#8CBDE6] pb-1.5 last:border-0 last:pb-0">
@@ -780,6 +783,7 @@
                             <span class="text-[11px] font-bold text-[#003B99] truncate">${album.title}</span>
                         </div>`;
                 });
+
                 dataParts = [currentMode, encodeURIComponent(userName), rankStr];
                 document.getElementById('singleChoicesList').innerHTML = singleHtml;
 
@@ -788,7 +792,7 @@
                 const album = chenAlbums[albumIdx];
                 const orderItems = Array.from(mode3RankList.children);
                 let rankStr = "";
-                
+
                 orderItems.forEach((li, idx) => {
                     const origIdx = parseInt(li.dataset.originalIdx, 10);
                     rankStr += origIdx.toString(36);
@@ -944,7 +948,7 @@
                 <span class="text-[11px] sm:text-xs font-bold text-[#005A9E] block leading-tight drop-shadow-sm">陳綺貞</span>
                 <span class="text-[11px] sm:text-xs font-bold text-[#005A9E] block leading-tight drop-shadow-sm">${friendModeTitle}</span>
             `;
-
+            
             if (friendData.m === 1) {
                 const selects = document.querySelectorAll('.album-select');
                 let myTracks = {}, myComplete = true;
@@ -952,15 +956,16 @@
                     if (!select.value) myComplete = false;
                     myTracks[select.dataset.albumId] = select.value;
                 });
-                
+
                 if (!myComplete) { 
-                    modeSelect.value = '1'; modeSelect.dispatchEvent(new Event('change'));
+                    modeSelect.value = '1';
+                    modeSelect.dispatchEvent(new Event('change'));
                     alert("對方使用的是「各專輯最愛」模式，請先完成你的選擇再比對ㄛ！"); return; 
                 }
 
                 const friendTracks = friendData.t;
                 let commonHtml = '', myHtml = '', friendHtml = '', matchCount = 0, matchedCovers = []; 
-                const total = regularAlbums.length; 
+                const total = regularAlbums.length;
 
                 regularAlbums.forEach((album) => {
                     const myTrack = getTrackName(myTracks[album.id]);
@@ -983,7 +988,7 @@
                 });
 
                 if (matchCount === 0) { 
-                    commonHtml = `<p class="text-[10px] text-[#557799] text-center py-2 col-span-2 italic">030</p>`; 
+                    commonHtml = `<p class="text-[10px] text-[#557799] text-center py-2 col-span-2 italic">030</p>`;
                     regularAlbums.forEach(album => matchedCovers.push(album.cover));
                 }
 
@@ -1018,7 +1023,6 @@
                     }
                 });
                 topCoverContainer.innerHTML = stackHtml;
-
                 matchRate = Math.round((matchCount / total) * 100);
                 
                 document.getElementById('mode1ResultBlock').classList.remove('hidden');
@@ -1083,14 +1087,16 @@
                 document.getElementById('mode1ResultBlock').classList.add('hidden');
                 document.getElementById('mode3ResultBlock').classList.add('hidden');
                 document.getElementById('mode4ResultBlock').classList.add('hidden');
-                modeSelect.value = '2'; modeSelect.dispatchEvent(new Event('change'));
+                modeSelect.value = '2';
+                modeSelect.dispatchEvent(new Event('change'));
 
             } else if (friendData.m === 3) {
                 const currentMode = document.getElementById('modeSelect').value;
                 const myAlbumIdx = parseInt(mode3AlbumSelect.value, 10);
                 
                 if (currentMode !== '3' || myAlbumIdx !== friendData.a) {
-                    modeSelect.value = '3'; modeSelect.dispatchEvent(new Event('change'));
+                    modeSelect.value = '3';
+                    modeSelect.dispatchEvent(new Event('change'));
                     mode3AlbumSelect.value = friendData.a; mode3AlbumSelect.dispatchEvent(new Event('change'));
                     alert(`對方使用的是「單專歌曲排行」模式，並且選擇了《${chenAlbums[friendData.a].title}》。請先為這張專輯排序再比對ㄛ！`);
                     return;
@@ -1127,7 +1133,7 @@
                     <div class="absolute z-10 hover:z-50">
                         <div class="w-24 h-24 sm:w-36 sm:h-36 transition-all duration-300 hover:scale-105 cursor-pointer">
                             <div class="p-1 bg-[rgba(255,255,255,0.9)] border border-[#8CBDE6] shadow-[0_5px_15px_rgba(0,50,150,0.4)] h-full w-full rounded-sm">
-                                <img src="${album.cover}" class="w-full h-full object-cover rounded-sm">
+                                 <img src="${album.cover}" class="w-full h-full object-cover rounded-sm">
                             </div>
                         </div>
                     </div>`;
@@ -1144,7 +1150,8 @@
             } else if (friendData.m === 4) {
                 const currentMode = document.getElementById('modeSelect').value;
                 if (currentMode !== '4') {
-                    modeSelect.value = '4'; modeSelect.dispatchEvent(new Event('change'));
+                    modeSelect.value = '4';
+                    modeSelect.dispatchEvent(new Event('change'));
                     alert("對方使用的是「全歌曲 TOP10」模式。請先完成你的選擇再比對ㄛ！");
                     return;
                 }
@@ -1157,8 +1164,8 @@
                 let matchCount = 0;
                 let matchedCovers = [];
                 const commonTracks = myOrder.filter(id => friendOrder.includes(id));
-
                 let commonHtml = '';
+                
                 if (commonTracks.length === 0) {
                     commonHtml = `<p class="text-[10px] text-[#557799] text-center py-2 col-span-2 italic">030</p>`;
                     myOrder.concat(friendOrder).forEach(id => {
@@ -1242,6 +1249,7 @@
 
             document.getElementById('singleResultArea').classList.add('hidden');
             document.getElementById('resultArea').classList.remove('hidden');
+            
             setTimeout(() => { document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
         };
     </script>
