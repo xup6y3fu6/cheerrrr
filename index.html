@@ -1,2527 +1,1247 @@
 <!DOCTYPE html>
-
 <html lang="zh-TW">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>表現給我看</title>
-
     <script src="https://cdn.tailwindcss.com"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
-
     <style>
-
         /* ========================================== */
-
         /* 背景強制填滿修正與 App 視窗化配置           */
-
         /* ========================================== */
-
-        /* ==========================================
-           iOS 背景修正：將背景移至 html 層
-           避免 body overflow:hidden 裁切 fixed 偽元素
-           ========================================== */
         html {
-            min-height: 100%;
-            min-height: -webkit-fill-available;
             background-color: #4B97FF;
-            background-image: url('bg.jpg');
-            background-size: cover;
-            background-position: center center;
-            background-attachment: fixed;
-            background-repeat: no-repeat;
-            -webkit-background-size: cover;
-            filter: saturate(1.2) contrast(1.1);
         }
 
         body {
             height: 100vh;
             height: 100dvh;
-            height: -webkit-fill-available;
             margin: 0;
-            padding: 0;
+            
+            /* 適配 iOS 安全邊距 */
+            padding-top: env(safe-area-inset-top);
+            padding-bottom: env(safe-area-inset-bottom);
+            padding-left: env(safe-area-inset-left);
+            padding-right: env(safe-area-inset-right);
+            box-sizing: border-box;
+            
             overflow: hidden;
             background-color: transparent;
+        }
+
+        /* 新寫法 — 掛在 html 上，完全脫離 safe area 的影響 */
+html::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #4B97FF;
+    background-image: url('bg.jpg'); 
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    z-index: -1;
+    filter: saturate(1.2) contrast(1.1);
+}
+
+        /* 視窗本體設定 */
+        body {
             font-family: 'Tahoma', 'Verdana', sans-serif;
             color: #113366;
             -webkit-tap-highlight-color: transparent;
-        }
-
-
-
-        /* ========================================== */
-
-        /* iOS 全螢幕安全邊界 Hack (自 SCSS 編譯)      */
-
-        /* ========================================== */
-
-        #wrap {
-
-            width: 100%;
-
-            height: 100%;
-
             display: flex;
-
             justify-content: center;
-
             align-items: center;
-
-            box-sizing: border-box;
-
         }
-
-
-
-        @supports (padding:max(0px)) {
-
-            #wrap.hack_iphoneFullScreen {
-
-                /* iOS < 11.2 */
-
-                padding-left: constant(safe-area-inset-left);
-
-                padding-top: constant(safe-area-inset-top);
-
-                padding-right: constant(safe-area-inset-right);
-
-                padding-bottom: constant(safe-area-inset-bottom);
-
-                /* iOS >= 11.2 */
-
-                padding-left: env(safe-area-inset-left);
-
-                padding-top: env(safe-area-inset-top);
-
-                padding-right: env(safe-area-inset-right);
-
-                padding-bottom: env(safe-area-inset-bottom);
-
-            }
-
-        }
-
-
-
-        /* ========================================== */
-
-        /* 視窗本體設定                                */
-
-        /* ========================================== */
 
         .aero-window {
-
             background: rgba(220, 240, 255, 0.25);
-
             backdrop-filter: blur(14px);
-
             -webkit-backdrop-filter: blur(14px);
-
             border: 1.5px solid rgba(255, 255, 255, 0.8);
-
             box-shadow: 0 15px 35px rgba(0, 40, 120, 0.4), inset 0 0 0 2px rgba(255, 255, 255, 0.6), inset 0 15px 30px rgba(255, 255, 255, 0.4);
-
             border-radius: 10px;
-
             padding: 4px;
-
             width: 96%;
-
             max-width: 480px;
-
             height: 96%;
-
             max-height: 850px;
-
             display: flex;
-
             flex-direction: column;
-
         }
-
-
 
         ::-webkit-scrollbar { display: none; }
-
         .custom-scrollbar::-webkit-scrollbar { height: 6px; width: 6px; display: block; }
-
         .custom-scrollbar::-webkit-scrollbar-thumb { 
-
             background: linear-gradient(to bottom, #7AC5FF, #2596FF); 
-
             border-radius: 3px; 
-
             box-shadow: inset 0 0 2px rgba(255,255,255,0.8);
-
         }
-
         textarea { resize: none; }
 
-
-
         .aero-titlebar {
-
             background: linear-gradient(to bottom, #0088FF 0%, #0054E6 12%, #002DB3 45%, #001280 50%, #0026CC 100%);
-
             border: 1px solid #001040;
-
             border-bottom: 2px solid #5486B6;
-
             border-radius: 7px 7px 0 0;
-
             flex-shrink: 0;
-
             box-shadow: inset 0 1px 2px rgba(255,255,255,0.6);
-
         }
-
-
 
         /* 雕刻文字共用類別 */
-
         .engraved-text {
-
             color: rgb(255, 255, 255);
-
             text-shadow: 0px 1px 1px rgba(0, 10, 153, 0.9), 0px -1px 1px rgba(0, 0, 0, 0.716);
-
         }
-
-
 
         /* 果凍感立體標題 */
-
         .glossy-header {
-
             background: linear-gradient(to bottom, #94D0FF 0%, #3DA5FF 45%, #0078D7 50%, #4FB4FF 100%);
-
             border: 1px solid #005A9E;
-
             border-radius: 5px;
-
             box-shadow: inset 0 2px 3px rgba(255,255,255,0.7), 0 2px 4px rgba(0,40,120,0.2);
-
             letter-spacing: 0.1em;
-
         }
-
-
 
         /* 清單專用水晶標題列 */
-
         .crystal-bar {
-
             background: linear-gradient(to bottom, #94D0FF 0%, #3DA5FF 45%, #0078D7 50%, #4FB4FF 100%);
-
             border-bottom: 1px solid #005A9E;
-
             box-shadow: inset 0 2px 3px rgba(255,255,255,0.7);
-
         }
-
         
-
         .no-engrave {
-
             text-shadow: none !important;
-
         }
-
-
 
         .crystal-btn {
-
             background: linear-gradient(to bottom, #BCE4FF 0%, #66BFFF 45%, #2098FF 50%, #66BFFF 100%);
-
             border: 1px solid #005A9E;
-
             border-radius: 6px;
-
             color: #002255;
-
             text-shadow: 0 1px 0 rgba(255,255,255,0.9);
-
             box-shadow: inset 0 1px 2px rgba(255,255,255,0.9), inset 0 -1px 2px rgba(0,0,0,0.1), 0 3px 5px rgba(0,50,150,0.3);
-
             transition: all 0.1s;
-
         }
-
         .crystal-btn:active {
-
             background: linear-gradient(to bottom, #2098FF 0%, #66BFFF 100%);
-
             box-shadow: inset 0 2px 5px rgba(0,30,100,0.4);
-
             transform: translateY(1px);
-
         }
-
-
 
         /* 復古淺黃色輸入框 */
-
         .inset-input {
-
             background: rgba(255, 252, 224, 0.85);
-
             backdrop-filter: blur(4px);
-
             -webkit-backdrop-filter: blur(4px);
-
             border: 1px solid #B0A070;
-
             box-shadow: inset 2px 2px 5px rgba(130,110,50,0.15), 0 1px 0 rgba(255,255,255,0.8);
-
             border-radius: 4px;
-
             color: #554411;
-
         }
-
         .inset-input:focus {
-
             background: rgba(255, 255, 240, 1);
-
             border-color: #D9A400;
-
             box-shadow: inset 2px 2px 5px rgba(130,110,50,0.2), 0 0 5px rgba(217,164,0,0.5);
-
             outline: none;
-
         }
-
-
 
         select {
-
             appearance: none;
-
             background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23554411'%3e%3cpolygon points='6,9 18,9 12,16'/%3e%3c/svg%3e");
-
             background-repeat: no-repeat;
-
             background-position: right 0.25rem center;
-
             background-size: 0.8rem;
-
         }
-
-
 
         .glass-container {
-
             background-color: rgba(255, 255, 255, 0.55);
-
             background-image: radial-gradient(#8CBDE6 1.5px, transparent 1.5px);
-
             background-size: 12px 12px;
-
             backdrop-filter: blur(6px);
-
             -webkit-backdrop-filter: blur(6px);
-
         }
-
-
 
         .jelly-box {
-
             background: rgba(244, 249, 254, 0.7);
-
             border: 1px solid rgba(143, 180, 212, 0.6);
-
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.8), 0 2px 4px rgba(0,40,120,0.05);
-
             backdrop-filter: blur(3px);
-
         }
-
         .jelly-item {
-
             background: rgba(255, 255, 255, 0.75);
-
             border: 1px solid rgba(140, 189, 230, 0.7);
-
             box-shadow: inset 0 1px 0 rgba(255,255,255,0.9), 0 2px 3px rgba(0,30,90,0.08);
-
         }
-
-
 
         .sortable-ghost { opacity: 0.4; }
-
         .sortable-drag { cursor: grabbing !important; }
-
     </style>
-
 </head>
-
 <body class="antialiased">
 
-
-
-    <div id="wrap" class="hack_iphoneFullScreen">
-
-
-
-        <div class="aero-window">
-
+    <div class="aero-window">
+        
+        <div class="aero-titlebar p-2 flex flex-col gap-2 shrink-0">
+            <div class="flex items-center justify-between px-1">
+                <div class="flex items-center gap-1.5">
+                    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='%23FFFFFF'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/></svg>" class="w-4 h-4 drop-shadow-md">
+                    <span class="text-xs font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">Cheerego Internet Explorer</span>
+                </div>
+                <div class="flex gap-0.5">
+                    <div class="w-6 h-4 bg-gradient-to-b from-[#6094EB] to-[#1551C2] border border-[#01217A] rounded-sm shadow-inner flex justify-center items-center pb-1 text-white leading-none cursor-pointer">_</div>
+                    <div class="w-6 h-4 bg-gradient-to-b from-[#6094EB] to-[#1551C2] border border-[#01217A] rounded-sm shadow-inner flex justify-center items-center text-white leading-none text-[10px] cursor-pointer">□</div>
+                    <div class="w-9 h-4 bg-gradient-to-b from-[#FFAAAA] to-[#E60000] border border-[#7A0F0F] rounded-sm shadow-[inset_0_1px_1px_rgba(255,255,255,0.7)] flex justify-center items-center text-white text-[10px] font-bold cursor-pointer drop-shadow-sm">X</div>
+                </div>
+            </div>
             
-
-            <div class="aero-titlebar p-2 flex flex-col gap-2 shrink-0">
-
-                <div class="flex items-center justify-between px-1">
-
-                    <div class="flex items-center gap-1.5">
-
-                        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='%23FFFFFF'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/></svg>" class="w-4 h-4 drop-shadow-md">
-
-                        <span class="text-xs font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">Cheerego Internet Explorer</span>
-
-                    </div>
-
-                    <div class="flex gap-0.5">
-
-                        <div class="w-6 h-4 bg-gradient-to-b from-[#6094EB] to-[#1551C2] border border-[#01217A] rounded-sm shadow-inner flex justify-center items-center pb-1 text-white leading-none cursor-pointer">_</div>
-
-                        <div class="w-6 h-4 bg-gradient-to-b from-[#6094EB] to-[#1551C2] border border-[#01217A] rounded-sm shadow-inner flex justify-center items-center text-white leading-none text-[10px] cursor-pointer">□</div>
-
-                        <div class="w-9 h-4 bg-gradient-to-b from-[#FFAAAA] to-[#E60000] border border-[#7A0F0F] rounded-sm shadow-[inset_0_1px_1px_rgba(255,255,255,0.7)] flex justify-center items-center text-white text-[10px] font-bold cursor-pointer drop-shadow-sm">X</div>
-
-                    </div>
-
+            <div class="bg-[rgba(150,200,255,0.3)] backdrop-blur-md border border-[rgba(255,255,255,0.5)] p-1 flex gap-1 items-center rounded-sm shadow-[inset_0_1px_3px_rgba(255,255,255,0.8)]">
+                <div class="flex gap-0.5">
+                    <div class="w-6 h-6 rounded-full bg-gradient-to-b from-[rgba(208,234,250,0.8)] to-[rgba(135,206,250,0.8)] backdrop-blur-sm border border-[#5289A5] flex items-center justify-center text-[#003B99] font-black shadow-sm text-xs opacity-80">←</div>
+                    <div class="w-6 h-6 rounded-full bg-gradient-to-b from-[rgba(208,234,250,0.8)] to-[rgba(135,206,250,0.8)] backdrop-blur-sm border border-[#5289A5] flex items-center justify-center text-[#003B99] font-black shadow-sm text-xs opacity-40">→</div>
                 </div>
-
-                
-
-                <div class="bg-[rgba(150,200,255,0.3)] backdrop-blur-md border border-[rgba(255,255,255,0.5)] p-1 flex gap-1 items-center rounded-sm shadow-[inset_0_1px_3px_rgba(255,255,255,0.8)]">
-
-                    <div class="flex gap-0.5">
-
-                        <div class="w-6 h-6 rounded-full bg-gradient-to-b from-[rgba(208,234,250,0.8)] to-[rgba(135,206,250,0.8)] backdrop-blur-sm border border-[#5289A5] flex items-center justify-center text-[#003B99] font-black shadow-sm text-xs opacity-80">←</div>
-
-                        <div class="w-6 h-6 rounded-full bg-gradient-to-b from-[rgba(208,234,250,0.8)] to-[rgba(135,206,250,0.8)] backdrop-blur-sm border border-[#5289A5] flex items-center justify-center text-[#003B99] font-black shadow-sm text-xs opacity-40">→</div>
-
-                    </div>
-
-                    <div class="flex-1 bg-[rgba(255,255,255,0.55)] backdrop-blur-sm border border-[rgba(127,157,185,0.8)] shadow-[inset_0_1px_4px_rgba(0,50,150,0.2)] px-2 py-0.5 text-[11px] text-[#003B99] flex items-center gap-1.5 h-6 rounded-sm">
-
-                        <span class="text-[#3DA5FF]">🔍</span> https://www.cheerego.com
-
-                    </div>
-
+                <div class="flex-1 bg-[rgba(255,255,255,0.55)] backdrop-blur-sm border border-[rgba(127,157,185,0.8)] shadow-[inset_0_1px_4px_rgba(0,50,150,0.2)] px-2 py-0.5 text-[11px] text-[#003B99] flex items-center gap-1.5 h-6 rounded-sm">
+                    <span class="text-[#3DA5FF]">🔍</span> https://www.cheerego.com
                 </div>
-
             </div>
-
-
-
-            <div class="glass-container border-l border-r border-b border-[#5486B6] flex-1 overflow-y-auto p-3 space-y-5 rounded-b-[8px] relative">
-
-                
-
-                <div>
-
-                    <marquee scrollamount="3" class="text-[10px] text-[#004FFF] font-bold mb-1 tracking-widest bg-gradient-to-r from-transparent via-[rgba(208,234,250,0.6)] to-transparent py-0.5 rounded-sm">
-
-                        ₍^ >ヮ<^₎ .ᐟ.ᐟ我愛你 我愛你 ᓚ₍つ^. .^₎っ♥ 我用盡所有美好夢想 /ᐠ > ˕ <マ 不想和別人享用 ( ,,⩌'︿'⩌,,) 你每一個小動作 ૮ ྀིᴗ͈ . ᴗ͈ ྀིა 
-
-                    </marquee>
-
-
-
-                    <div class="glossy-header engraved-text py-1 text-center text-[11px] mb-2 tracking-wider font-bold">
-
-                        ♥₊°🌈✩₊° 想要聽你說 你都怎麼過 °₊✩🌈°₊♥
-
-                    </div>
-
-                    
-
-                    <div class="border border-[#A6D2F5] jelly-box p-3 text-xs text-[#335577] leading-relaxed mb-3 rounded-sm">
-
-                        <strong class="text-[#004499] text-sm">表現給我看 (๑ↀᆺↀ๑)</strong><br>
-
-                        <span id="modeDescription">選出每張專輯中你的最愛 ♪</span>
-
-                    </div>
-
-
-
-                    <select id="modeSelect" class="inset-input w-full py-1.5 px-2 text-[11px] font-bold outline-none cursor-pointer">
-
-                        <option value="1">模式：各專輯最愛ᓚ₍つ^. .^₎っ♥</option>
-
-                        <option value="2">模式：全專輯排行 ≽^-⩊-^≼</option>
-
-                        <option value="3">模式：單專歌曲排行 ₍^ >⩊< ^₎Ⳋ</option>
-
-                        <option value="4">模式：全歌曲TOP10 ദ്ദി/ᐠ - ⩊ -マ.ᐟ</option>
-
-                    </select>
-
-                </div>
-
-
-
-                <section class="space-y-3">
-
-                    <div class="glossy-header engraved-text py-1 text-center text-[11px] tracking-wider font-bold">
-
-                        ⋆✧꒰ა☆ 總以為謎一般難懂的我 ☆໒꒱✧⋆
-
-                    </div>
-
-                    
-
-                    <div class="flex items-center gap-2 jelly-box p-2 rounded-sm">
-
-                        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%232098FF'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" class="w-8 h-8 p-1 border border-[#BCE0F9] bg-[rgba(255,255,255,0.8)] shadow-sm rounded-sm">
-
-                        <div class="flex-1">
-
-                            <label class="text-[10px] font-bold text-[#004499] block mb-0.5">我是：</label>
-
-                            <input type="text" id="userName" placeholder="(輸入名字...)" class="inset-input w-full py-1 px-2 text-[11px]">
-
-                        </div>
-
-                    </div>
-
-
-
-                    <div id="mode1Area" class="grid grid-cols-1 gap-2 pt-2"></div>
-
-
-
-                    <div id="mode2Area" class="hidden pt-2">
-
-                        <ul id="rankList" class="space-y-2"></ul>
-
-                    </div>
-
-
-
-                    <div id="mode3Area" class="hidden pt-2 space-y-3">
-
-                        <div class="jelly-box p-3 flex gap-3 items-start rounded-sm">
-
-                            <img id="mode3SelectedCover" src="" class="w-20 h-20 sm:w-24 sm:h-24 object-cover border border-[#8FB4D4] shrink-0 rounded-sm shadow-sm">
-
-                            <div class="flex-1 min-w-0">
-
-                                <h2 id="mode3SelectedTitle" class="text-sm font-bold text-[#004499] mb-2 truncate">專輯名稱</h2>
-
-                                <label class="text-[10px] font-bold text-[#557799] block mb-1">選擇你想排行的專輯：</label>
-
-                                <select id="mode3AlbumSelect" class="inset-input w-full py-1.5 px-2 text-[11px] font-bold outline-none cursor-pointer">
-
-                                    </select>
-
-                            </div>
-
-                        </div>
-
-                        <ul id="mode3RankList" class="space-y-2"></ul>
-
-                    </div>
-
-
-
-                    <div id="mode4Area" class="hidden pt-2 space-y-3">
-
-                        <div class="jelly-box p-2 rounded-sm">
-
-                            <label class="text-[10px] font-bold text-[#004499] block mb-1">1. 從專輯中挑選歌曲加入 TOP10：</label>
-
-                            <div class="flex gap-2 overflow-x-auto custom-scrollbar pb-2 pt-1 px-1" id="mode4AlbumTabs"></div>
-
-                            <div class="grid grid-cols-2 gap-1.5 mt-2 max-h-32 overflow-y-auto custom-scrollbar pr-1" id="mode4TrackPool"></div>
-
-                        </div>
-
-                        
-
-                        <div class="jelly-box p-2 rounded-sm">
-
-                            <div class="flex justify-between items-center mb-2">
-
-                                <label class="text-[10px] font-bold text-[#004499]">2. TOP10 (可拖曳排序)：</label>
-
-                                <span id="mode4Count" class="text-[10px] font-bold text-red-500 bg-[rgba(255,255,255,0.8)] border border-[#D0EAFA] px-1 rounded-sm">0/10</span>
-
-                            </div>
-
-                            <ul id="mode4RankList" class="space-y-1 min-h-[50px] bg-[rgba(255,255,255,0.6)] border border-[#D0EAFA] p-1 rounded-sm shadow-inner">
-
-                                </ul>
-
-                        </div>
-
-                    </div>
-
-
-
-                    <button id="generateResultBtn" class="crystal-btn w-full py-2 text-xs font-bold tracking-wide mt-2 !text-[#8B0000]">
-
-                        結果! ₍^ >ヮ<^₎✧
-
-                    </button>
-
-                </section>
-
-
-
-                <section id="singleResultArea" class="hidden pt-2 border-t border-dashed border-[#8CBDE6]">
-
-                    <div class="glossy-header engraved-text py-1 text-center text-[11px] tracking-wider mb-3 font-bold">
-
-                        ⋆✧ 我的花讓我開 ✧⋆
-
-                    </div>
-
-                    
-
-                    <div class="jelly-box p-3 sm:p-4 flex justify-between items-center mb-4 rounded-sm">
-
-                        <div class="flex-1 z-10 pr-2 min-w-0">
-
-                            <div id="singleResultHeader" class="tracking-tight mb-2"></div>
-
-                        </div>
-
-                        <div id="singleTopCoverContainer" class="relative w-36 h-28 sm:w-64 sm:h-40 shrink-0 flex justify-center items-center">
-
-                        </div>
-
-                    </div>
-
-
-
-                    <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
-
-                        <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="singleListTitle">這就是我 ★</div>
-
-                        <div class="p-2 bg-[rgba(255,255,255,0.7)] space-y-2 backdrop-blur-sm" id="singleChoicesList"></div>
-
-                    </div>
-
-                </section>
-
-
-
-                <div id="postResultSection" class="hidden pt-3 border-t border-dashed border-[#8CBDE6]">
-
-                    <section>
-
-                        <div class="glossy-header engraved-text py-1 text-center text-[11px] tracking-wider mb-2 font-bold">
-
-                            跟你的朋友比較吧！ ✧₍^ >⩊< ^₎Ⳋ
-
-                        </div>
-
-                        <div class="jelly-box p-3 rounded-sm flex flex-col gap-3">
-
-                            <div>
-
-                                <p class="text-[10px] font-bold text-[#004499] mb-1">複製代碼分享給朋友！ </p>
-
-                                <div class="relative">
-
-                                    <textarea id="generatedCode" readonly class="inset-input w-full p-2 pr-16 text-[10px] font-mono h-12 flex items-center"></textarea>
-
-                                    <button id="copyCodeBtn" class="absolute bottom-2 right-2 crystal-btn px-2 py-1 text-[10px]">
-
-                                        複製
-
-                                    </button>
-
-                                </div>
-
-                            </div>
-
-
-
-                            <div class="flex flex-col gap-2 pt-2 border-t border-dashed border-[#A6D2F5]">
-
-                                <div class="flex gap-1.5">
-
-                                    <input type="text" id="friendCode" placeholder="貼上他的代碼( *^-^)ρ" class="inset-input w-full px-2 py-1.5 text-[11px] flex-1">
-
-                                    <button id="pasteCodeBtn" class="crystal-btn px-3 py-1 text-[11px] font-bold shrink-0 whitespace-nowrap">
-
-                                        貼上
-
-                                    </button>
-
-                                </div>
-
-                                <button id="compareBtn" class="crystal-btn w-full py-2 text-xs font-bold tracking-wide !text-[#8B0000]">
-
-                                    我們的喜好契合嗎...？ 
-
-                                </button>
-
-                            </div>
-
-                        </div>
-
-                    </section>
-
-                </div>
-
-
-
-                <section id="resultArea" class="hidden pt-2 border-t border-dashed border-[#8CBDE6]">
-
-                    <div class="glossy-header engraved-text py-1 text-center text-[11px] tracking-wider mb-3 font-bold" id="resultMainTitle">
-
-                        ⋆✧ match results ✧⋆
-
-                    </div>
-
-                    
-
-                    <div class="jelly-box p-3 sm:p-4 flex justify-between items-center mb-4 rounded-sm">
-
-                        <div class="flex-1 z-10 pr-2 min-w-0">
-
-                            <div id="matchResultHeader" class="tracking-tight mb-1 truncate"></div>
-
-                            <h1 class="text-3xl sm:text-4xl font-black text-[#004FFF] tracking-tighter drop-shadow-[0_2px_2px_rgba(255,255,255,0.8)] flex items-baseline gap-0.5 whitespace-nowrap" id="matchPercentage">
-
-                                44% <span class="text-base sm:text-lg font-bold text-[#0078FF] pb-0.5">相似</span>
-
-                            </h1>
-
-                            <p class="text-[10px] text-[#557799] mt-1 font-bold italic leading-tight pr-1" id="matchQuote">“你們沒有相同的選擇/ᐠ ╥ ˕ ╥マ”</p>
-
-                        </div>
-
-                        <div id="topCoverContainer" class="relative w-36 h-28 sm:w-64 sm:h-40 shrink-0 flex justify-center items-center">
-
-                        </div>
-
-                    </div>
-
-
-
-                    <div id="mode1ResultBlock" class="hidden space-y-3">
-
-                        <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
-
-                            <div class="crystal-bar engraved-text px-2 py-1 flex justify-between items-center">
-
-                                <span class="text-[10px] font-bold">你們都選了... ?</span>
-
-                                <span class="text-[10px] bg-[rgba(255,255,255,0.8)] border border-[#8FB4D4] px-1 rounded-sm text-[#004499] no-engrave" id="commonCountLabel">4/7</span>
-
-                            </div>
-
-                            <div class="p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm grid grid-cols-2 gap-2" id="commonChoicesList"></div>
-
-                        </div>
-
-
-
-                        <div class="grid grid-cols-2 gap-2">
-
-                            <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
-
-                                <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle1">我的喜好★</div>
-
-                                <div class="p-2 bg-[rgba(248,251,253,0.7)] backdrop-blur-sm space-y-2 h-full" id="myChoicesList"></div>
-
-                            </div>
-
-                            <div class="border border-[#A6D2F5] rounded-sm overflow-hidden shadow-sm">
-
-                                <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="friendColumnTitle1">他的喜好★</div>
-
-                                <div class="p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm space-y-2 h-full" id="friendChoicesList"></div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-
-                    <div id="mode2ResultBlock" class="hidden space-y-3">
-
-                        <div class="grid grid-cols-2 gap-2">
-
-                            <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
-
-                                <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle2">我的喜好★</div>
-
-                                <div class="p-2 bg-[rgba(248,251,253,0.7)] backdrop-blur-sm space-y-2 h-full" id="myRankResultList"></div>
-
-                            </div>
-
-                            <div class="border border-[#A6D2F5] rounded-sm overflow-hidden shadow-sm">
-
-                                <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="friendColumnTitle2">他的喜好★</div>
-
-                                <div class="p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm space-y-2 h-full" id="friendRankResultList"></div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-
-                    <div id="mode3ResultBlock" class="hidden space-y-3">
-
-                        <div class="crystal-bar engraved-text px-2 py-1 text-[11px] font-bold text-center shadow-sm" id="mode3ResultAlbumName">
-
-                            專輯名稱
-
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-2">
-
-                            <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
-
-                                <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle3">我的喜好★</div>
-
-                                <div class="p-2 bg-[rgba(248,251,253,0.7)] backdrop-blur-sm space-y-2 h-full" id="myTrackRankResultList"></div>
-
-                            </div>
-
-                            <div class="border border-[#A6D2F5] rounded-sm overflow-hidden shadow-sm">
-
-                                <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="friendColumnTitle3">他的喜好★</div>
-
-                                <div class="p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm space-y-2 h-full" id="friendTrackRankResultList"></div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-
-                    <div id="mode4ResultBlock" class="hidden space-y-3">
-
-                        <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
-
-                            <div class="crystal-bar engraved-text px-2 py-1 flex justify-between items-center">
-
-                                <span class="text-[10px] font-bold">你們都選了... ?</span>
-
-                                <span class="text-[10px] bg-[rgba(255,255,255,0.8)] border border-[#8FB4D4] px-1 rounded-sm text-[#004499] no-engrave" id="mode4CommonCountLabel"></span>
-
-                            </div>
-
-                            <div class="p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm grid grid-cols-2 gap-2" id="mode4CommonChoicesList"></div>
-
-                        </div>
-
-
-
-                        <div class="grid grid-cols-2 gap-2">
-
-                            <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
-
-                                <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle4">我的TOP10</div>
-
-                                <div class="p-1 sm:p-2 bg-[rgba(248,251,253,0.7)] backdrop-blur-sm space-y-1 h-full" id="myTrackTop10ResultList"></div>
-
-                            </div>
-
-                            <div class="border border-[#A6D2F5] rounded-sm overflow-hidden shadow-sm">
-
-                                <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="friendColumnTitle4">他的TOP10</div>
-
-                                <div class="p-1 sm:p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm space-y-1 h-full" id="friendTrackTop10ResultList"></div>
-
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-
-                </section>
-
-
-
-            </div>
-
         </div>
 
-    </div> <script>
-
-        // ==========================================
-
-        // 執行 Safari 全螢幕 Meta Hack
-
-        // ==========================================
-
-        function safariHacks () {
-
-            const hasSlider = document.getElementById('wrap');
-
-            const isMata = document.querySelector('meta[name="viewport"]');
-
-
-
-            if(hasSlider !== null) {
-
-                isMata.setAttribute(
-
-                    'content', 
-
-                    'width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover'
-
-                );
-
-            };
-
-        }
-
-        safariHacks();
-
-
-
-        // 專輯資料庫
-
-        const chenAlbums = [
-
-            { id: "album_01", title: "讓我想一想", year: "1998", cover: "想.jpg", isEp: false, tracks: [{ id: "t01_01", name: "讓我想一想" }, { id: "t01_02", name: "微涼的你" }, { id: "t01_03", name: "會不會" }, { id: "t01_04", name: "情歌" }, { id: "t01_05", name: "和你在一起" }, { id: "t01_06", name: "嫉妒" }, { id: "t01_07", name: "孤島" }, { id: "t01_08", name: "孩子" }, { id: "t01_09", name: "天使" }, { id: "t01_10", name: "漫漫長夜" }] },
-
-            { id: "album_02", title: "還是會寂寞", year: "2000", cover: "還是.jpg", isEp: false, tracks: [{ id: "t02_01", name: "越洋電話" }, { id: "t02_02", name: "我的驕傲無可救藥" }, { id: "t02_03", name: "還是會寂寞" }, { id: "t02_04", name: "下午三點" }, { id: "t02_05", name: "溫室花朵" }, { id: "t02_06", name: "午餐的約會" }, { id: "t02_07", name: "等待" }, { id: "t02_08", name: "慢歌3" }, { id: "t02_09", name: "告訴我" }, { id: "t02_10", name: "慢歌1" }, { id: "t02_11", name: "靈感" }] },
-
-            { id: "album_03", title: "吉他手", year: "2002", cover: "吉他手.jpg", isEp: false, tracks: [{ id: "t03_01", name: "我親愛的偏執狂" }, { id: "t03_02", name: "太聰明" }, { id: "t03_03", name: "小步舞曲" }, { id: "t03_04", name: "1234567" }, { id: "t03_05", name: "隨便說說" }, { id: "t03_06", name: "躺在你的衣櫃 (Guitar Version)" }, { id: "t03_07", name: "A Practice" }, { id: "t03_08", name: "吉他手" }, { id: "t03_09", name: "黑眼圈" }, { id: "t03_10", name: "就算全世界與我為敵" }, { id: "t03_11", name: "小塵埃" }, { id: "t03_12", name: "不應該" }, { id: "t03_13", name: "躺在你的衣櫃 (Piano Version)" }] },
-
-            { id: "album_04", title: "華麗的冒險", year: "2005", cover: "華麗.jpg", isEp: false, tracks: [{ id: "t04_01", name: "旅行的意義" }, { id: "t04_02", name: "腐朽" }, { id: "t04_03", name: "Sentimental Kills" }, { id: "t04_04", name: "華麗的冒險" }, { id: "t04_05", name: "太多" }, { id: "t04_06", name: "花的姿態" }, { id: "t04_07", name: "Self" }, { id: "t04_08", name: "80%完美的日子" }, { id: "t04_09", name: "表面的和平" }, { id: "t04_10", name: "靜靜的生活" }, { id: "t04_11", name: "最初的起點" }] },
-
-            { id: "album_05", title: "太陽", year: "2009", cover: "太陽.jpg", isEp: false, tracks: [{ id: "t05_01", name: "手的預言" }, { id: "t05_02", name: "狂戀" }, { id: "t05_03", name: "太陽" }, { id: "t05_04", name: "魚" }, { id: "t05_05", name: "距離" }, { id: "t05_06", name: "倔強愛情的勝利" }, { id: "t05_07", name: "失敗者的飛翔" }, { id: "t05_08", name: "下個星期去英國" }, { id: "t05_09", name: "另一種平靜" }, { id: "t05_10", name: "煙火" }, { id: "t05_11", name: "一首歌，讓你帶回去" }] },
-
-            { id: "album_06", title: "時間的歌", year: "2013", cover: "時間.jpg", isEp: false, tracks: [{ id: "t06_01", name: "時間的歌" }, { id: "t06_02", name: "漣漪" }, { id: "t06_03", name: "柏拉圖式的愛情" }, { id: "t06_04", name: "Peace & Revolution" }, { id: "t06_05", name: "雨水一盒" }, { id: "t06_06", name: "秋天蒙太奇" }, { id: "t06_07", name: "流浪者之歌" }, { id: "t06_08", name: "倒數" }, { id: "t06_09", name: "沙漏" }, { id: "t06_10", name: "普魯斯特行動" }, { id: "t06_11", name: "別送我回家" }, { id: "t06_12", name: "家" }] },
-
-            { id: "album_07", title: "沙發海", year: "2018", cover: "沙發.jpg", isEp: false, tracks: [{ id: "t07_01", name: "傷害" }, { id: "t07_02", name: "小船" }, { id: "t07_03", name: "殘缺的彩虹" }, { id: "t07_04", name: "台北某個地方" }, { id: "t07_05", name: "沙發海" }, { id: "t07_06", name: "跳舞吧" }, { id: "t07_07", name: "他說" }, { id: "t07_08", name: "華生" }, { id: "t07_09", name: "變色龍" }, { id: "t07_10", name: "觀察者" }, { id: "t07_11", name: "神魂顛倒" }] },
-
+        <div class="glass-container border-l border-r border-b border-[#5486B6] flex-1 overflow-y-auto p-3 space-y-5 rounded-b-[8px] relative">
             
-
-            // ▼ 預留 EP / 單曲欄位，帶有 isEp: true 標記，會在 1、2、3 模式被隱藏 ▼
-
-            
-
-            { id: "ep_01", title: "CHEER", year: "2005", cover: "精選.jpg", isEp: true, tracks: [{ id: "ep_01", name: "九份的咖啡店" }, { id: "ep_01", name: "雨天的尾巴(滬尾小情歌)" }] },
-
-            { id: "ep_02", title: "After 17 - Single", year: "2004", cover: "17.jpg", isEp: true, tracks: [{ id: "ep02_01", name: "After 17" }, { id: "ep02_02", name: "小小校歌" }] },
-
-            { id: "ep_03", title: "夏季練習曲世界巡迴現場錄音", year: "2004", cover: "夏季.jpg", isEp: true, tracks: [{ id: "ep03_01", name: "（失明前）我想記得的四十七件事" }] },
-
-            { id: "ep_04", title: "pussy - Single", year: "2007", cover: "鋪溪.jpg", isEp: true, tracks: [{ id: "ep04_01", name: "pussy" }] },
-
-            { id: "ep_05", title: "蜉蝣 - Single", year: "2011", cover: "蜉蝣.jpg", isEp: true, tracks: [{ id: "ep05_01", name: "迷霧中跳舞" }, { id: "ep05_02", name: "蜉蝣" }] },
-
-            { id: "ep_06", title: "喜歡上你時的內心活動 - Single", year: "2017", cover: "喜.jpg", isEp: true, tracks: [{ id: "ep06_01", name: "喜歡上你時的內心活動" }] },
-
-            { id: "ep_07", title: "偶然與巧合 - Single", year: "2014", cover: "偶然.jpg", isEp: true, tracks: [{ id: "ep07_01", name: "偶然與巧合" }, { id: "ep07_02", name: "海浪" }] },
-
-            { id: "ep_08", title: "夏天蒙太奇 - Single", year: "2023", cover: "夏天.jpg", isEp: true, tracks: [{ id: "ep08_01", name: "夏天蒙太奇" }] },
-
-        ];
-
-
-
-        // 過濾出正規專輯
-
-        const regularAlbums = chenAlbums.filter(a => !a.isEp);
-
-
-
-        const modeSelect = document.getElementById('modeSelect');
-
-        const modeDescription = document.getElementById('modeDescription');
-
-        const mode1Area = document.getElementById('mode1Area');
-
-        const mode2Area = document.getElementById('mode2Area');
-
-        const mode3Area = document.getElementById('mode3Area');
-
-        const mode4Area = document.getElementById('mode4Area');
-
-        const singleResultArea = document.getElementById('singleResultArea');
-
-        const postResultSection = document.getElementById('postResultSection');
-
-        const resultArea = document.getElementById('resultArea');
-
-
-
-        const mode3AlbumSelect = document.getElementById('mode3AlbumSelect');
-
-        const mode3RankList = document.getElementById('mode3RankList');
-
-        const mode3SelectedCover = document.getElementById('mode3SelectedCover');
-
-        const mode3SelectedTitle = document.getElementById('mode3SelectedTitle');
-
-        let mode3Sortable = null;
-
-
-
-        // 縮小化手機版散落排版設定
-
-        const casualLayouts = [
-
-            { x: -75,  y: -40, r: -10 }, 
-
-            { x: 0,    y: -55, r: 4 },   
-
-            { x: 75,   y: -35, r: 12 },  
-
-            { x: -100, y: 25,  r: -15 }, 
-
-            { x: -30,  y: 45,  r: -4 },  
-
-            { x: 30,   y: 35,  r: 6 },   
-
-            { x: 100,  y: 50,  r: 14 }   
-
-        ];
-
-
-
-        function encodeTrackId(trackId) {
-
-            for (let aIdx = 0; aIdx < chenAlbums.length; aIdx++) {
-
-                const tIdx = chenAlbums[aIdx].tracks.findIndex(t => t.id === trackId);
-
-                if (tIdx !== -1) return aIdx.toString(36) + tIdx.toString(36);
-
-            }
-
-            return "00";
-
-        }
-
-        function decodeTrackId(twoCharStr) {
-
-            const aIdx = parseInt(twoCharStr[0], 36);
-
-            const tIdx = parseInt(twoCharStr[1], 36);
-
-            return chenAlbums[aIdx]?.tracks[tIdx]?.id || "";
-
-        }
-
-
-
-        // ==========================================
-
-        // 模式切換邏輯
-
-        // ==========================================
-
-        modeSelect.addEventListener('change', (e) => {
-
-            resultArea.classList.add('hidden');
-
-            singleResultArea.classList.add('hidden');
-
-            postResultSection.classList.add('hidden');
-
-            mode1Area.classList.add('hidden');
-
-            mode2Area.classList.add('hidden');
-
-            mode3Area.classList.add('hidden');
-
-            mode4Area.classList.add('hidden');
-
-
-
-            if (e.target.value === '1') {
-
-                modeDescription.textContent = "你的陳綺貞各專輯最愛 ♪";
-
-                mode1Area.classList.remove('hidden');
-
-            } else if (e.target.value === '2') {
-
-                modeDescription.textContent = "你的陳綺貞專輯喜好排行 ♪";
-
-                mode2Area.classList.remove('hidden');
-
-            } else if (e.target.value === '3') {
-
-                modeDescription.textContent = "你對陳綺貞專輯裡曲目的喜好 ♪";
-
-                mode3Area.classList.remove('hidden');
-
-            } else if (e.target.value === '4') {
-
-                modeDescription.textContent = "你的陳綺貞TOP10歌曲！ ♪";
-
-                mode4Area.classList.remove('hidden');
-
-            }
-
-        });
-
-
-
-        // ==========================================
-
-        // 渲染模式 1 (各專輯最愛)
-
-        // ==========================================
-
-        const albumContainer = document.getElementById('mode1Area');
-
-        regularAlbums.forEach(album => {
-
-            let optionsHtml = '<option value="">-- select track --</option>';
-
-            album.tracks.forEach(track => {
-
-                optionsHtml += `<option value="${track.id}">${track.name}</option>`;
-
-            });
-
-            const cardHtml = `
-
-                <div class="flex items-center gap-2 border-b border-dashed border-[#A6D2F5] pb-2 last:border-0 last:pb-0">
-
-                    <div class="p-0.5 bg-[rgba(255,255,255,0.8)] border border-[#66BFFF] shadow-sm shrink-0 rounded-sm">
-
-                        <img src="${album.cover}" class="w-12 h-12 object-cover">
-
-                    </div>
-
-                    <div class="flex-1 min-w-0">
-
-                        <h3 class="font-bold text-[11px] text-[#004499] truncate mb-0.5">${album.title}</h3>
-
-                        <select data-album-id="${album.id}" class="album-select w-full inset-input py-0.5 px-1 text-[10px]">
-
-                            ${optionsHtml}
-
-                        </select>
-
-                    </div>
-
+            <div>
+                <marquee scrollamount="3" class="text-[10px] text-[#004FFF] font-bold mb-1 tracking-widest bg-gradient-to-r from-transparent via-[rgba(208,234,250,0.6)] to-transparent py-0.5 rounded-sm">
+                    ₍^ >ヮ<^₎ .ᐟ.ᐟ我愛你 我愛你 ᓚ₍つ^. .^₎っ♥ 我用盡所有美好夢想 /ᐠ > ˕ <マ 不想和別人享用 ( ,,⩌'︿'⩌,,) 你每一個小動作 ૮ ྀིᴗ͈ . ᴗ͈ ྀིა 
+                </marquee>
+
+                <div class="glossy-header engraved-text py-1 text-center text-[11px] mb-2 tracking-wider font-bold">
+                    ♥₊°🌈✩₊° 想要聽你說 你都怎麼過 °₊✩🌈°₊♥
+                </div>
+                
+                <div class="border border-[#A6D2F5] jelly-box p-3 text-xs text-[#335577] leading-relaxed mb-3 rounded-sm">
+                    <strong class="text-[#004499] text-sm">表現給我看 (๑ↀᆺↀ๑)</strong><br>
+                    <span id="modeDescription">選出每張專輯中你的最愛 ♪</span>
                 </div>
 
-            `;
+                <select id="modeSelect" class="inset-input w-full py-1.5 px-2 text-[11px] font-bold outline-none cursor-pointer">
+                    <option value="1">模式：各專輯最愛ᓚ₍つ^. .^₎っ♥</option>
+                    <option value="2">模式：全專輯排行 ≽^-⩊-^≼</option>
+                    <option value="3">模式：單專歌曲排行 ₍^ >⩊< ^₎Ⳋ</option>
+                    <option value="4">模式：全歌曲TOP10 ദ്ദി/ᐠ - ⩊ -マ.ᐟ</option>
+                </select>
+            </div>
 
-            albumContainer.insertAdjacentHTML('beforeend', cardHtml);
+            <section class="space-y-3">
+                <div class="glossy-header engraved-text py-1 text-center text-[11px] tracking-wider font-bold">
+                    ⋆✧꒰ა☆ 總以為謎一般難懂的我 ☆໒꒱✧⋆
+                </div>
+                
+                <div class="flex items-center gap-2 jelly-box p-2 rounded-sm">
+                    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%232098FF'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" class="w-8 h-8 p-1 border border-[#BCE0F9] bg-[rgba(255,255,255,0.8)] shadow-sm rounded-sm">
+                    <div class="flex-1">
+                        <label class="text-[10px] font-bold text-[#004499] block mb-0.5">我是：</label>
+                        <input type="text" id="userName" placeholder="(輸入名字...)" class="inset-input w-full py-1 px-2 text-[11px]">
+                    </div>
+                </div>
 
+                <div id="mode1Area" class="grid grid-cols-1 gap-2 pt-2"></div>
+
+                <div id="mode2Area" class="hidden pt-2">
+                    <ul id="rankList" class="space-y-2"></ul>
+                </div>
+
+                <div id="mode3Area" class="hidden pt-2 space-y-3">
+                    <div class="jelly-box p-3 flex gap-3 items-start rounded-sm">
+                        <img id="mode3SelectedCover" src="" class="w-20 h-20 sm:w-24 sm:h-24 object-cover border border-[#8FB4D4] shrink-0 rounded-sm shadow-sm">
+                        <div class="flex-1 min-w-0">
+                            <h2 id="mode3SelectedTitle" class="text-sm font-bold text-[#004499] mb-2 truncate">專輯名稱</h2>
+                            <label class="text-[10px] font-bold text-[#557799] block mb-1">選擇你想排行的專輯：</label>
+                            <select id="mode3AlbumSelect" class="inset-input w-full py-1.5 px-2 text-[11px] font-bold outline-none cursor-pointer">
+                                </select>
+                        </div>
+                    </div>
+                    <ul id="mode3RankList" class="space-y-2"></ul>
+                </div>
+
+                <div id="mode4Area" class="hidden pt-2 space-y-3">
+                    <div class="jelly-box p-2 rounded-sm">
+                        <label class="text-[10px] font-bold text-[#004499] block mb-1">1. 從專輯中挑選歌曲加入 TOP10：</label>
+                        <div class="flex gap-2 overflow-x-auto custom-scrollbar pb-2 pt-1 px-1" id="mode4AlbumTabs"></div>
+                        <div class="grid grid-cols-2 gap-1.5 mt-2 max-h-32 overflow-y-auto custom-scrollbar pr-1" id="mode4TrackPool"></div>
+                    </div>
+                    
+                    <div class="jelly-box p-2 rounded-sm">
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-[10px] font-bold text-[#004499]">2. TOP10 (可拖曳排序)：</label>
+                            <span id="mode4Count" class="text-[10px] font-bold text-red-500 bg-[rgba(255,255,255,0.8)] border border-[#D0EAFA] px-1 rounded-sm">0/10</span>
+                        </div>
+                        <ul id="mode4RankList" class="space-y-1 min-h-[50px] bg-[rgba(255,255,255,0.6)] border border-[#D0EAFA] p-1 rounded-sm shadow-inner">
+                            </ul>
+                    </div>
+                </div>
+
+                <button id="generateResultBtn" class="crystal-btn w-full py-2 text-xs font-bold tracking-wide mt-2 !text-[#8B0000]">
+                    結果! ₍^ >ヮ<^₎✧
+                </button>
+            </section>
+
+            <section id="singleResultArea" class="hidden pt-2 border-t border-dashed border-[#8CBDE6]">
+                <div class="glossy-header engraved-text py-1 text-center text-[11px] tracking-wider mb-3 font-bold">
+                    ⋆✧ 我的花讓我開 ✧⋆
+                </div>
+                
+                <div class="jelly-box p-3 sm:p-4 flex justify-between items-center mb-4 rounded-sm">
+                    <div class="flex-1 z-10 pr-2 min-w-0">
+                        <div id="singleResultHeader" class="tracking-tight mb-2"></div>
+                    </div>
+                    <div id="singleTopCoverContainer" class="relative w-36 h-28 sm:w-64 sm:h-40 shrink-0 flex justify-center items-center">
+                    </div>
+                </div>
+
+                <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
+                    <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="singleListTitle">這就是我 ★</div>
+                    <div class="p-2 bg-[rgba(255,255,255,0.7)] space-y-2 backdrop-blur-sm" id="singleChoicesList"></div>
+                </div>
+            </section>
+
+            <div id="postResultSection" class="hidden pt-3 border-t border-dashed border-[#8CBDE6]">
+                <section>
+                    <div class="glossy-header engraved-text py-1 text-center text-[11px] tracking-wider mb-2 font-bold">
+                        跟你的朋友比較吧！ ✧₍^ >⩊< ^₎Ⳋ
+                    </div>
+                    <div class="jelly-box p-3 rounded-sm flex flex-col gap-3">
+                        <div>
+                            <p class="text-[10px] font-bold text-[#004499] mb-1">複製代碼分享給朋友！ </p>
+                            <div class="relative">
+                                <textarea id="generatedCode" readonly class="inset-input w-full p-2 pr-16 text-[10px] font-mono h-12 flex items-center"></textarea>
+                                <button id="copyCodeBtn" class="absolute bottom-2 right-2 crystal-btn px-2 py-1 text-[10px]">
+                                    複製
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-col gap-2 pt-2 border-t border-dashed border-[#A6D2F5]">
+                            <div class="flex gap-1.5">
+                                <input type="text" id="friendCode" placeholder="貼上他的代碼( *^-^)ρ" class="inset-input w-full px-2 py-1.5 text-[11px] flex-1">
+                                <button id="pasteCodeBtn" class="crystal-btn px-3 py-1 text-[11px] font-bold shrink-0 whitespace-nowrap">
+                                    貼上
+                                </button>
+                            </div>
+                            <button id="compareBtn" class="crystal-btn w-full py-2 text-xs font-bold tracking-wide !text-[#8B0000]">
+                                我們的喜好契合嗎...？ 
+                            </button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <section id="resultArea" class="hidden pt-2 border-t border-dashed border-[#8CBDE6]">
+                <div class="glossy-header engraved-text py-1 text-center text-[11px] tracking-wider mb-3 font-bold" id="resultMainTitle">
+                    ⋆✧ match results ✧⋆
+                </div>
+                
+                <div class="jelly-box p-3 sm:p-4 flex justify-between items-center mb-4 rounded-sm">
+                    <div class="flex-1 z-10 pr-2 min-w-0">
+                        <div id="matchResultHeader" class="tracking-tight mb-1 truncate"></div>
+                        <h1 class="text-3xl sm:text-4xl font-black text-[#004FFF] tracking-tighter drop-shadow-[0_2px_2px_rgba(255,255,255,0.8)] flex items-baseline gap-0.5 whitespace-nowrap" id="matchPercentage">
+                            44% <span class="text-base sm:text-lg font-bold text-[#0078FF] pb-0.5">相似</span>
+                        </h1>
+                        <p class="text-[10px] text-[#557799] mt-1 font-bold italic leading-tight pr-1" id="matchQuote">“你們沒有相同的選擇/ᐠ ╥ ˕ ╥マ”</p>
+                    </div>
+                    <div id="topCoverContainer" class="relative w-36 h-28 sm:w-64 sm:h-40 shrink-0 flex justify-center items-center">
+                    </div>
+                </div>
+
+                <div id="mode1ResultBlock" class="hidden space-y-3">
+                    <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
+                        <div class="crystal-bar engraved-text px-2 py-1 flex justify-between items-center">
+                            <span class="text-[10px] font-bold">你們都選了... ?</span>
+                            <span class="text-[10px] bg-[rgba(255,255,255,0.8)] border border-[#8FB4D4] px-1 rounded-sm text-[#004499] no-engrave" id="commonCountLabel">4/7</span>
+                        </div>
+                        <div class="p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm grid grid-cols-2 gap-2" id="commonChoicesList"></div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
+                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle1">我的喜好★</div>
+                            <div class="p-2 bg-[rgba(248,251,253,0.7)] backdrop-blur-sm space-y-2 h-full" id="myChoicesList"></div>
+                        </div>
+                        <div class="border border-[#A6D2F5] rounded-sm overflow-hidden shadow-sm">
+                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="friendColumnTitle1">他的喜好★</div>
+                            <div class="p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm space-y-2 h-full" id="friendChoicesList"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="mode2ResultBlock" class="hidden space-y-3">
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
+                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle2">我的喜好★</div>
+                            <div class="p-2 bg-[rgba(248,251,253,0.7)] backdrop-blur-sm space-y-2 h-full" id="myRankResultList"></div>
+                        </div>
+                        <div class="border border-[#A6D2F5] rounded-sm overflow-hidden shadow-sm">
+                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="friendColumnTitle2">他的喜好★</div>
+                            <div class="p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm space-y-2 h-full" id="friendRankResultList"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="mode3ResultBlock" class="hidden space-y-3">
+                    <div class="crystal-bar engraved-text px-2 py-1 text-[11px] font-bold text-center shadow-sm" id="mode3ResultAlbumName">
+                        專輯名稱
+                    </div>
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
+                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle3">我的喜好★</div>
+                            <div class="p-2 bg-[rgba(248,251,253,0.7)] backdrop-blur-sm space-y-2 h-full" id="myTrackRankResultList"></div>
+                        </div>
+                        <div class="border border-[#A6D2F5] rounded-sm overflow-hidden shadow-sm">
+                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="friendColumnTitle3">他的喜好★</div>
+                            <div class="p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm space-y-2 h-full" id="friendTrackRankResultList"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="mode4ResultBlock" class="hidden space-y-3">
+                    <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
+                        <div class="crystal-bar engraved-text px-2 py-1 flex justify-between items-center">
+                            <span class="text-[10px] font-bold">你們都選了... ?</span>
+                            <span class="text-[10px] bg-[rgba(255,255,255,0.8)] border border-[#8FB4D4] px-1 rounded-sm text-[#004499] no-engrave" id="mode4CommonCountLabel"></span>
+                        </div>
+                        <div class="p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm grid grid-cols-2 gap-2" id="mode4CommonChoicesList"></div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-2">
+                        <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
+                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle4">我的TOP10</div>
+                            <div class="p-1 sm:p-2 bg-[rgba(248,251,253,0.7)] backdrop-blur-sm space-y-1 h-full" id="myTrackTop10ResultList"></div>
+                        </div>
+                        <div class="border border-[#A6D2F5] rounded-sm overflow-hidden shadow-sm">
+                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="friendColumnTitle4">他的TOP10</div>
+                            <div class="p-1 sm:p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm space-y-1 h-full" id="friendTrackTop10ResultList"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+
+        </div>
+    </div>
+
+    <script>
+        const chenAlbums = [
+            { id: "album_01", title: "讓我想一想", year: "1998", cover: "想.jpg", isEp: false, tracks: [{ id: "t01_01", name: "讓我想一想" }, { id: "t01_02", name: "微涼的你" }, { id: "t01_03", name: "會不會" }, { id: "t01_04", name: "情歌" }, { id: "t01_05", name: "和你在一起" }, { id: "t01_06", name: "嫉妒" }, { id: "t01_07", name: "孤島" }, { id: "t01_08", name: "孩子" }, { id: "t01_09", name: "天使" }, { id: "t01_10", name: "漫漫長夜" }] },
+            { id: "album_02", title: "還是會寂寞", year: "2000", cover: "還是.jpg", isEp: false, tracks: [{ id: "t02_01", name: "越洋電話" }, { id: "t02_02", name: "我的驕傲無可救藥" }, { id: "t02_03", name: "還是會寂寞" }, { id: "t02_04", name: "下午三點" }, { id: "t02_05", name: "溫室花朵" }, { id: "t02_06", name: "午餐的約會" }, { id: "t02_07", name: "等待" }, { id: "t02_08", name: "慢歌3" }, { id: "t02_09", name: "告訴我" }, { id: "t02_10", name: "慢歌1" }, { id: "t02_11", name: "靈感" }] },
+            { id: "album_03", title: "吉他手", year: "2002", cover: "吉他手.jpg", isEp: false, tracks: [{ id: "t03_01", name: "我親愛的偏執狂" }, { id: "t03_02", name: "太聰明" }, { id: "t03_03", name: "小步舞曲" }, { id: "t03_04", name: "1234567" }, { id: "t03_05", name: "隨便說說" }, { id: "t03_06", name: "躺在你的衣櫃 (Guitar Version)" }, { id: "t03_07", name: "A Practice" }, { id: "t03_08", name: "吉他手" }, { id: "t03_09", name: "黑眼圈" }, { id: "t03_10", name: "就算全世界與我為敵" }, { id: "t03_11", name: "小塵埃" }, { id: "t03_12", name: "不應該" }, { id: "t03_13", name: "躺在你的衣櫃 (Piano Version)" }] },
+            { id: "album_04", title: "華麗的冒險", year: "2005", cover: "華麗.jpg", isEp: false, tracks: [{ id: "t04_01", name: "旅行的意義" }, { id: "t04_02", name: "腐朽" }, { id: "t04_03", name: "Sentimental Kills" }, { id: "t04_04", name: "華麗的冒險" }, { id: "t04_05", name: "太多" }, { id: "t04_06", name: "花的姿態" }, { id: "t04_07", name: "Self" }, { id: "t04_08", name: "80%完美的日子" }, { id: "t04_09", name: "表面的和平" }, { id: "t04_10", name: "靜靜的生活" }, { id: "t04_11", name: "最初的起點" }] },
+            { id: "album_05", title: "太陽", year: "2009", cover: "太陽.jpg", isEp: false, tracks: [{ id: "t05_01", name: "手的預言" }, { id: "t05_02", name: "狂戀" }, { id: "t05_03", name: "太陽" }, { id: "t05_04", name: "魚" }, { id: "t05_05", name: "距離" }, { id: "t05_06", name: "倔強愛情的勝利" }, { id: "t05_07", name: "失敗者的飛翔" }, { id: "t05_08", name: "下個星期去英國" }, { id: "t05_09", name: "另一種平靜" }, { id: "t05_10", name: "煙火" }, { id: "t05_11", name: "一首歌，讓你帶回去" }] },
+            { id: "album_06", title: "時間的歌", year: "2013", cover: "時間.jpg", isEp: false, tracks: [{ id: "t06_01", name: "時間的歌" }, { id: "t06_02", name: "漣漪" }, { id: "t06_03", name: "柏拉圖式的愛情" }, { id: "t06_04", name: "Peace & Revolution" }, { id: "t06_05", name: "雨水一盒" }, { id: "t06_06", name: "秋天蒙太奇" }, { id: "t06_07", name: "流浪者之歌" }, { id: "t06_08", name: "倒數" }, { id: "t06_09", name: "沙漏" }, { id: "t06_10", name: "普魯斯特行動" }, { id: "t06_11", name: "別送我回家" }, { id: "t06_12", name: "家" }] },
+            { id: "album_07", title: "沙發海", year: "2018", cover: "沙發.jpg", isEp: false, tracks: [{ id: "t07_01", name: "傷害" }, { id: "t07_02", name: "小船" }, { id: "t07_03", name: "殘缺的彩虹" }, { id: "t07_04", name: "台北某個地方" }, { id: "t07_05", name: "沙發海" }, { id: "t07_06", name: "跳舞吧" }, { id: "t07_07", name: "他說" }, { id: "t07_08", name: "華生" }, { id: "t07_09", name: "變色龍" }, { id: "t07_10", name: "觀察者" }, { id: "t07_11", name: "神魂顛倒" }] },
+            
+            // ▼ 預留 EP / 單曲欄位，帶有 isEp: true 標記，會在 1、2、3 模式被隱藏 ▼
+            
+            { id: "ep_01", title: "CHEER", year: "2005", cover: "精選.jpg", isEp: true, tracks: [{ id: "ep_01", name: "九份的咖啡店" }, { id: "ep_01", name: "雨天的尾巴(滬尾小情歌)" }] },
+            { id: "ep_02", title: "After 17 - Single", year: "2004", cover: "17.jpg", isEp: true, tracks: [{ id: "ep02_01", name: "After 17" }, { id: "ep02_02", name: "小小校歌" }] },
+            { id: "ep_03", title: "夏季練習曲世界巡迴現場錄音", year: "2004", cover: "夏季.jpg", isEp: true, tracks: [{ id: "ep03_01", name: "（失明前）我想記得的四十七件事" }] },
+            { id: "ep_04", title: "pussy - Single", year: "2007", cover: "鋪溪.jpg", isEp: true, tracks: [{ id: "ep04_01", name: "pussy" }] },
+            { id: "ep_05", title: "蜉蝣 - Single", year: "2011", cover: "蜉蝣.jpg", isEp: true, tracks: [{ id: "ep05_01", name: "迷霧中跳舞" }, { id: "ep05_02", name: "蜉蝣" }] },
+            { id: "ep_06", title: "喜歡上你時的內心活動 - Single", year: "2017", cover: "喜.jpg", isEp: true, tracks: [{ id: "ep06_01", name: "喜歡上你時的內心活動" }] },
+            { id: "ep_07", title: "偶然與巧合 - Single", year: "2014", cover: "偶然.jpg", isEp: true, tracks: [{ id: "ep07_01", name: "偶然與巧合" }, { id: "ep07_02", name: "海浪" }] },
+            { id: "ep_08", title: "夏天蒙太奇 - Single", year: "2023", cover: "夏天.jpg", isEp: true, tracks: [{ id: "ep08_01", name: "夏天蒙太奇" }] },
+        ];
+
+        // 過濾出正規專輯
+        const regularAlbums = chenAlbums.filter(a => !a.isEp);
+
+        const modeSelect = document.getElementById('modeSelect');
+        const modeDescription = document.getElementById('modeDescription');
+        const mode1Area = document.getElementById('mode1Area');
+        const mode2Area = document.getElementById('mode2Area');
+        const mode3Area = document.getElementById('mode3Area');
+        const mode4Area = document.getElementById('mode4Area');
+        const singleResultArea = document.getElementById('singleResultArea');
+        const postResultSection = document.getElementById('postResultSection');
+        const resultArea = document.getElementById('resultArea');
+
+        const mode3AlbumSelect = document.getElementById('mode3AlbumSelect');
+        const mode3RankList = document.getElementById('mode3RankList');
+        const mode3SelectedCover = document.getElementById('mode3SelectedCover');
+        const mode3SelectedTitle = document.getElementById('mode3SelectedTitle');
+        let mode3Sortable = null;
+
+        // 縮小化手機版散落排版設定
+        const casualLayouts = [
+            { x: -75,  y: -40, r: -10 }, 
+            { x: 0,    y: -55, r: 4 },   
+            { x: 75,   y: -35, r: 12 },  
+            { x: -100, y: 25,  r: -15 }, 
+            { x: -30,  y: 45,  r: -4 },  
+            { x: 30,   y: 35,  r: 6 },   
+            { x: 100,  y: 50,  r: 14 }   
+        ];
+
+        function encodeTrackId(trackId) {
+            for (let aIdx = 0; aIdx < chenAlbums.length; aIdx++) {
+                const tIdx = chenAlbums[aIdx].tracks.findIndex(t => t.id === trackId);
+                if (tIdx !== -1) return aIdx.toString(36) + tIdx.toString(36);
+            }
+            return "00";
+        }
+        function decodeTrackId(twoCharStr) {
+            const aIdx = parseInt(twoCharStr[0], 36);
+            const tIdx = parseInt(twoCharStr[1], 36);
+            return chenAlbums[aIdx]?.tracks[tIdx]?.id || "";
+        }
+
+        // ==========================================
+        // 模式切換邏輯
+        // ==========================================
+        modeSelect.addEventListener('change', (e) => {
+            resultArea.classList.add('hidden');
+            singleResultArea.classList.add('hidden');
+            postResultSection.classList.add('hidden');
+            mode1Area.classList.add('hidden');
+            mode2Area.classList.add('hidden');
+            mode3Area.classList.add('hidden');
+            mode4Area.classList.add('hidden');
+
+            if (e.target.value === '1') {
+                modeDescription.textContent = "你的陳綺貞各專輯最愛 ♪";
+                mode1Area.classList.remove('hidden');
+            } else if (e.target.value === '2') {
+                modeDescription.textContent = "你的陳綺貞專輯喜好排行 ♪";
+                mode2Area.classList.remove('hidden');
+            } else if (e.target.value === '3') {
+                modeDescription.textContent = "你對陳綺貞專輯裡曲目的喜好 ♪";
+                mode3Area.classList.remove('hidden');
+            } else if (e.target.value === '4') {
+                modeDescription.textContent = "你的陳綺貞TOP10歌曲！ ♪";
+                mode4Area.classList.remove('hidden');
+            }
         });
 
-
-
         // ==========================================
-
-        // 渲染模式 2 (專輯排行)
-
+        // 渲染模式 1 (各專輯最愛)
         // ==========================================
-
-        const rankList = document.getElementById('rankList');
-
+        const albumContainer = document.getElementById('mode1Area');
         regularAlbums.forEach(album => {
-
-            const li = document.createElement('li');
-
-            li.dataset.id = album.id;
-
-            li.className = 'flex items-center gap-3 jelly-item p-2 rounded cursor-grab active:cursor-grabbing transition-transform hover:scale-[1.01]';
-
-            li.innerHTML = `
-
-                <span class="text-[#005A9E] font-bold text-lg px-2 select-none drop-shadow-sm">☰</span>
-
-                <img src="${album.cover}" class="w-10 h-10 object-cover border border-[#66BFFF] rounded-sm">
-
-                <span class="text-xs font-bold text-[#003B99]">${album.title}</span>
-
+            let optionsHtml = '<option value="">-- select track --</option>';
+            album.tracks.forEach(track => {
+                optionsHtml += `<option value="${track.id}">${track.name}</option>`;
+            });
+            const cardHtml = `
+                <div class="flex items-center gap-2 border-b border-dashed border-[#A6D2F5] pb-2 last:border-0 last:pb-0">
+                    <div class="p-0.5 bg-[rgba(255,255,255,0.8)] border border-[#66BFFF] shadow-sm shrink-0 rounded-sm">
+                        <img src="${album.cover}" class="w-12 h-12 object-cover">
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="font-bold text-[11px] text-[#004499] truncate mb-0.5">${album.title}</h3>
+                        <select data-album-id="${album.id}" class="album-select w-full inset-input py-0.5 px-1 text-[10px]">
+                            ${optionsHtml}
+                        </select>
+                    </div>
+                </div>
             `;
-
-            rankList.appendChild(li);
-
+            albumContainer.insertAdjacentHTML('beforeend', cardHtml);
         });
 
+        // ==========================================
+        // 渲染模式 2 (專輯排行)
+        // ==========================================
+        const rankList = document.getElementById('rankList');
+        regularAlbums.forEach(album => {
+            const li = document.createElement('li');
+            li.dataset.id = album.id;
+            li.className = 'flex items-center gap-3 jelly-item p-2 rounded cursor-grab active:cursor-grabbing transition-transform hover:scale-[1.01]';
+            li.innerHTML = `
+                <span class="text-[#005A9E] font-bold text-lg px-2 select-none drop-shadow-sm">☰</span>
+                <img src="${album.cover}" class="w-10 h-10 object-cover border border-[#66BFFF] rounded-sm">
+                <span class="text-xs font-bold text-[#003B99]">${album.title}</span>
+            `;
+            rankList.appendChild(li);
+        });
         new Sortable(rankList, { animation: 150 });
 
-
-
         // ==========================================
-
         // 渲染模式 3 (單專歌曲排行)
-
         // ==========================================
-
         let m3OptionsHtml = '';
-
         regularAlbums.forEach((album) => {
-
             const absoluteIdx = chenAlbums.findIndex(a => a.id === album.id);
-
             m3OptionsHtml += `<option value="${absoluteIdx}">${album.title}</option>`;
-
         });
-
         mode3AlbumSelect.innerHTML = m3OptionsHtml;
 
-
-
         function renderMode3Tracks(albumIndex) {
-
             const album = chenAlbums[albumIndex];
-
             mode3SelectedCover.src = album.cover;
-
             mode3SelectedTitle.textContent = album.title;
-
             mode3RankList.innerHTML = '';
-
             
-
             album.tracks.forEach((track, idx) => {
-
                 const li = document.createElement('li');
-
                 li.dataset.id = track.id;
-
                 li.dataset.originalIdx = idx;
-
                 li.className = 'flex items-center gap-3 jelly-item p-2 rounded cursor-grab active:cursor-grabbing transition-transform hover:scale-[1.01]';
-
                 li.innerHTML = `
-
                     <span class="text-[#005A9E] font-bold text-lg px-2 select-none drop-shadow-sm">☰</span>
-
                     <span class="text-[10px] text-[#0078D7] font-mono font-bold">Tr.${String(idx+1).padStart(2,'0')}</span>
-
                     <span class="text-xs font-bold text-[#003B99] truncate">${track.name}</span>
-
                 `;
-
                 mode3RankList.appendChild(li);
-
             });
-
             if (mode3Sortable) mode3Sortable.destroy();
-
             mode3Sortable = new Sortable(mode3RankList, { animation: 150 });
-
         }
-
-
 
         mode3AlbumSelect.addEventListener('change', (e) => {
-
             renderMode3Tracks(e.target.value);
-
         });
-
         renderMode3Tracks(0);
 
-
-
         // ==========================================
-
         // 渲染模式 4 (全歌曲大雜燴 TOP10 視覺化選區)
-
         // ==========================================
-
         let mode4SelectedTracks = [];
-
         const mode4AlbumTabs = document.getElementById('mode4AlbumTabs');
-
         const mode4TrackPool = document.getElementById('mode4TrackPool');
-
         const mode4RankList = document.getElementById('mode4RankList');
-
         const mode4Count = document.getElementById('mode4Count');
 
-
-
         function renderMode4Tabs() {
-
             chenAlbums.forEach((album, idx) => {
-
                 const img = document.createElement('img');
-
                 img.src = album.cover;
-
                 img.className = "w-10 h-10 shrink-0 object-cover border-[1.5px] cursor-pointer transition-all rounded-sm " + (idx === 0 ? "border-[#004FFF] shadow-md scale-105" : "border-transparent opacity-70 hover:opacity-100");
-
                 img.onclick = () => {
-
                     Array.from(mode4AlbumTabs.children).forEach(child => {
-
                         child.classList.remove('border-[#004FFF]', 'shadow-md', 'scale-105');
-
                         child.classList.add('border-transparent', 'opacity-70');
-
                     });
-
                     img.classList.remove('border-transparent', 'opacity-70');
-
                     img.classList.add('border-[#004FFF]', 'shadow-md', 'scale-105');
-
                     renderMode4Pool(idx);
-
                 };
-
                 mode4AlbumTabs.appendChild(img);
-
             });
-
             renderMode4Pool(0);
-
         }
-
-
 
         function renderMode4Pool(albumIdx) {
-
             const album = chenAlbums[albumIdx];
-
             mode4TrackPool.innerHTML = '';
-
             album.tracks.forEach(track => {
-
                 const btn = document.createElement('button');
-
                 btn.className = "flex items-center text-left px-2 py-1.5 text-[10px] text-[#004499] font-bold bg-[rgba(255,255,255,0.8)] border border-[#8CBDE6] hover:bg-[#BCE4FF] rounded-sm transition-colors shadow-sm cursor-pointer";
-
                 btn.innerHTML = `<span class="mr-1.5 text-[#0078FF] font-black">+</span><span class="truncate flex-1">${track.name}</span>`;
-
                 btn.onclick = () => {
-
                     if (mode4SelectedTracks.length >= 10) { alert("榜單已經填滿 10 首歌ㄛ！"); return; }
-
                     if (mode4SelectedTracks.find(t => t.id === track.id)) { alert("這首歌已經在榜單中ㄛ！"); return; }
-
                     mode4SelectedTracks.push({ id: track.id, name: track.name, cover: album.cover });
-
                     renderMode4RankList();
-
                 };
-
                 mode4TrackPool.appendChild(btn);
-
             });
-
         }
-
-
 
         function renderMode4RankList() {
-
             mode4RankList.innerHTML = '';
-
             mode4SelectedTracks.forEach((item, index) => {
-
                 const li = document.createElement('li');
-
                 li.dataset.id = item.id;
-
                 li.className = "flex items-center gap-2 p-1.5 border border-[#8CBDE6] bg-[rgba(232,245,255,0.8)] rounded-sm shadow-sm cursor-grab active:cursor-grabbing";
-
                 li.innerHTML = `
-
                     <span class="text-[#0078FF] font-bold text-[10px] px-1 select-none">☰</span>
-
                     <span class="text-[10px] font-black text-[#0026CC] w-3 drop-shadow-sm">${index + 1}</span>
-
                     <img src="${item.cover}" class="w-6 h-6 object-cover border border-[#66BFFF] shrink-0 rounded-sm">
-
                     <span class="text-[10px] font-bold text-[#004499] flex-1 truncate">${item.name}</span>
-
                     <button class="text-red-500 hover:text-red-700 font-black px-2 text-[10px]" onclick="removeMode4Track('${item.id}')">✕</button>
-
                 `;
-
                 mode4RankList.appendChild(li);
-
             });
-
             mode4Count.textContent = `${mode4SelectedTracks.length}/10`;
-
             mode4Count.className = mode4SelectedTracks.length === 10 ? "text-[10px] font-bold text-[#0078D7] bg-[#BCE4FF] border border-[#66BFFF] px-1 rounded-sm shadow-sm" : "text-[10px] font-bold text-red-500 bg-[rgba(255,255,255,0.8)] border border-[#A6D2F5] px-1 rounded-sm shadow-sm";
-
         }
-
-
 
         window.removeMode4Track = function(trackId) {
-
             mode4SelectedTracks = mode4SelectedTracks.filter(t => t.id !== trackId);
-
             renderMode4RankList();
-
         };
-
-
 
         new Sortable(mode4RankList, {
-
             animation: 150,
-
             onEnd: function() {
-
                 const newOrderIds = Array.from(mode4RankList.children).map(li => li.dataset.id);
-
                 mode4SelectedTracks = newOrderIds.map(id => mode4SelectedTracks.find(t => t.id === id));
-
                 renderMode4RankList();
-
             }
-
         });
-
         
-
         renderMode4Tabs();
 
-
-
         function getTrackName(trackId) {
-
             for (let album of chenAlbums) {
-
                 let track = album.tracks.find(t => t.id === trackId);
-
                 if (track) return track.name;
-
             }
-
             return "未選擇";
-
         }
 
-
-
         // ==========================================
-
         // 貼上按鈕邏輯
-
         // ==========================================
-
         document.getElementById('pasteCodeBtn').onclick = async function() {
-
             try {
-
                 const text = await navigator.clipboard.readText();
-
                 document.getElementById('friendCode').value = text;
-
             } catch (err) {
-
                 alert('無法自動讀取剪貼簿，請手動長按輸入框貼上ㄛ！');
-
             }
-
         };
 
-
-
         // ==========================================
-
         // 產生結果 & 代碼
-
         // ==========================================
-
         document.getElementById('generateResultBtn').onclick = function() {
-
             const userName = document.getElementById('userName').value.trim() || "我";
-
             const currentMode = document.getElementById('modeSelect').value;
-
             let singleHtml = '';
-
             let displayCovers = [];
-
             let dataParts = [];
 
-
-
             let resultHeaderHtml = `
-
                 <span class="text-lg sm:text-xl font-bold text-[#005A9E] block leading-tight drop-shadow-sm">${userName} 的</span>
-
                 <span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight mt-0.5 drop-shadow-md">陳綺貞</span>
-
             `;
 
-
-
             if (currentMode === '1') {
-
                 resultHeaderHtml += `<span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md">各專輯最愛</span>`;
-
             } else if (currentMode === '2') {
-
                 resultHeaderHtml += `<span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md">專輯喜好排行</span>`;
-
             } else if (currentMode === '3') {
-
                 const albumIdx = parseInt(mode3AlbumSelect.value, 10);
-
                 const albumTitle = chenAlbums[albumIdx].title;
-
                 resultHeaderHtml += `
-
                     <span class="text-xl sm:text-2xl font-extrabold text-[#005A9E] block leading-tight drop-shadow-md mt-0.5">《${albumTitle}》</span>
-
                     <span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md mt-0.5">喜好排行</span>
-
                 `;
-
             } else if (currentMode === '4') {
-
                 resultHeaderHtml += `<span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md">TOP10</span>`;
-
             }
-
-
 
             document.getElementById('singleResultHeader').innerHTML = resultHeaderHtml;
 
-
-
             if (currentMode === '1') {
-
                 const selects = document.querySelectorAll('.album-select');
-
                 let isComplete = true;
-
                 let tracksStr = "";
-
                 
-
                 regularAlbums.forEach((album) => {
-
                     const select = document.querySelector(`.album-select[data-album-id="${album.id}"]`);
-
                     if (!select || !select.value) isComplete = false;
-
                     else {
-
                         const trackIdx = album.tracks.findIndex(t => t.id === select.value);
-
                         tracksStr += trackIdx.toString(36); 
-
                         
-
                         const myTrack = getTrackName(select.value);
-
                         displayCovers.push(album.cover);
-
                         singleHtml += `
-
                             <div class="flex items-center gap-2 border-b border-dashed border-[#8CBDE6] pb-1.5 last:border-0 last:pb-0">
-
                                 <img src="${album.cover}" class="w-8 h-8 object-cover border border-[#66BFFF] shrink-0 rounded-sm">
-
                                 <div class="flex-1 min-w-0">
-
                                     <span class="block font-bold text-[#003B99] text-[11px] truncate">${myTrack}</span>
-
                                     <span class="block text-[9px] text-[#557799] truncate">《${album.title}》</span>
-
                                 </div>
-
                             </div>`;
-
                     }
-
                 });
-
                 
-
                 if (!isComplete) { alert("每張專輯都要選一首歌ㄛ！"); return; }
-
                 
-
                 dataParts = [currentMode, encodeURIComponent(userName), tracksStr];
-
                 document.getElementById('singleChoicesList').innerHTML = singleHtml;
-
-
 
             } else if (currentMode === '2') {
-
                 const order = Array.from(rankList.children).map(li => li.dataset.id);
-
                 let rankStr = "";
-
                 order.forEach((id, idx) => {
-
                     const albumIdx = chenAlbums.findIndex(a => a.id === id); 
-
                     rankStr += albumIdx.toString(36);
-
                     const album = chenAlbums[albumIdx];
-
                     displayCovers.push(album.cover);
-
                     singleHtml += `
-
                         <div class="flex items-center gap-2 border-b border-dashed border-[#8CBDE6] pb-1.5 last:border-0 last:pb-0">
-
                             <span class="text-[11px] font-bold text-[#0078D7] w-3 drop-shadow-sm">${idx+1}</span>
-
                             <img src="${album.cover}" class="w-8 h-8 object-cover border border-[#66BFFF] shrink-0 rounded-sm">
-
                             <span class="text-[11px] font-bold text-[#003B99] truncate">${album.title}</span>
-
                         </div>`;
-
                 });
-
                 dataParts = [currentMode, encodeURIComponent(userName), rankStr];
-
                 document.getElementById('singleChoicesList').innerHTML = singleHtml;
-
-
 
             } else if (currentMode === '3') {
-
                 const albumIdx = parseInt(mode3AlbumSelect.value, 10);
-
                 const album = chenAlbums[albumIdx];
-
                 const orderItems = Array.from(mode3RankList.children);
-
                 let rankStr = "";
-
                 
-
                 orderItems.forEach((li, idx) => {
-
                     const origIdx = parseInt(li.dataset.originalIdx, 10);
-
                     rankStr += origIdx.toString(36);
-
                     const track = album.tracks[origIdx];
-
                     
-
                     singleHtml += `
-
                         <div class="flex items-center gap-2 border-b border-dashed border-[#8CBDE6] pb-1.5 last:border-0 last:pb-0">
-
                             <span class="text-[11px] font-bold text-[#0078D7] w-3 drop-shadow-sm">${idx+1}</span>
-
                             <div class="flex-1 min-w-0">
-
                                 <span class="block font-bold text-[#003B99] text-[11px] truncate">${track.name}</span>
-
                             </div>
-
                         </div>`;
-
                 });
-
                 
-
                 displayCovers = [album.cover];
-
                 dataParts = [currentMode, encodeURIComponent(userName), albumIdx.toString(36), rankStr];
-
                 document.getElementById('singleChoicesList').innerHTML = singleHtml;
 
-
-
             } else if (currentMode === '4') {
-
                 if (mode4SelectedTracks.length < 10) { alert("請選滿 10 首歌ㄛ！"); return; }
-
                 let tracksStr = "";
-
                 let mode4Html = '<div class="grid grid-cols-1 sm:grid-cols-2 gap-x-2 gap-y-1.5 w-full">';
 
-
-
                 mode4SelectedTracks.forEach((item, idx) => {
-
                     tracksStr += encodeTrackId(item.id);
-
                     mode4Html += `
-
                         <div class="flex items-center gap-1.5 border-b border-dashed border-[#8CBDE6] pb-1 last:border-0 sm:last:border-b">
-
                             <span class="text-[11px] font-bold text-[#0078D7] w-4 text-center pr-0.5 drop-shadow-sm">#${idx+1}</span>
-
                             <img src="${item.cover}" class="w-6 h-6 object-cover border border-[#66BFFF] shrink-0 rounded-sm">
-
                             <div class="flex-1 min-w-0">
-
                                 <span class="block font-bold text-[#003B99] text-[10px] truncate">${item.name}</span>
-
                             </div>
-
                         </div>`;
-
                     if (!displayCovers.includes(item.cover)) displayCovers.push(item.cover);
-
                 });
-
                 mode4Html += '</div>';
-
                 
-
                 dataParts = [currentMode, encodeURIComponent(userName), tracksStr];
-
                 document.getElementById('singleChoicesList').innerHTML = mode4Html;
-
             }
-
             
-
             let stackHtml = '';
-
             displayCovers.forEach((coverUrl, idx) => {
-
                 if (displayCovers.length > 1) {
-
                     const pos = casualLayouts[idx % casualLayouts.length];
-
                     stackHtml += `
-
                         <div class="absolute hover:z-50" style="transform: translate(${pos.x}%, ${pos.y}%) rotate(${pos.r}deg); z-index: ${idx};">
-
                             <div class="w-11 h-11 sm:w-16 sm:h-16 transition-all duration-300 hover:-translate-y-3 hover:scale-125 cursor-pointer">
-
                                 <div class="p-0.5 sm:p-1 bg-[rgba(255,255,255,0.9)] border border-[#8CBDE6] shadow-[0_4px_10px_rgba(0,50,150,0.3)] h-full w-full rounded-sm">
-
                                     <img src="${coverUrl}" class="w-full h-full object-cover rounded-sm">
-
                                 </div>
-
                             </div>
-
                         </div>`;
-
                 } else {
-
                     stackHtml += `
-
                         <div class="absolute z-10 hover:z-50">
-
                             <div class="w-24 h-24 sm:w-36 sm:h-36 transition-all duration-300 hover:scale-105 cursor-pointer">
-
                                 <div class="p-1 bg-[rgba(255,255,255,0.9)] border border-[#8CBDE6] shadow-[0_5px_15px_rgba(0,50,150,0.4)] h-full w-full rounded-sm">
-
                                     <img src="${coverUrl}" class="w-full h-full object-cover rounded-sm">
-
                                 </div>
-
                             </div>
-
                         </div>`;
-
                 }
-
             });
-
             document.getElementById('singleTopCoverContainer').innerHTML = stackHtml;
 
-
-
             const shortCode = btoa(dataParts.join('|'));
-
             document.getElementById('generatedCode').value = shortCode;
-
             
-
             document.getElementById('singleResultArea').classList.remove('hidden');
-
             document.getElementById('postResultSection').classList.remove('hidden');
-
             resultArea.classList.add('hidden');
-
             
-
             setTimeout(() => { document.getElementById('singleResultArea').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
-
         };
-
-
 
         document.getElementById('copyCodeBtn').onclick = function() {
-
             const codeInput = document.getElementById('generatedCode');
-
             codeInput.select();
-
             codeInput.setSelectionRange(0, 99999);
-
             navigator.clipboard.writeText(codeInput.value).then(() => {
-
                 const btn = document.getElementById('copyCodeBtn');
-
                 btn.textContent = "已複製★";
-
                 setTimeout(() => { btn.textContent = "複製"; }, 2000);
-
             }).catch(() => alert("請手動複製！"));
-
         };
 
-
-
         // ==========================================
-
         // 比對資料與結果計算
-
         // ==========================================
-
         document.getElementById('compareBtn').onclick = function() {
-
             const myName = document.getElementById('userName').value.trim() || "你";
-
             const friendCode = document.getElementById('friendCode').value.trim();
-
-
 
             if (!friendCode) { alert("請貼上他的代碼！"); return; }
 
-
-
             let friendData = {};
-
             try {
-
                 const decodedStr = atob(friendCode);
-
                 if (decodedStr.includes('|')) {
-
                     const parts = decodedStr.split('|');
-
                     friendData.m = parseInt(parts[0], 10);
-
                     friendData.n = decodeURIComponent(parts[1]);
-
                     
-
                     if (friendData.m === 1) {
-
                         friendData.t = {};
-
                         for (let i = 0; i < regularAlbums.length; i++) {
-
                             let tIdx = parseInt(parts[2][i], 36);
-
                             friendData.t[regularAlbums[i].id] = regularAlbums[i].tracks[tIdx].id;
-
                         }
-
                     } else if (friendData.m === 2) {
-
                         friendData.r = [];
-
                         for (let i = 0; i < parts[2].length; i++) {
-
                             let aIdx = parseInt(parts[2][i], 36);
-
                             friendData.r.push(chenAlbums[aIdx].id);
-
                         }
-
                     } else if (friendData.m === 3) {
-
                         friendData.a = parseInt(parts[2], 36);
-
                         friendData.r = [];
-
                         const albumTracks = chenAlbums[friendData.a].tracks;
-
                         for (let i = 0; i < parts[3].length; i++) {
-
                             let tIdx = parseInt(parts[3][i], 36);
-
                             friendData.r.push(albumTracks[tIdx].id);
-
                         }
-
                     } else if (friendData.m === 4) {
-
                         friendData.r = [];
-
                         for (let i = 0; i < parts[2].length; i += 2) {
-
                             const twoChar = parts[2].substring(i, i + 2);
-
                             friendData.r.push(decodeTrackId(twoChar));
-
                         }
-
                     }
-
                 } else {
-
                     friendData = JSON.parse(decodeURIComponent(decodedStr));
-
                     if (!friendData.m) friendData.m = 1;
-
                 }
-
             } catch (e) {
-
                 alert("代碼解析失敗，請確認代碼是否完整ㄛQQ");
-
                 return;
-
             }
 
-
-
             const friendName = friendData.n;
-
             const topCoverContainer = document.getElementById('topCoverContainer');
-
             let matchRate = 0;
 
-
-
             let friendModeTitle = "";
-
             if (friendData.m === 1) friendModeTitle = "各專輯最愛";
-
             else if (friendData.m === 2) friendModeTitle = "專輯喜好排行";
-
             else if (friendData.m === 3) friendModeTitle = "單專歌曲排行";
-
             else if (friendData.m === 4) friendModeTitle = "TOP10";
 
-
-
             document.getElementById('matchResultHeader').innerHTML = `
-
                 <span class="text-[9px] sm:text-[10px] font-bold text-[#335577] block leading-tight">${myName} vs. ${friendName} 的</span>
-
                 <span class="text-[11px] sm:text-xs font-bold text-[#005A9E] block leading-tight drop-shadow-sm">陳綺貞</span>
-
                 <span class="text-[11px] sm:text-xs font-bold text-[#005A9E] block leading-tight drop-shadow-sm">${friendModeTitle}</span>
-
             `;
 
-
-
             if (friendData.m === 1) {
-
                 const selects = document.querySelectorAll('.album-select');
-
                 let myTracks = {}, myComplete = true;
-
                 selects.forEach(select => {
-
                     if (!select.value) myComplete = false;
-
                     myTracks[select.dataset.albumId] = select.value;
-
                 });
-
                 
-
                 if (!myComplete) { 
-
                     modeSelect.value = '1'; modeSelect.dispatchEvent(new Event('change'));
-
                     alert("對方使用的是「各專輯最愛」模式，請先完成你的選擇再比對ㄛ！"); return; 
-
                 }
-
-
 
                 const friendTracks = friendData.t;
-
                 let commonHtml = '', myHtml = '', friendHtml = '', matchCount = 0, matchedCovers = []; 
-
                 const total = regularAlbums.length; 
 
-
-
                 regularAlbums.forEach((album) => {
-
                     const myTrack = getTrackName(myTracks[album.id]);
-
                     const friendTrack = friendTracks[album.id] ? getTrackName(friendTracks[album.id]) : "未選擇";
-
                     const isMatch = (myTracks[album.id] === friendTracks[album.id] && myTracks[album.id] !== undefined);
 
-
-
                     if (isMatch) {
-
                         matchCount++; matchedCovers.push(album.cover); 
-
                         commonHtml += `
-
                             <div class="flex items-center gap-2 border border-dashed border-[#8CBDE6] p-1.5 rounded-sm bg-[rgba(255,255,255,0.7)] shadow-inner">
-
                                 <div class="p-0.5 bg-[rgba(255,255,255,0.9)] border border-[#8CBDE6] shadow-sm shrink-0 rounded-sm"><img src="${album.cover}" class="w-8 h-8 object-cover rounded-sm"></div>
-
                                 <div class="flex-1 min-w-0">
-
                                     <span class="block font-bold text-[#003B99] text-[11px] truncate">${myTrack}</span>
-
                                     <span class="block text-[9px] text-[#557799] truncate">《${album.title}》</span>
-
                                 </div>
-
                             </div>`;
-
                     }
-
                     myHtml += `<div class="flex items-center gap-1.5 border border-dashed ${isMatch ? "bg-[rgba(166,210,245,0.7)] border-[#0078FF] shadow-inner" : "border-transparent border-b-[#8CBDE6] bg-transparent"} p-1 mb-1 rounded-sm"><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#66BFFF] shrink-0 rounded-sm"><span class="text-[10px] text-[#002255] truncate flex-1">${myTrack}</span></div>`;
-
                     friendHtml += `<div class="flex items-center gap-1.5 border border-dashed ${isMatch ? "bg-[rgba(166,210,245,0.7)] border-[#0078FF] shadow-inner" : "border-transparent border-b-[#8CBDE6] bg-transparent"} p-1 mb-1 rounded-sm"><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#A6D2F5] shrink-0 opacity-80 rounded-sm"><span class="text-[10px] text-[#335577] truncate flex-1">${friendTrack}</span></div>`;
-
                 });
-
-
 
                 if (matchCount === 0) { 
-
                     commonHtml = `<p class="text-[10px] text-[#557799] text-center py-2 col-span-2 italic">030</p>`; 
-
                     regularAlbums.forEach(album => matchedCovers.push(album.cover));
-
                 }
-
-
 
                 document.getElementById('myColumnTitle1').textContent = `${myName} 選擇了`;
-
                 document.getElementById('friendColumnTitle1').textContent = `${friendName} 選擇了`;
-
                 document.getElementById('commonChoicesList').innerHTML = commonHtml;
-
                 document.getElementById('myChoicesList').innerHTML = myHtml;
-
                 document.getElementById('friendChoicesList').innerHTML = friendHtml;
-
                 document.getElementById('commonCountLabel').textContent = `${matchCount}/${total}`;
 
-
-
                 let stackHtml = '';
-
                 matchedCovers.forEach((coverUrl, idx) => {
-
                     if (matchedCovers.length > 1) {
-
                         const pos = casualLayouts[idx % casualLayouts.length];
-
                         stackHtml += `
-
                             <div class="absolute hover:z-50" style="transform: translate(${pos.x}%, ${pos.y}%) rotate(${pos.r}deg); z-index: ${idx};">
-
                                 <div class="w-11 h-11 sm:w-16 sm:h-16 transition-all duration-300 hover:-translate-y-3 hover:scale-125 cursor-pointer">
-
                                     <div class="p-0.5 sm:p-1 bg-[rgba(255,255,255,0.9)] border border-[#8CBDE6] shadow-[0_4px_10px_rgba(0,50,150,0.3)] h-full w-full rounded-sm">
-
                                         <img src="${coverUrl}" class="w-full h-full object-cover rounded-sm">
-
                                     </div>
-
                                 </div>
-
                             </div>`;
-
                     } else {
-
                         stackHtml += `
-
                             <div class="absolute z-10 hover:z-50">
-
                                 <div class="w-24 h-24 sm:w-36 sm:h-36 transition-all duration-300 hover:scale-105 cursor-pointer">
-
                                     <div class="p-1 bg-[rgba(255,255,255,0.9)] border border-[#8CBDE6] shadow-[0_5px_15px_rgba(0,50,150,0.4)] h-full w-full rounded-sm">
-
                                         <img src="${coverUrl}" class="w-full h-full object-cover rounded-sm">
-
                                     </div>
-
                                 </div>
-
                             </div>`;
-
                     }
-
                 });
-
                 topCoverContainer.innerHTML = stackHtml;
 
-
-
                 matchRate = Math.round((matchCount / total) * 100);
-
                 
-
                 document.getElementById('mode1ResultBlock').classList.remove('hidden');
-
                 document.getElementById('mode2ResultBlock').classList.add('hidden');
-
                 document.getElementById('mode3ResultBlock').classList.add('hidden');
-
                 document.getElementById('mode4ResultBlock').classList.add('hidden');
-
                 modeSelect.value = '1'; modeSelect.dispatchEvent(new Event('change'));
 
-
-
             } else if (friendData.m === 2) {
-
                 const friendOrder = friendData.r;
-
                 const myOrder = Array.from(rankList.children).map(li => li.dataset.id);
-
                 
-
                 let myHtml = '', friendHtml = '', matchCount = 0;
-
                 let matchedCovers = [];
-
                 const total = regularAlbums.length;
 
-
-
                 myOrder.forEach((id, idx) => {
-
                     const album = regularAlbums.find(a => a.id === id);
-
                     const diff = friendOrder.indexOf(id) === idx ? 0 : -1;
-
                     const bgClass = diff === 0 ? "bg-[rgba(166,210,245,0.7)] border-[#0078FF] shadow-inner" : "border-transparent border-b-[#8CBDE6] bg-transparent";
-
                     myHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-2 text-center drop-shadow-sm">${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#66BFFF] shrink-0 rounded-sm"><span class="text-[10px] text-[#002255] truncate flex-1">${album.title}</span></div>`;
-
                 });
-
-
 
                 friendOrder.forEach((id, idx) => {
-
                     const album = regularAlbums.find(a => a.id === id);
-
                     const diff = myOrder.indexOf(id) === idx ? 0 : -1;
-
                     
-
                     if (diff === 0) {
-
                         matchCount++;
-
                         matchedCovers.push(album.cover);
-
                     }
-
                     const bgClass = diff === 0 ? "bg-[rgba(166,210,245,0.7)] border-[#0078FF] shadow-inner" : "border-transparent border-b-[#8CBDE6] bg-transparent";
-
                     friendHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-2 text-center drop-shadow-sm">${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#A6D2F5] shrink-0 opacity-80 rounded-sm"><span class="text-[10px] text-[#335577] truncate flex-1">${album.title}</span></div>`;
-
                 });
-
-
 
                 if (matchCount === 0) {
-
                     regularAlbums.forEach(album => matchedCovers.push(album.cover));
-
                 }
 
-
-
                 document.getElementById('myColumnTitle2').textContent = `${myName} 的喜好★`;
-
                 document.getElementById('friendColumnTitle2').textContent = `${friendName} 的喜好★`;
-
                 document.getElementById('myRankResultList').innerHTML = myHtml;
-
                 document.getElementById('friendRankResultList').innerHTML = friendHtml;
 
-
-
                 let stackHtml = '';
-
                 matchedCovers.forEach((coverUrl, idx) => {
-
                     const pos = casualLayouts[idx % casualLayouts.length];
-
                     stackHtml += `
-
                         <div class="absolute hover:z-50" style="transform: translate(${pos.x}%, ${pos.y}%) rotate(${pos.r}deg); z-index: ${idx};">
-
                             <div class="w-11 h-11 sm:w-16 sm:h-16 transition-all duration-300 hover:-translate-y-3 hover:scale-125 cursor-pointer">
-
                                 <div class="p-0.5 sm:p-1 bg-[rgba(255,255,255,0.9)] border border-[#8CBDE6] shadow-[0_4px_10px_rgba(0,50,150,0.3)] h-full w-full rounded-sm">
-
                                     <img src="${coverUrl}" class="w-full h-full object-cover rounded-sm">
-
                                 </div>
-
                             </div>
-
                         </div>`;
-
                 });
-
                 topCoverContainer.innerHTML = stackHtml;
-
-
 
                 matchRate = Math.round((matchCount / total) * 100);
 
-
-
                 document.getElementById('mode2ResultBlock').classList.remove('hidden');
-
                 document.getElementById('mode1ResultBlock').classList.add('hidden');
-
                 document.getElementById('mode3ResultBlock').classList.add('hidden');
-
                 document.getElementById('mode4ResultBlock').classList.add('hidden');
-
                 modeSelect.value = '2'; modeSelect.dispatchEvent(new Event('change'));
 
-
-
             } else if (friendData.m === 3) {
-
                 const currentMode = document.getElementById('modeSelect').value;
-
                 const myAlbumIdx = parseInt(mode3AlbumSelect.value, 10);
-
                 
-
                 if (currentMode !== '3' || myAlbumIdx !== friendData.a) {
-
                     modeSelect.value = '3'; modeSelect.dispatchEvent(new Event('change'));
-
                     mode3AlbumSelect.value = friendData.a; mode3AlbumSelect.dispatchEvent(new Event('change'));
-
                     alert(`對方使用的是「單專歌曲排行」模式，並且選擇了《${chenAlbums[friendData.a].title}》。請先為這張專輯排序再比對ㄛ！`);
-
                     return;
-
                 }
-
-
 
                 const friendOrder = friendData.r;
-
                 const myOrder = Array.from(mode3RankList.children).map(li => li.dataset.id);
-
                 const album = chenAlbums[myAlbumIdx];
-
                 
-
                 let myHtml = '', friendHtml = '', matchCount = 0;
 
-
-
                 myOrder.forEach((id, idx) => {
-
                     const track = album.tracks.find(t => t.id === id);
-
                     const diff = friendOrder.indexOf(id) === idx ? 0 : -1;
-
                     const bgClass = diff === 0 ? "bg-[rgba(166,210,245,0.7)] border-[#0078FF] shadow-inner" : "border-transparent border-b-[#8CBDE6] bg-transparent";
-
                     myHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-4 text-center drop-shadow-sm">${idx+1}</span><span class="text-[10px] text-[#002255] truncate flex-1">${track.name}</span></div>`;
-
                 });
-
-
 
                 friendOrder.forEach((id, idx) => {
-
                     const track = album.tracks.find(t => t.id === id);
-
                     const diff = myOrder.indexOf(id) === idx ? 0 : -1;
-
                     if (diff === 0) matchCount++;
-
                     const bgClass = diff === 0 ? "bg-[rgba(166,210,245,0.7)] border-[#0078FF] shadow-inner" : "border-transparent border-b-[#8CBDE6] bg-transparent";
-
                     friendHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-4 text-center drop-shadow-sm">${idx+1}</span><span class="text-[10px] text-[#335577] truncate flex-1">${track.name}</span></div>`;
-
                 });
 
-
-
                 document.getElementById('mode3ResultAlbumName').textContent = `《${album.title}》歌曲排行比對`;
-
                 document.getElementById('myColumnTitle3').textContent = `${myName} 的喜好★`;
-
                 document.getElementById('friendColumnTitle3').textContent = `${friendName} 的喜好★`;
-
                 document.getElementById('myTrackRankResultList').innerHTML = myHtml;
-
                 document.getElementById('friendTrackRankResultList').innerHTML = friendHtml;
 
-
-
                 topCoverContainer.innerHTML = `
-
                     <div class="absolute z-10 hover:z-50">
-
                         <div class="w-24 h-24 sm:w-36 sm:h-36 transition-all duration-300 hover:scale-105 cursor-pointer">
-
                             <div class="p-1 bg-[rgba(255,255,255,0.9)] border border-[#8CBDE6] shadow-[0_5px_15px_rgba(0,50,150,0.4)] h-full w-full rounded-sm">
-
                                 <img src="${album.cover}" class="w-full h-full object-cover rounded-sm">
-
                             </div>
-
                         </div>
-
                     </div>`;
 
-
-
                 const n = album.tracks.length;
-
                 matchRate = Math.round((matchCount / n) * 100);
 
-
-
                 document.getElementById('mode3ResultBlock').classList.remove('hidden');
-
                 document.getElementById('mode1ResultBlock').classList.add('hidden');
-
                 document.getElementById('mode2ResultBlock').classList.add('hidden');
-
                 document.getElementById('mode4ResultBlock').classList.add('hidden');
-
                 modeSelect.value = '3';
 
-
-
             } else if (friendData.m === 4) {
-
                 const currentMode = document.getElementById('modeSelect').value;
-
                 if (currentMode !== '4') {
-
                     modeSelect.value = '4'; modeSelect.dispatchEvent(new Event('change'));
-
                     alert("對方使用的是「全歌曲 TOP10」模式。請先完成你的選擇再比對ㄛ！");
-
                     return;
-
                 }
-
-
 
                 if (mode4SelectedTracks.length < 10) { alert("請先選滿 10 首你的最愛歌曲再比對ㄛ！"); return; }
 
-
-
                 const myOrder = mode4SelectedTracks.map(t => t.id);
-
                 const friendOrder = friendData.r;
 
-
-
                 let matchCount = 0;
-
                 let matchedCovers = [];
-
                 const commonTracks = myOrder.filter(id => friendOrder.includes(id));
 
-
-
                 let commonHtml = '';
-
                 if (commonTracks.length === 0) {
-
                     commonHtml = `<p class="text-[10px] text-[#557799] text-center py-2 col-span-2 italic">030</p>`;
-
                     myOrder.concat(friendOrder).forEach(id => {
-
                         const album = chenAlbums.find(a => a.tracks.some(t => t.id === id));
-
                         if (!matchedCovers.includes(album.cover)) matchedCovers.push(album.cover);
-
                     });
-
                 } else {
-
                     commonTracks.forEach(id => {
-
                         const trackName = getTrackName(id);
-
                         const album = chenAlbums.find(a => a.tracks.some(t => t.id === id));
-
                         commonHtml += `
-
                             <div class="flex items-center gap-2 border border-dashed border-[#8CBDE6] p-1.5 rounded-sm bg-[rgba(255,255,255,0.7)] shadow-inner">
-
                                 <div class="p-0.5 bg-[rgba(255,255,255,0.9)] border border-[#8CBDE6] shadow-sm shrink-0 rounded-sm"><img src="${album.cover}" class="w-8 h-8 object-cover rounded-sm"></div>
-
                                 <div class="flex-1 min-w-0">
-
                                     <span class="block font-bold text-[#003B99] text-[11px] truncate">${trackName}</span>
-
                                     <span class="block text-[9px] text-[#557799] truncate">《${album.title}》</span>
-
                                 </div>
-
                             </div>`;
-
                     });
-
                 }
 
-
-
                 let myHtml = '';
-
                 myOrder.forEach((id, idx) => {
-
                     const trackName = getTrackName(id);
-
                     const album = chenAlbums.find(a => a.tracks.some(t => t.id === id));
-
                     const isMatch = commonTracks.includes(id);
-
                     const bgClass = isMatch ? "bg-[rgba(166,210,245,0.7)] border-[#0078FF] shadow-inner" : "bg-transparent border-transparent border-b-[#8CBDE6]";
-
                     
-
                     if (friendOrder.indexOf(id) === idx) matchCount++; // 同位才加分
-
                     if (isMatch && !matchedCovers.includes(album.cover)) matchedCovers.push(album.cover);
 
-
-
                     myHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-4 text-center drop-shadow-sm">#${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#66BFFF] shrink-0 rounded-sm"><span class="text-[10px] text-[#002255] truncate flex-1">${trackName}</span></div>`;
-
                 });
-
-
 
                 let friendHtml = '';
-
                 friendOrder.forEach((id, idx) => {
-
                     const trackName = getTrackName(id);
-
                     const album = chenAlbums.find(a => a.tracks.some(t => t.id === id));
-
                     const isMatch = commonTracks.includes(id);
-
                     const bgClass = isMatch ? "bg-[rgba(166,210,245,0.7)] border-[#0078FF] shadow-inner" : "bg-transparent border-transparent border-b-[#8CBDE6]";
-
                     friendHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-4 text-center drop-shadow-sm">#${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#A6D2F5] shrink-0 opacity-80 rounded-sm"><span class="text-[10px] text-[#335577] truncate flex-1">${trackName}</span></div>`;
-
                 });
-
-
 
                 document.getElementById('myColumnTitle4').textContent = `${myName} 的TOP10`;
-
                 document.getElementById('friendColumnTitle4').textContent = `${friendName} 的TOP10`;
-
                 document.getElementById('mode4CommonCountLabel').textContent = `${commonTracks.length}/10`;
-
                 document.getElementById('mode4CommonChoicesList').innerHTML = commonHtml;
-
                 document.getElementById('myTrackTop10ResultList').innerHTML = myHtml;
-
                 document.getElementById('friendTrackTop10ResultList').innerHTML = friendHtml;
 
-
-
                 let stackHtml = '';
-
                 matchedCovers.forEach((coverUrl, idx) => {
-
                     const pos = casualLayouts[idx % casualLayouts.length];
-
                     stackHtml += `
-
                         <div class="absolute hover:z-50" style="transform: translate(${pos.x}%, ${pos.y}%) rotate(${pos.r}deg); z-index: ${idx};">
-
                             <div class="w-11 h-11 sm:w-16 sm:h-16 transition-all duration-300 hover:-translate-y-3 hover:scale-125 cursor-pointer">
-
                                 <div class="p-0.5 sm:p-1 bg-[rgba(255,255,255,0.9)] border border-[#8CBDE6] shadow-[0_4px_10px_rgba(0,50,150,0.3)] h-full w-full rounded-sm">
-
                                     <img src="${coverUrl}" class="w-full h-full object-cover rounded-sm">
-
                                 </div>
-
                             </div>
-
                         </div>`;
-
                 });
-
                 topCoverContainer.innerHTML = stackHtml;
-
-
 
                 matchRate = Math.round((matchCount / 10) * 100);
 
-
-
                 document.getElementById('mode4ResultBlock').classList.remove('hidden');
-
                 document.getElementById('mode1ResultBlock').classList.add('hidden');
-
                 document.getElementById('mode2ResultBlock').classList.add('hidden');
-
                 document.getElementById('mode3ResultBlock').classList.add('hidden');
-
                 modeSelect.value = '4';
-
             }
 
-
-
             document.getElementById('matchPercentage').innerHTML = `${matchRate}%<span class="text-sm sm:text-base font-bold text-[#0078FF] ml-0.5 pb-0.5">相似</span>`;
-
             
-
             const quoteEl = document.getElementById('matchQuote');
-
             if (matchRate === 100) quoteEl.textContent = "“好像除了我，沒人能把你看透”";
-
             else if (matchRate >= 40) quoteEl.textContent = "“我從你的話語之間，才明白你和我之間，不需要語言”";
-
             else if (matchRate > 0) quoteEl.textContent = "“為什麼你總沉迷，某種神奇的幻想”";
-
             else quoteEl.textContent = "“你擁有你的，我擁有我的，姿態”";
 
-
-
             document.getElementById('singleResultArea').classList.add('hidden');
-
             document.getElementById('resultArea').classList.remove('hidden');
-
             setTimeout(() => { document.getElementById('resultArea').scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 100);
-
         };
-
     </script>
-
 </body>
-
 </html>
