@@ -11,7 +11,9 @@
         /* 背景強制填滿修正與 App 視窗化配置           */
         /* ========================================== */
         html {
-            background-color: #4B97FF;
+            /* 設定網頁最底層為漸層色 */
+            background: linear-gradient(to bottom, #4B97FF, #264100);
+            min-height: 100%;
         }
 
         body {
@@ -30,8 +32,8 @@
             left: -20px;
             right: -20px;
             bottom: -20px;
-            background-color: #4B97FF;
-            background-image: url('https://i.meee.com.tw/ph013sW.jpg'); 
+            /* 第一層為圖片，第二層為漸層墊底 */
+            background-image: url('https://i.meee.com.tw/ph013sW.jpg'), linear-gradient(to bottom, #4B97FF, #264100); 
             background-size: cover;
             background-position: center center;
             background-repeat: no-repeat;
