@@ -198,7 +198,7 @@
             
             <div>
                 <marquee scrollamount="3" class="text-[10px] text-[#004FFF] font-bold mb-1 tracking-widest bg-gradient-to-r from-transparent via-[rgba(208,234,250,0.6)] to-transparent py-0.5 rounded-sm">
-                    ₍^ >ヮ<^₎ .ᐟ.ᐟ我愛你 我愛你 ᓚ₍つ^. .^₎っ♥ 我用盡所有美好夢想 不想和別人享用 ( ,,⩌'︿'⩌,,) 你每一個小動作 ૮ ྀིᴗ͈ . ᴗ͈ ྀིა 
+                    ₍^ >ヮ<^₎ .ᐟ.ᐟ我愛你 我愛你 ᓚ₍つ^. .^₎っ♥ 我用盡所有美好夢想 /ᐠ > ˕ <マ 不想和別人享用 ( ,,⩌'︿'⩌,,) 你每一個小動作 ૮ ྀིᴗ͈ . ᴗ͈ ྀིა 
                 </marquee>
 
                 <div class="glossy-header engraved-text py-1 text-center text-[11px] mb-2 tracking-wider font-bold">
@@ -214,7 +214,7 @@
                     <option value="1">模式：各專輯最愛ᓚ₍つ^. .^₎っ♥</option>
                     <option value="2">模式：全專輯排行 ≽^-⩊-^≼</option>
                     <option value="3">模式：單專歌曲排行 ₍^ >⩊< ^₎Ⳋ</option>
-                    <option value="4">模式：全歌曲 TOP10 ദ്ദി/ᐠ - ⩊ -マ.ᐟ</option>
+                    <option value="4">模式：全歌曲TOP10 ദ്ദി/ᐠ - ⩊ -マ.ᐟ</option>
                 </select>
             </div>
 
@@ -267,27 +267,26 @@
                     </div>
                 </div>
 
-                <button id="generateResultBtn" class="crystal-btn w-full py-2 text-xs font-bold tracking-wide mt-2">
+                <button id="generateResultBtn" class="crystal-btn w-full py-2 text-xs font-bold tracking-wide mt-2 !text-[#8B0000]">
                     結果! ₍^ >ヮ<^₎✧
                 </button>
             </section>
 
             <section id="singleResultArea" class="hidden pt-2 border-t border-dashed border-[#8CBDE6]">
                 <div class="glossy-header engraved-text py-1 text-center text-[11px] tracking-wider mb-3 font-bold">
-                    ⋆✧ 這就是我 ✧⋆
+                    ⋆✧ 我的花讓我開 ✧⋆
                 </div>
                 
                 <div class="jelly-box p-3 sm:p-4 flex justify-between items-center mb-4 rounded-sm">
                     <div class="flex-1 z-10 pr-2 min-w-0">
                         <div id="singleResultHeader" class="tracking-tight mb-2"></div>
-                        <p class="text-[10px] text-[#557799] mt-2 font-bold italic leading-tight pr-1">“我的花讓我開 ‧₊˚❀༉‧₊˚.”</p>
                     </div>
                     <div id="singleTopCoverContainer" class="relative w-36 h-28 sm:w-64 sm:h-40 shrink-0 flex justify-center items-center">
                     </div>
                 </div>
 
                 <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
-                    <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="singleListTitle">My Taste ★</div>
+                    <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="singleListTitle">這就是我 ★</div>
                     <div class="p-2 bg-[rgba(255,255,255,0.7)] space-y-2 backdrop-blur-sm" id="singleChoicesList"></div>
                 </div>
             </section>
@@ -310,13 +309,13 @@
 
                         <div class="flex flex-col gap-2 pt-2 border-t border-dashed border-[#A6D2F5]">
                             <div class="flex gap-1.5">
-                                <input type="text" id="friendCode" placeholder="貼上他的代碼... ( *^-^)ρ" class="inset-input w-full px-2 py-1.5 text-[11px] flex-1">
+                                <input type="text" id="friendCode" placeholder="貼上他的代碼( *^-^)ρ" class="inset-input w-full px-2 py-1.5 text-[11px] flex-1">
                                 <button id="pasteCodeBtn" class="crystal-btn px-3 py-1 text-[11px] font-bold shrink-0 whitespace-nowrap">
                                     貼上
                                 </button>
                             </div>
-                            <button id="compareBtn" class="crystal-btn w-full py-2 text-xs font-bold tracking-wide">
-                                你們的喜好契合嗎...？ 
+                            <button id="compareBtn" class="crystal-btn w-full py-2 text-xs font-bold tracking-wide !text-[#8B0000]">
+                                我們的喜好契合嗎...？ 
                             </button>
                         </div>
                     </div>
@@ -351,11 +350,11 @@
 
                     <div class="grid grid-cols-2 gap-2">
                         <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
-                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle1">我的選擇</div>
+                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle1">我的喜好★</div>
                             <div class="p-2 bg-[rgba(248,251,253,0.7)] backdrop-blur-sm space-y-2 h-full" id="myChoicesList"></div>
                         </div>
                         <div class="border border-[#A6D2F5] rounded-sm overflow-hidden shadow-sm">
-                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="friendColumnTitle1">他的選擇</div>
+                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="friendColumnTitle1">他的喜好★</div>
                             <div class="p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm space-y-2 h-full" id="friendChoicesList"></div>
                         </div>
                     </div>
@@ -364,11 +363,11 @@
                 <div id="mode2ResultBlock" class="hidden space-y-3">
                     <div class="grid grid-cols-2 gap-2">
                         <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
-                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle2">我的排行</div>
+                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle2">我的喜好★</div>
                             <div class="p-2 bg-[rgba(248,251,253,0.7)] backdrop-blur-sm space-y-2 h-full" id="myRankResultList"></div>
                         </div>
                         <div class="border border-[#A6D2F5] rounded-sm overflow-hidden shadow-sm">
-                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="friendColumnTitle2">他的排行</div>
+                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="friendColumnTitle2">他的喜好★</div>
                             <div class="p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm space-y-2 h-full" id="friendRankResultList"></div>
                         </div>
                     </div>
@@ -380,11 +379,11 @@
                     </div>
                     <div class="grid grid-cols-2 gap-2">
                         <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
-                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle3">我的排行</div>
+                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle3">我的喜好★</div>
                             <div class="p-2 bg-[rgba(248,251,253,0.7)] backdrop-blur-sm space-y-2 h-full" id="myTrackRankResultList"></div>
                         </div>
                         <div class="border border-[#A6D2F5] rounded-sm overflow-hidden shadow-sm">
-                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="friendColumnTitle3">他的排行</div>
+                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="friendColumnTitle3">他的喜好★</div>
                             <div class="p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm space-y-2 h-full" id="friendTrackRankResultList"></div>
                         </div>
                     </div>
@@ -401,11 +400,11 @@
 
                     <div class="grid grid-cols-2 gap-2">
                         <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
-                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle4">我的 TOP10</div>
+                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle4">我的TOP10</div>
                             <div class="p-1 sm:p-2 bg-[rgba(248,251,253,0.7)] backdrop-blur-sm space-y-1 h-full" id="myTrackTop10ResultList"></div>
                         </div>
                         <div class="border border-[#A6D2F5] rounded-sm overflow-hidden shadow-sm">
-                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="friendColumnTitle4">他的 TOP10</div>
+                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="friendColumnTitle4">他的TOP10</div>
                             <div class="p-1 sm:p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm space-y-1 h-full" id="friendTrackTop10ResultList"></div>
                         </div>
                     </div>
@@ -503,7 +502,7 @@
                 modeDescription.textContent = "你對陳綺貞專輯裡曲目的喜好 ♪";
                 mode3Area.classList.remove('hidden');
             } else if (e.target.value === '4') {
-                modeDescription.textContent = "你最愛的陳綺貞 TOP 10 歌曲！ ♪";
+                modeDescription.textContent = "你最愛的陳綺貞TOP10歌曲！ ♪";
                 mode4Area.classList.remove('hidden');
             }
         });
@@ -714,7 +713,7 @@
                     <span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md mt-0.5">喜好排行</span>
                 `;
             } else if (currentMode === '4') {
-                resultHeaderHtml += `<span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md">全歌曲 TOP10</span>`;
+                resultHeaderHtml += `<span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md">全歌曲TOP10</span>`;
             }
 
             document.getElementById('singleResultHeader').innerHTML = resultHeaderHtml;
@@ -855,7 +854,7 @@
             codeInput.setSelectionRange(0, 99999);
             navigator.clipboard.writeText(codeInput.value).then(() => {
                 const btn = document.getElementById('copyCodeBtn');
-                btn.textContent = "已複製 ★";
+                btn.textContent = "已複製★";
                 setTimeout(() => { btn.textContent = "複製"; }, 2000);
             }).catch(() => alert("請手動複製！"));
         };
@@ -919,8 +918,8 @@
 
             let friendModeTitle = "";
             if (friendData.m === 1) friendModeTitle = "各專輯最愛";
-            else if (friendData.m === 2) friendModeTitle = "專輯喜好排序";
-            else if (friendData.m === 3) friendModeTitle = "單專歌曲排序";
+            else if (friendData.m === 2) friendModeTitle = "專輯喜好排行";
+            else if (friendData.m === 3) friendModeTitle = "單專歌曲排行";
             else if (friendData.m === 4) friendModeTitle = "全歌曲 TOP10";
 
             document.getElementById('matchResultHeader').innerHTML = `
@@ -971,8 +970,8 @@
                     regularAlbums.forEach(album => matchedCovers.push(album.cover));
                 }
 
-                document.getElementById('myColumnTitle1').textContent = `${myName} 選擇了♥`;
-                document.getElementById('friendColumnTitle1').textContent = `${friendName} 選擇了♥`;
+                document.getElementById('myColumnTitle1').textContent = `${myName} 選擇了`;
+                document.getElementById('friendColumnTitle1').textContent = `${friendName} 選擇了`;
                 document.getElementById('commonChoicesList').innerHTML = commonHtml;
                 document.getElementById('myChoicesList').innerHTML = myHtml;
                 document.getElementById('friendChoicesList').innerHTML = friendHtml;
@@ -1102,8 +1101,8 @@
                 });
 
                 document.getElementById('mode3ResultAlbumName').textContent = `《${album.title}》歌曲排行比對`;
-                document.getElementById('myColumnTitle3').textContent = `${myName} 的排行`;
-                document.getElementById('friendColumnTitle3').textContent = `${friendName} 的排行`;
+                document.getElementById('myColumnTitle3').textContent = `${myName} 的喜好★`;
+                document.getElementById('friendColumnTitle3').textContent = `${friendName} 的喜好★`;
                 document.getElementById('myTrackRankResultList').innerHTML = myHtml;
                 document.getElementById('friendTrackRankResultList').innerHTML = friendHtml;
 
@@ -1186,8 +1185,8 @@
                     friendHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-4 text-center drop-shadow-sm">#${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#A6D2F5] shrink-0 opacity-80 rounded-sm"><span class="text-[10px] text-[#335577] truncate flex-1">${trackName}</span></div>`;
                 });
 
-                document.getElementById('myColumnTitle4').textContent = `${myName} 的 TOP10`;
-                document.getElementById('friendColumnTitle4').textContent = `${friendName} 的 TOP10`;
+                document.getElementById('myColumnTitle4').textContent = `${myName} 的TOP10`;
+                document.getElementById('friendColumnTitle4').textContent = `${friendName} 的TOP10`;
                 document.getElementById('mode4CommonCountLabel').textContent = `${commonTracks.length}/10`;
                 document.getElementById('mode4CommonChoicesList').innerHTML = commonHtml;
                 document.getElementById('myTrackTop10ResultList').innerHTML = myHtml;
@@ -1219,10 +1218,10 @@
             document.getElementById('matchPercentage').innerHTML = `${matchRate}%<span class="text-sm sm:text-base font-bold text-[#0078FF] ml-0.5 pb-0.5">相似</span>`;
             
             const quoteEl = document.getElementById('matchQuote');
-            if (matchRate === 100) quoteEl.textContent = "“好像除了我，沒人能把你看透 ( •̀ ω •́ )✧”";
-            else if (matchRate >= 40) quoteEl.textContent = "“我從你的話語之間，才明白你和我之間，不需要語言 (*´∀`)~♥”";
-            else if (matchRate > 0) quoteEl.textContent = "“為什麼你總沉迷，某種神奇的幻想 ヽ(✿ﾟ▽ﾟ)ノ”";
-            else quoteEl.textContent = "“你擁有你的，我擁有我的，姿態 (๑´ㅂ`๑)”";
+            if (matchRate === 100) quoteEl.textContent = "“好像除了我，沒人能把你看透”";
+            else if (matchRate >= 40) quoteEl.textContent = "“我從你的話語之間，才明白你和我之間，不需要語言”";
+            else if (matchRate > 0) quoteEl.textContent = "“為什麼你總沉迷，某種神奇的幻想”";
+            else quoteEl.textContent = "“你擁有你的，我擁有我的，姿態”";
 
             document.getElementById('singleResultArea').classList.add('hidden');
             document.getElementById('resultArea').classList.remove('hidden');
