@@ -174,7 +174,7 @@
             <div class="flex items-center justify-between px-1">
                 <div class="flex items-center gap-1.5">
                     <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='%23FFFFFF'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/></svg>" class="w-4 h-4 drop-shadow-md">
-                    <span class="text-xs font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">Windows Internet Explorer</span>
+                    <span class="text-xs font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">Cheerego Internet Explorer</span>
                 </div>
                 <div class="flex gap-0.5">
                     <div class="w-6 h-4 bg-gradient-to-b from-[#6094EB] to-[#1551C2] border border-[#01217A] rounded-sm shadow-inner flex justify-center items-center pb-1 text-white leading-none cursor-pointer">_</div>
@@ -268,7 +268,7 @@
                 </div>
 
                 <button id="generateResultBtn" class="crystal-btn w-full py-2 text-xs font-bold tracking-wide mt-2">
-                    結果! (๑•̀ㅂ•́)و✧
+                    結果! ₍^ >ヮ<^₎✧
                 </button>
             </section>
 
@@ -292,37 +292,33 @@
                 </div>
             </section>
 
-            <div id="postResultSection" class="hidden space-y-5 pt-3 border-t border-dashed border-[#8CBDE6]">
-                
+            <div id="postResultSection" class="hidden pt-3 border-t border-dashed border-[#8CBDE6]">
                 <section>
                     <div class="glossy-header engraved-text py-1 text-center text-[11px] tracking-wider mb-2 font-bold">
-                        ⋆✧ my code ✧⋆
+                        跟你的朋友比較吧！ ✧₍^ >⩊< ^₎Ⳋ
                     </div>
-                    <div class="jelly-box p-3 rounded-sm">
-                        <p class="text-[10px] font-bold text-[#004499] mb-1">複製代碼分享給朋友！ </p>
-                        <div class="relative">
-                            <textarea id="generatedCode" readonly class="inset-input w-full p-2 pr-16 text-[10px] font-mono h-12 flex items-center"></textarea>
-                            <button id="copyCodeBtn" class="absolute bottom-2 right-2 crystal-btn px-2 py-1 text-[10px]">
-                                複製
-                            </button>
+                    <div class="jelly-box p-3 rounded-sm flex flex-col gap-3">
+                        <div>
+                            <p class="text-[10px] font-bold text-[#004499] mb-1">複製代碼分享給朋友！ </p>
+                            <div class="relative">
+                                <textarea id="generatedCode" readonly class="inset-input w-full p-2 pr-16 text-[10px] font-mono h-12 flex items-center"></textarea>
+                                <button id="copyCodeBtn" class="absolute bottom-2 right-2 crystal-btn px-2 py-1 text-[10px]">
+                                    複製
+                                </button>
+                            </div>
                         </div>
-                    </div>
-                </section>
 
-                <section class="space-y-3">
-                    <div class="glossy-header engraved-text py-1 text-center text-[11px] tracking-wider font-bold">
-                        ⋆✧꒰ა☆ 在你理想的國度 我住在那裡嗎 ☆໒꒱✧⋆
-                    </div>
-                    <div class="flex flex-col gap-2">
-                        <div class="flex gap-1.5">
-                            <input type="text" id="friendCode" placeholder="貼上他的代碼... ( *^-^)ρ" class="inset-input w-full px-2 py-1.5 text-[11px] flex-1">
-                            <button id="pasteCodeBtn" class="crystal-btn px-3 py-1 text-[11px] font-bold shrink-0 whitespace-nowrap">
-                                貼上
+                        <div class="flex flex-col gap-2 pt-2 border-t border-dashed border-[#A6D2F5]">
+                            <div class="flex gap-1.5">
+                                <input type="text" id="friendCode" placeholder="貼上他的代碼... ( *^-^)ρ" class="inset-input w-full px-2 py-1.5 text-[11px] flex-1">
+                                <button id="pasteCodeBtn" class="crystal-btn px-3 py-1 text-[11px] font-bold shrink-0 whitespace-nowrap">
+                                    貼上
+                                </button>
+                            </div>
+                            <button id="compareBtn" class="crystal-btn w-full py-2 text-xs font-bold tracking-wide">
+                                你們的喜好契合嗎...？ 
                             </button>
                         </div>
-                        <button id="compareBtn" class="crystal-btn w-full py-2 text-xs font-bold tracking-wide">
-                            你們的品味 match 嗎...？ 
-                        </button>
                     </div>
                 </section>
             </div>
@@ -627,8 +623,8 @@
                 btn.className = "flex items-center text-left px-2 py-1.5 text-[10px] text-[#004499] font-bold bg-[rgba(255,255,255,0.8)] border border-[#8CBDE6] hover:bg-[#BCE4FF] rounded-sm transition-colors shadow-sm cursor-pointer";
                 btn.innerHTML = `<span class="mr-1.5 text-[#0078FF] font-black">+</span><span class="truncate flex-1">${track.name}</span>`;
                 btn.onclick = () => {
-                    if (mode4SelectedTracks.length >= 10) { alert("榜單已經填滿 10 首歌ㄌㄡ！"); return; }
-                    if (mode4SelectedTracks.find(t => t.id === track.id)) { alert("這首歌已經在榜單中ㄌㄡ！"); return; }
+                    if (mode4SelectedTracks.length >= 10) { alert("榜單已經填滿 10 首歌ㄛ！"); return; }
+                    if (mode4SelectedTracks.find(t => t.id === track.id)) { alert("這首歌已經在榜單中ㄛ！"); return; }
                     mode4SelectedTracks.push({ id: track.id, name: track.name, cover: album.cover });
                     renderMode4RankList();
                 };
@@ -913,7 +909,7 @@
                     if (!friendData.m) friendData.m = 1;
                 }
             } catch (e) {
-                alert("代碼解析失敗，請確認代碼是否完整ㄡQQ");
+                alert("代碼解析失敗，請確認代碼是否完整ㄛQQ");
                 return;
             }
 
@@ -1223,10 +1219,10 @@
             document.getElementById('matchPercentage').innerHTML = `${matchRate}%<span class="text-sm sm:text-base font-bold text-[#0078FF] ml-0.5 pb-0.5">相似</span>`;
             
             const quoteEl = document.getElementById('matchQuote');
-            if (matchRate === 100) quoteEl.textContent = "“好像除了我，沒人能把你看透”";
-            else if (matchRate >= 40) quoteEl.textContent = "“我從你的話語之間，才明白你和我之間，不需要語言”";
-            else if (matchRate > 0) quoteEl.textContent = "“為什麼你總沉迷，某種神奇的幻想”";
-            else quoteEl.textContent = "“你擁有你的，我擁有我的，姿態";
+            if (matchRate === 100) quoteEl.textContent = "“好像除了我，沒人能把你看透 ( •̀ ω •́ )✧”";
+            else if (matchRate >= 40) quoteEl.textContent = "“我從你的話語之間，才明白你和我之間，不需要語言 (*´∀`)~♥”";
+            else if (matchRate > 0) quoteEl.textContent = "“為什麼你總沉迷，某種神奇的幻想 ヽ(✿ﾟ▽ﾟ)ノ”";
+            else quoteEl.textContent = "“你擁有你的，我擁有我的，姿態 (๑´ㅂ`๑)”";
 
             document.getElementById('singleResultArea').classList.add('hidden');
             document.getElementById('resultArea').classList.remove('hidden');
