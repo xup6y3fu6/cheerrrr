@@ -10,23 +10,27 @@
         /* ========================================== */
         /* 背景強制填滿修正與 App 視窗化配置           */
         /* ========================================== */
-        html, body {
+        html {
+            background-color: #4B97FF;
+        }
+
+        body {
             height: 100vh;
             height: 100dvh;
             margin: 0;
             padding: 0;
             overflow: hidden;
+            background-color: transparent;
         }
 
         body::before {
             content: "";
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            height: 100dvh;
-            background-color: #004FFF; 
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            background-color: #4B97FF;
             background-image: url('https://i.meee.com.tw/ph013sW.jpg'); 
             background-size: cover;
             background-position: center center;
@@ -35,6 +39,7 @@
             filter: saturate(1.2) contrast(1.1);
         }
 
+        /* 視窗本體設定 */
         body {
             font-family: 'Tahoma', 'Verdana', sans-serif;
             color: #113366;
