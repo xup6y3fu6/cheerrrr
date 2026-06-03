@@ -19,7 +19,6 @@
         html::before {
             content: "";
             position: fixed;
-            /* 將邊界向外延伸，強制覆蓋所有藍色邊界 */
             top: -50px;
             left: -50px;
             right: -50px;
@@ -38,7 +37,6 @@
             height: 100dvh;
             margin: 0;
             
-            /* 適配 iOS 安全邊距 */
             padding-top: env(safe-area-inset-top);
             padding-bottom: env(safe-area-inset-bottom);
             padding-left: env(safe-area-inset-left);
@@ -47,10 +45,6 @@
             
             overflow: hidden;
             background-color: transparent;
-        }
-
-        /* 視窗本體設定 */
-        body {
             font-family: 'Tahoma', 'Verdana', sans-serif;
             color: #113366;
             -webkit-tap-highlight-color: transparent;
@@ -93,13 +87,11 @@
             box-shadow: inset 0 1px 2px rgba(255,255,255,0.6);
         }
 
-        /* 雕刻文字共用類別 */
         .engraved-text {
             color: rgb(255, 255, 255);
             text-shadow: 0px 1px 1px rgba(0, 10, 153, 0.9), 0px -1px 1px rgba(0, 0, 0, 0.716);
         }
 
-        /* 果凍感立體標題 */
         .glossy-header {
             background: linear-gradient(to bottom, #94D0FF 0%, #3DA5FF 45%, #0078D7 50%, #4FB4FF 100%);
             border: 1px solid #005A9E;
@@ -108,7 +100,6 @@
             letter-spacing: 0.1em;
         }
 
-        /* 清單專用水晶標題列 */
         .crystal-bar {
             background: linear-gradient(to bottom, #94D0FF 0%, #3DA5FF 45%, #0078D7 50%, #4FB4FF 100%);
             border-bottom: 1px solid #005A9E;
@@ -134,7 +125,6 @@
             transform: translateY(1px);
         }
 
-        /* 復古淺黃色輸入框 */
         .inset-input {
             background: rgba(255, 252, 224, 0.85);
             backdrop-filter: blur(4px);
@@ -180,7 +170,7 @@
         }
 
         .sortable-ghost { opacity: 0.4; }
-        .sortable-drag { cursor: grabbing !important; }
+        .drag-handle { touch-action: none; }
     </style>
 </head>
 <body class="antialiased">
@@ -251,7 +241,7 @@
                 <div id="mode1Area" class="grid grid-cols-1 gap-2 pt-2"></div>
 
                 <div id="mode2Area" class="hidden pt-2">
-                    <ul id="rankList" class="space-y-2"></ul>
+                    <ul id="rankList" class="space-y-2 max-h-[45vh] overflow-y-auto custom-scrollbar pr-2 pl-1 pb-1"></ul>
                 </div>
 
                 <div id="mode3Area" class="hidden pt-2 space-y-3">
@@ -264,7 +254,7 @@
                             </select>
                         </div>
                     </div>
-                    <ul id="mode3RankList" class="space-y-2"></ul>
+                    <ul id="mode3RankList" class="space-y-2 max-h-[45vh] overflow-y-auto custom-scrollbar pr-2 pl-1 pb-1"></ul>
                 </div>
 
                 <div id="mode4Area" class="hidden pt-2 space-y-3">
@@ -276,10 +266,10 @@
                     
                     <div class="jelly-box p-2 rounded-sm">
                         <div class="flex justify-between items-center mb-2">
-                            <label class="text-[10px] font-bold text-[#004499]">2. TOP10 (可拖曳排序)：</label>
+                            <label class="text-[10px] font-bold text-[#004499]">2. TOP10 (排序)：</label>
                             <span id="mode4Count" class="text-[10px] font-bold text-red-500 bg-[rgba(255,255,255,0.8)] border border-[#D0EAFA] px-1 rounded-sm">0/10</span>
                         </div>
-                        <ul id="mode4RankList" class="space-y-1 min-h-[50px] bg-[rgba(255,255,255,0.6)] border border-[#D0EAFA] p-1 rounded-sm shadow-inner">
+                        <ul id="mode4RankList" class="space-y-1 min-h-[50px] max-h-[45vh] overflow-y-auto custom-scrollbar pr-2 pl-1 pb-1 bg-[rgba(255,255,255,0.6)] border border-[#D0EAFA] rounded-sm shadow-inner">
                         </ul>
                     </div>
                 </div>
@@ -442,7 +432,6 @@
             { id: "album_06", title: "時間的歌", year: "2013", cover: "時間.jpg", isEp: false, tracks: [{ id: "t06_01", name: "時間的歌" }, { id: "t06_02", name: "漣漪" }, { id: "t06_03", name: "柏拉圖式的愛情" }, { id: "t06_04", name: "Peace & Revolution" }, { id: "t06_05", name: "雨水一盒" }, { id: "t06_06", name: "秋天蒙太奇" }, { id: "t06_07", name: "流浪者之歌" }, { id: "t06_08", name: "倒數" }, { id: "t06_09", name: "沙漏" }, { id: "t06_10", name: "普魯斯特行動" }, { id: "t06_11", name: "別送我回家" }, { id: "t06_12", name: "家" }] },
             { id: "album_07", title: "沙發海", year: "2018", cover: "沙發.jpg", isEp: false, tracks: [{ id: "t07_01", name: "傷害" }, { id: "t07_02", name: "小船" }, { id: "t07_03", name: "殘缺的彩虹" }, { id: "t07_04", name: "台北某個地方" }, { id: "t07_05", name: "沙發海" }, { id: "t07_06", name: "跳舞吧" }, { id: "t07_07", name: "他說" }, { id: "t07_08", name: "華生" }, { id: "t07_09", name: "變色龍" }, { id: "t07_10", name: "觀察者" }, { id: "t07_11", name: "神魂顛倒" }] },
             
-            // ▼ 預留 EP / 單曲欄位，帶有 isEp: true 標記，會在 1、2、3 模式被隱藏 ▼
             { id: "ep_01", title: "CHEER", year: "2005", cover: "精選.jpg", isEp: true, tracks: [{ id: "ep_01", name: "九份的咖啡店" }, { id: "ep_01", name: "雨天的尾巴(滬尾小情歌)" }] },
             { id: "ep_02", title: "After 17 - Single", year: "2004", cover: "17.jpg", isEp: true, tracks: [{ id: "ep02_01", name: "After 17" }, { id: "ep02_02", name: "小小校歌" }] },
             { id: "ep_03", title: "夏季練習曲世界巡迴現場錄音", year: "2004", cover: "夏季.jpg", isEp: true, tracks: [{ id: "ep03_01", name: "（失明前）我想記得的四十七件事" }] },
@@ -453,7 +442,6 @@
             { id: "ep_08", title: "夏天蒙太奇 - Single", year: "2023", cover: "夏天.jpg", isEp: true, tracks: [{ id: "ep08_01", name: "夏天蒙太奇" }] },
         ];
         
-        // 過濾出正規專輯
         const regularAlbums = chenAlbums.filter(a => !a.isEp);
 
         const modeSelect = document.getElementById('modeSelect');
@@ -472,7 +460,6 @@
         const mode3SelectedTitle = document.getElementById('mode3SelectedTitle');
         let mode3Sortable = null;
 
-        // 縮小化手機版散落排版設定
         const casualLayouts = [
             { x: -75,  y: -40, r: -10 }, 
             { x: 0,    y: -55, r: 4 },   
@@ -556,15 +543,16 @@
         regularAlbums.forEach(album => {
             const li = document.createElement('li');
             li.dataset.id = album.id;
-            li.className = 'flex items-center gap-3 jelly-item p-2 rounded cursor-grab active:cursor-grabbing transition-transform hover:scale-[1.01]';
+            li.className = 'flex items-center gap-2 jelly-item p-2 rounded transition-transform hover:scale-[1.01]';
             li.innerHTML = `
-                <span class="text-[#005A9E] font-bold text-lg px-2 select-none drop-shadow-sm">☰</span>
-                <img src="${album.cover}" class="w-10 h-10 object-cover border border-[#66BFFF] rounded-sm">
-                <span class="text-xs font-bold text-[#003B99]">${album.title}</span>
+                <img src="${album.cover}" class="w-10 h-10 object-cover border border-[#66BFFF] rounded-sm pointer-events-none shrink-0">
+                <span class="text-xs font-bold text-[#003B99] pointer-events-none flex-1 truncate">${album.title}</span>
+                <span class="text-[9px] text-[#8CBDE6] pointer-events-none select-none tracking-wider shrink-0 pr-1">按住☰來拖動</span>
+                <span class="drag-handle text-[#005A9E] font-bold text-lg px-1 select-none drop-shadow-sm cursor-grab active:cursor-grabbing shrink-0">☰</span>
             `;
             rankList.appendChild(li);
         });
-        new Sortable(rankList, { animation: 150 });
+        new Sortable(rankList, { animation: 150, handle: '.drag-handle' });
 
         // ==========================================
         // 渲染模式 3 (單專歌曲排行)
@@ -586,16 +574,17 @@
                 const li = document.createElement('li');
                 li.dataset.id = track.id;
                 li.dataset.originalIdx = idx;
-                li.className = 'flex items-center gap-3 jelly-item p-2 rounded cursor-grab active:cursor-grabbing transition-transform hover:scale-[1.01]';
+                li.className = 'flex items-center gap-2 jelly-item p-2 rounded transition-transform hover:scale-[1.01]';
                 li.innerHTML = `
-                    <span class="text-[#005A9E] font-bold text-lg px-2 select-none drop-shadow-sm">☰</span>
-                    <span class="text-[10px] text-[#0078D7] font-mono font-bold">Tr.${String(idx+1).padStart(2,'0')}</span>
-                    <span class="text-xs font-bold text-[#003B99] truncate">${track.name}</span>
+                    <span class="text-[10px] text-[#0078D7] font-mono font-bold pointer-events-none shrink-0 w-8">Tr.${String(idx+1).padStart(2,'0')}</span>
+                    <span class="text-xs font-bold text-[#003B99] truncate pointer-events-none flex-1">${track.name}</span>
+                    <span class="text-[9px] text-[#8CBDE6] pointer-events-none select-none tracking-wider shrink-0 pr-1">按住☰來拖動</span>
+                    <span class="drag-handle text-[#005A9E] font-bold text-lg px-1 select-none drop-shadow-sm cursor-grab active:cursor-grabbing shrink-0">☰</span>
                 `;
                 mode3RankList.appendChild(li);
             });
             if (mode3Sortable) mode3Sortable.destroy();
-            mode3Sortable = new Sortable(mode3RankList, { animation: 150 });
+            mode3Sortable = new Sortable(mode3RankList, { animation: 150, handle: '.drag-handle' });
         }
 
         mode3AlbumSelect.addEventListener('change', (e) => {
@@ -626,7 +615,6 @@
                     img.classList.add('border-[#004FFF]', 'shadow-md', 'scale-105');
                     renderMode4Pool(idx);
                 };
-                
                 mode4AlbumTabs.appendChild(img);
             });
             renderMode4Pool(0);
@@ -654,13 +642,14 @@
             mode4SelectedTracks.forEach((item, index) => {
                 const li = document.createElement('li');
                 li.dataset.id = item.id;
-                li.className = "flex items-center gap-2 p-1.5 border border-[#8CBDE6] bg-[rgba(232,245,255,0.8)] rounded-sm shadow-sm cursor-grab active:cursor-grabbing";
+                li.className = "flex items-center gap-1.5 p-1.5 border border-[#8CBDE6] bg-[rgba(232,245,255,0.8)] rounded-sm shadow-sm";
                 li.innerHTML = `
-                    <span class="text-[#0078FF] font-bold text-[10px] px-1 select-none">☰</span>
-                    <span class="text-[10px] font-black text-[#0026CC] w-3 drop-shadow-sm">${index + 1}</span>
-                    <img src="${item.cover}" class="w-6 h-6 object-cover border border-[#66BFFF] shrink-0 rounded-sm">
-                    <span class="text-[10px] font-bold text-[#004499] flex-1 truncate">${item.name}</span>
-                    <button class="text-red-500 hover:text-red-700 font-black px-2 text-[10px]" onclick="removeMode4Track('${item.id}')">✕</button>
+                    <span class="text-[10px] font-black text-[#0026CC] w-3 drop-shadow-sm pointer-events-none shrink-0">${index + 1}</span>
+                    <img src="${item.cover}" class="w-6 h-6 object-cover border border-[#66BFFF] shrink-0 rounded-sm pointer-events-none">
+                    <span class="text-[10px] font-bold text-[#004499] flex-1 truncate pointer-events-none">${item.name}</span>
+                    <span class="text-[8px] text-[#8CBDE6] pointer-events-none select-none tracking-wider shrink-0 pr-1">按住☰來拖動</span>
+                    <span class="drag-handle text-[#0078FF] font-bold text-base px-1 select-none cursor-grab active:cursor-grabbing shrink-0">☰</span>
+                    <button class="text-red-500 hover:text-red-700 font-black px-1 text-[10px] shrink-0" onclick="removeMode4Track('${item.id}')">✕</button>
                 `;
                 mode4RankList.appendChild(li);
             });
@@ -676,6 +665,7 @@
 
         new Sortable(mode4RankList, {
             animation: 150,
+            handle: '.drag-handle',
             onEnd: function() {
                 const newOrderIds = Array.from(mode4RankList.children).map(li => li.dataset.id);
                 mode4SelectedTracks = newOrderIds.map(id => mode4SelectedTracks.find(t => t.id === id));
@@ -881,7 +871,7 @@
         };
 
         // ==========================================
-        // 比對資料與結果計算
+        // 比對資料與漸進式給分機制
         // ==========================================
         document.getElementById('compareBtn').onclick = function() {
             const myName = document.getElementById('userName').value.trim() || "你";
@@ -1035,30 +1025,41 @@
                 const friendOrder = friendData.r;
                 const myOrder = Array.from(rankList.children).map(li => li.dataset.id);
                 
-                let myHtml = '', friendHtml = '', matchCount = 0;
+                let myHtml = '', friendHtml = '';
+                let matchScore = 0;
                 let matchedCovers = [];
                 const total = regularAlbums.length;
 
+                const getBgClass = (diff) => {
+                    if (diff === 0) return "bg-[rgba(166,210,245,0.7)] border-[#0078FF] shadow-inner";
+                    if (diff === 1) return "bg-[rgba(200,230,255,0.5)] border-[#66BFFF]";
+                    if (diff === 2) return "bg-[rgba(230,245,255,0.4)] border-[#A6D2F5]";
+                    return "border-transparent border-b-[#8CBDE6] bg-transparent";
+                };
+
                 myOrder.forEach((id, idx) => {
                     const album = regularAlbums.find(a => a.id === id);
-                    const diff = friendOrder.indexOf(id) === idx ? 0 : -1;
-                    const bgClass = diff === 0 ? "bg-[rgba(166,210,245,0.7)] border-[#0078FF] shadow-inner" : "border-transparent border-b-[#8CBDE6] bg-transparent";
+                    const fIdx = friendOrder.indexOf(id);
+                    const diff = Math.abs(idx - fIdx);
+                    
+                    if (diff === 0) { matchScore += 1; matchedCovers.push(album.cover); }
+                    else if (diff === 1) { matchScore += 0.5; }
+                    else if (diff === 2) { matchScore += 0.2; }
+                    
+                    const bgClass = getBgClass(diff);
                     myHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-2 text-center drop-shadow-sm">${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#66BFFF] shrink-0 rounded-sm"><span class="text-[10px] text-[#002255] truncate flex-1">${album.title}</span></div>`;
                 });
 
                 friendOrder.forEach((id, idx) => {
                     const album = regularAlbums.find(a => a.id === id);
-                    const diff = myOrder.indexOf(id) === idx ? 0 : -1;
+                    const mIdx = myOrder.indexOf(id);
+                    const diff = Math.abs(idx - mIdx);
                     
-                    if (diff === 0) {
-                        matchCount++;
-                        matchedCovers.push(album.cover);
-                    }
-                    const bgClass = diff === 0 ? "bg-[rgba(166,210,245,0.7)] border-[#0078FF] shadow-inner" : "border-transparent border-b-[#8CBDE6] bg-transparent";
+                    const bgClass = getBgClass(diff);
                     friendHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-2 text-center drop-shadow-sm">${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#A6D2F5] shrink-0 opacity-80 rounded-sm"><span class="text-[10px] text-[#335577] truncate flex-1">${album.title}</span></div>`;
                 });
 
-                if (matchCount === 0) {
+                if (matchedCovers.length === 0) {
                     regularAlbums.forEach(album => matchedCovers.push(album.cover));
                 }
 
@@ -1081,7 +1082,7 @@
                 });
                 topCoverContainer.innerHTML = stackHtml;
 
-                matchRate = Math.round((matchCount / total) * 100);
+                matchRate = Math.min(100, Math.round((matchScore / total) * 100));
 
                 document.getElementById('mode2ResultBlock').classList.remove('hidden');
                 document.getElementById('mode1ResultBlock').classList.add('hidden');
@@ -1106,20 +1107,36 @@
                 const myOrder = Array.from(mode3RankList.children).map(li => li.dataset.id);
                 const album = chenAlbums[myAlbumIdx];
                 
-                let myHtml = '', friendHtml = '', matchCount = 0;
+                let myHtml = '', friendHtml = '';
+                let matchScore = 0;
+                const n = album.tracks.length;
+
+                const getBgClass = (diff) => {
+                    if (diff === 0) return "bg-[rgba(166,210,245,0.7)] border-[#0078FF] shadow-inner";
+                    if (diff <= 2) return "bg-[rgba(200,230,255,0.5)] border-[#66BFFF]";
+                    if (diff <= 4) return "bg-[rgba(230,245,255,0.4)] border-[#A6D2F5]";
+                    return "border-transparent border-b-[#8CBDE6] bg-transparent";
+                };
 
                 myOrder.forEach((id, idx) => {
                     const track = album.tracks.find(t => t.id === id);
-                    const diff = friendOrder.indexOf(id) === idx ? 0 : -1;
-                    const bgClass = diff === 0 ? "bg-[rgba(166,210,245,0.7)] border-[#0078FF] shadow-inner" : "border-transparent border-b-[#8CBDE6] bg-transparent";
+                    const fIdx = friendOrder.indexOf(id);
+                    const diff = Math.abs(idx - fIdx);
+                    
+                    if (diff === 0) matchScore += 1;
+                    else if (diff <= 2) matchScore += 0.5;
+                    else if (diff <= 4) matchScore += 0.2;
+
+                    const bgClass = getBgClass(diff);
                     myHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-4 text-center drop-shadow-sm">${idx+1}</span><span class="text-[10px] text-[#002255] truncate flex-1">${track.name}</span></div>`;
                 });
 
                 friendOrder.forEach((id, idx) => {
                     const track = album.tracks.find(t => t.id === id);
-                    const diff = myOrder.indexOf(id) === idx ? 0 : -1;
-                    if (diff === 0) matchCount++;
-                    const bgClass = diff === 0 ? "bg-[rgba(166,210,245,0.7)] border-[#0078FF] shadow-inner" : "border-transparent border-b-[#8CBDE6] bg-transparent";
+                    const mIdx = myOrder.indexOf(id);
+                    const diff = Math.abs(idx - mIdx);
+                    
+                    const bgClass = getBgClass(diff);
                     friendHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-4 text-center drop-shadow-sm">${idx+1}</span><span class="text-[10px] text-[#335577] truncate flex-1">${track.name}</span></div>`;
                 });
 
@@ -1138,8 +1155,7 @@
                         </div>
                     </div>`;
 
-                const n = album.tracks.length;
-                matchRate = Math.round((matchCount / n) * 100);
+                matchRate = Math.min(100, Math.round((matchScore / n) * 100));
 
                 document.getElementById('mode3ResultBlock').classList.remove('hidden');
                 document.getElementById('mode1ResultBlock').classList.add('hidden');
@@ -1161,7 +1177,7 @@
                 const myOrder = mode4SelectedTracks.map(t => t.id);
                 const friendOrder = friendData.r;
 
-                let matchCount = 0;
+                let matchScore = 0;
                 let matchedCovers = [];
                 const commonTracks = myOrder.filter(id => friendOrder.includes(id));
                 let commonHtml = '';
@@ -1176,6 +1192,16 @@
                     commonTracks.forEach(id => {
                         const trackName = getTrackName(id);
                         const album = chenAlbums.find(a => a.tracks.some(t => t.id === id));
+                        
+                        const myIdx = myOrder.indexOf(id);
+                        const fIdx = friendOrder.indexOf(id);
+                        const diff = Math.abs(myIdx - fIdx);
+                        
+                        matchScore += 1; // 基礎選中共鳴分
+                        if (diff === 0) matchScore += 1; // 排名完美一致
+                        else if (diff <= 2) matchScore += 0.5; // 排名相近
+                        else if (diff <= 4) matchScore += 0.2; // 排名稍微靠近
+
                         commonHtml += `
                             <div class="flex items-center gap-2 border border-dashed border-[#8CBDE6] p-1.5 rounded-sm bg-[rgba(255,255,255,0.7)] shadow-inner">
                                 <div class="p-0.5 bg-[rgba(255,255,255,0.9)] border border-[#8CBDE6] shadow-sm shrink-0 rounded-sm"><img src="${album.cover}" class="w-8 h-8 object-cover rounded-sm"></div>
@@ -1187,15 +1213,25 @@
                     });
                 }
 
+                const getBgClass = (isMatch, diff) => {
+                    if (!isMatch) return "bg-transparent border-transparent border-b-[#8CBDE6]";
+                    if (diff === 0) return "bg-[rgba(166,210,245,0.7)] border-[#0078FF] shadow-inner";
+                    if (diff <= 2) return "bg-[rgba(200,230,255,0.5)] border-[#66BFFF]";
+                    return "bg-[rgba(230,245,255,0.4)] border-[#A6D2F5]"; // 僅為共同入選
+                };
+
                 let myHtml = '';
                 myOrder.forEach((id, idx) => {
                     const trackName = getTrackName(id);
                     const album = chenAlbums.find(a => a.tracks.some(t => t.id === id));
                     const isMatch = commonTracks.includes(id);
-                    const bgClass = isMatch ? "bg-[rgba(166,210,245,0.7)] border-[#0078FF] shadow-inner" : "bg-transparent border-transparent border-b-[#8CBDE6]";
                     
-                    if (friendOrder.indexOf(id) === idx) matchCount++; // 同位才加分
-                    if (isMatch && !matchedCovers.includes(album.cover)) matchedCovers.push(album.cover);
+                    let bgClass = getBgClass(false, 0);
+                    if (isMatch) {
+                        const diff = Math.abs(idx - friendOrder.indexOf(id));
+                        bgClass = getBgClass(true, diff);
+                        if (!matchedCovers.includes(album.cover)) matchedCovers.push(album.cover);
+                    }
 
                     myHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-4 text-center drop-shadow-sm">#${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#66BFFF] shrink-0 rounded-sm"><span class="text-[10px] text-[#002255] truncate flex-1">${trackName}</span></div>`;
                 });
@@ -1205,7 +1241,13 @@
                     const trackName = getTrackName(id);
                     const album = chenAlbums.find(a => a.tracks.some(t => t.id === id));
                     const isMatch = commonTracks.includes(id);
-                    const bgClass = isMatch ? "bg-[rgba(166,210,245,0.7)] border-[#0078FF] shadow-inner" : "bg-transparent border-transparent border-b-[#8CBDE6]";
+                    
+                    let bgClass = getBgClass(false, 0);
+                    if (isMatch) {
+                        const diff = Math.abs(idx - myOrder.indexOf(id));
+                        bgClass = getBgClass(true, diff);
+                    }
+
                     friendHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-4 text-center drop-shadow-sm">#${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#A6D2F5] shrink-0 opacity-80 rounded-sm"><span class="text-[10px] text-[#335577] truncate flex-1">${trackName}</span></div>`;
                 });
 
@@ -1230,7 +1272,8 @@
                 });
                 topCoverContainer.innerHTML = stackHtml;
 
-                matchRate = Math.round((matchCount / 10) * 100);
+                // 滿分為每首歌 2 分 (同在榜單 1分 + 排名位置完美吻合 1分) 共 20 分。
+                matchRate = Math.min(100, Math.round((matchScore / 20) * 100));
 
                 document.getElementById('mode4ResultBlock').classList.remove('hidden');
                 document.getElementById('mode1ResultBlock').classList.add('hidden');
