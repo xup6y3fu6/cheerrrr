@@ -1032,9 +1032,12 @@
 
                 const getBgClass = (diff) => {
                     if (diff === 0) return "bg-[rgba(166,210,245,0.7)] border-[#0078FF] shadow-inner";
-                    if (diff === 1) return "bg-[rgba(200,230,255,0.5)] border-[#66BFFF]";
-                    if (diff === 2) return "bg-[rgba(230,245,255,0.4)] border-[#A6D2F5]";
                     return "border-transparent border-b-[#8CBDE6] bg-transparent";
+                };
+
+                const getExtraLabel = (diff) => {
+                    if (diff > 0 && diff <= 2) return `<span class="text-[9px] font-bold text-[#6699CC] bg-[rgba(255,255,255,0.8)] border border-[#BCE4FF] px-1 rounded-[3px] shrink-0 drop-shadow-sm">相近</span>`;
+                    return "";
                 };
 
                 myOrder.forEach((id, idx) => {
@@ -1047,7 +1050,8 @@
                     else if (diff === 2) { matchScore += 0.2; }
                     
                     const bgClass = getBgClass(diff);
-                    myHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-2 text-center drop-shadow-sm">${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#66BFFF] shrink-0 rounded-sm"><span class="text-[10px] text-[#002255] truncate flex-1">${album.title}</span></div>`;
+                    const labelHtml = getExtraLabel(diff);
+                    myHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-2 text-center drop-shadow-sm">${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#66BFFF] shrink-0 rounded-sm"><span class="text-[10px] text-[#002255] truncate flex-1">${album.title}</span>${labelHtml}</div>`;
                 });
 
                 friendOrder.forEach((id, idx) => {
@@ -1056,7 +1060,8 @@
                     const diff = Math.abs(idx - mIdx);
                     
                     const bgClass = getBgClass(diff);
-                    friendHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-2 text-center drop-shadow-sm">${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#A6D2F5] shrink-0 opacity-80 rounded-sm"><span class="text-[10px] text-[#335577] truncate flex-1">${album.title}</span></div>`;
+                    const labelHtml = getExtraLabel(diff);
+                    friendHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-2 text-center drop-shadow-sm">${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#A6D2F5] shrink-0 opacity-80 rounded-sm"><span class="text-[10px] text-[#335577] truncate flex-1">${album.title}</span>${labelHtml}</div>`;
                 });
 
                 if (matchedCovers.length === 0) {
@@ -1113,9 +1118,13 @@
 
                 const getBgClass = (diff) => {
                     if (diff === 0) return "bg-[rgba(166,210,245,0.7)] border-[#0078FF] shadow-inner";
-                    if (diff <= 2) return "bg-[rgba(200,230,255,0.5)] border-[#66BFFF]";
-                    if (diff <= 4) return "bg-[rgba(230,245,255,0.4)] border-[#A6D2F5]";
                     return "border-transparent border-b-[#8CBDE6] bg-transparent";
+                };
+
+                const getExtraLabel = (diff) => {
+                    if (diff > 0 && diff <= 2) return `<span class="text-[9px] font-bold text-[#6699CC] bg-[rgba(255,255,255,0.8)] border border-[#BCE4FF] px-1 rounded-[3px] shrink-0 drop-shadow-sm">相近</span>`;
+                    if (diff > 2 && diff <= 4) return `<span class="text-[9px] font-bold text-[#88AACC] bg-[rgba(255,255,255,0.8)] border border-[#D0EAFA] px-1 rounded-[3px] shrink-0 drop-shadow-sm">略近</span>`;
+                    return "";
                 };
 
                 myOrder.forEach((id, idx) => {
@@ -1128,7 +1137,8 @@
                     else if (diff <= 4) matchScore += 0.2;
 
                     const bgClass = getBgClass(diff);
-                    myHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-4 text-center drop-shadow-sm">${idx+1}</span><span class="text-[10px] text-[#002255] truncate flex-1">${track.name}</span></div>`;
+                    const labelHtml = getExtraLabel(diff);
+                    myHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-4 text-center drop-shadow-sm">${idx+1}</span><span class="text-[10px] text-[#002255] truncate flex-1">${track.name}</span>${labelHtml}</div>`;
                 });
 
                 friendOrder.forEach((id, idx) => {
@@ -1137,7 +1147,8 @@
                     const diff = Math.abs(idx - mIdx);
                     
                     const bgClass = getBgClass(diff);
-                    friendHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-4 text-center drop-shadow-sm">${idx+1}</span><span class="text-[10px] text-[#335577] truncate flex-1">${track.name}</span></div>`;
+                    const labelHtml = getExtraLabel(diff);
+                    friendHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-4 text-center drop-shadow-sm">${idx+1}</span><span class="text-[10px] text-[#335577] truncate flex-1">${track.name}</span>${labelHtml}</div>`;
                 });
 
                 document.getElementById('mode3ResultAlbumName').textContent = `《${album.title}》歌曲排行比對`;
@@ -1214,10 +1225,14 @@
                 }
 
                 const getBgClass = (isMatch, diff) => {
-                    if (!isMatch) return "bg-transparent border-transparent border-b-[#8CBDE6]";
-                    if (diff === 0) return "bg-[rgba(166,210,245,0.7)] border-[#0078FF] shadow-inner";
-                    if (diff <= 2) return "bg-[rgba(200,230,255,0.5)] border-[#66BFFF]";
-                    return "bg-[rgba(230,245,255,0.4)] border-[#A6D2F5]"; // 僅為共同入選
+                    if (isMatch && diff === 0) return "bg-[rgba(166,210,245,0.7)] border-[#0078FF] shadow-inner";
+                    return "bg-transparent border-transparent border-b-[#8CBDE6]";
+                };
+
+                const getExtraLabel = (isMatch, diff) => {
+                    if (!isMatch || diff === 0) return "";
+                    if (diff <= 2) return `<span class="text-[9px] font-bold text-[#6699CC] bg-[rgba(255,255,255,0.8)] border border-[#BCE4FF] px-1 rounded-[3px] shrink-0 drop-shadow-sm">相近</span>`;
+                    return `<span class="text-[9px] font-bold text-[#88AACC] bg-[rgba(255,255,255,0.8)] border border-[#D0EAFA] px-1 rounded-[3px] shrink-0 drop-shadow-sm">同入選</span>`;
                 };
 
                 let myHtml = '';
@@ -1227,13 +1242,16 @@
                     const isMatch = commonTracks.includes(id);
                     
                     let bgClass = getBgClass(false, 0);
+                    let labelHtml = "";
+
                     if (isMatch) {
                         const diff = Math.abs(idx - friendOrder.indexOf(id));
                         bgClass = getBgClass(true, diff);
+                        labelHtml = getExtraLabel(true, diff);
                         if (!matchedCovers.includes(album.cover)) matchedCovers.push(album.cover);
                     }
 
-                    myHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-4 text-center drop-shadow-sm">#${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#66BFFF] shrink-0 rounded-sm"><span class="text-[10px] text-[#002255] truncate flex-1">${trackName}</span></div>`;
+                    myHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-4 text-center drop-shadow-sm">#${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#66BFFF] shrink-0 rounded-sm"><span class="text-[10px] text-[#002255] truncate flex-1">${trackName}</span>${labelHtml}</div>`;
                 });
 
                 let friendHtml = '';
@@ -1243,12 +1261,15 @@
                     const isMatch = commonTracks.includes(id);
                     
                     let bgClass = getBgClass(false, 0);
+                    let labelHtml = "";
+
                     if (isMatch) {
                         const diff = Math.abs(idx - myOrder.indexOf(id));
                         bgClass = getBgClass(true, diff);
+                        labelHtml = getExtraLabel(true, diff);
                     }
 
-                    friendHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-4 text-center drop-shadow-sm">#${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#A6D2F5] shrink-0 opacity-80 rounded-sm"><span class="text-[10px] text-[#335577] truncate flex-1">${trackName}</span></div>`;
+                    friendHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-4 text-center drop-shadow-sm">#${idx+1}</span><img src="${album.cover}" class="w-6 h-6 object-cover border border-[#A6D2F5] shrink-0 opacity-80 rounded-sm"><span class="text-[10px] text-[#335577] truncate flex-1">${trackName}</span>${labelHtml}</div>`;
                 });
 
                 document.getElementById('myColumnTitle4').textContent = `${myName} 的TOP10`;
