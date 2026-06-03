@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>表現給我看</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
@@ -18,16 +18,12 @@
             height: 100vh;
             height: 100dvh;
             margin: 0;
-            
-            /* 適配 iOS 安全邊距 */
-            padding-top: env(safe-area-inset-top);
-            padding-bottom: env(safe-area-inset-bottom);
-            padding-left: env(safe-area-inset-left);
-            padding-right: env(safe-area-inset-right);
-            box-sizing: border-box;
-            
+            padding: 0;
             overflow: hidden;
             background-color: transparent;
+            font-family: 'Tahoma', 'Verdana', sans-serif;
+            color: #113366;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body::before {
@@ -46,16 +42,36 @@
             filter: saturate(1.2) contrast(1.1);
         }
 
-        /* 視窗本體設定 */
-        body {
-            font-family: 'Tahoma', 'Verdana', sans-serif;
-            color: #113366;
-            -webkit-tap-highlight-color: transparent;
+        /* ========================================== */
+        /* iOS 全螢幕安全邊界 Hack (自 SCSS 編譯)      */
+        /* ========================================== */
+        #wrap {
+            width: 100%;
+            height: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
+            box-sizing: border-box;
         }
 
+        @supports (padding:max(0px)) {
+            #wrap.hack_iphoneFullScreen {
+                /* iOS < 11.2 */
+                padding-left: constant(safe-area-inset-left);
+                padding-top: constant(safe-area-inset-top);
+                padding-right: constant(safe-area-inset-right);
+                padding-bottom: constant(safe-area-inset-bottom);
+                /* iOS >= 11.2 */
+                padding-left: env(safe-area-inset-left);
+                padding-top: env(safe-area-inset-top);
+                padding-right: env(safe-area-inset-right);
+                padding-bottom: env(safe-area-inset-bottom);
+            }
+        }
+
+        /* ========================================== */
+        /* 視窗本體設定                                */
+        /* ========================================== */
         .aero-window {
             background: rgba(220, 240, 255, 0.25);
             backdrop-filter: blur(14px);
@@ -182,254 +198,272 @@
 </head>
 <body class="antialiased">
 
-    <div class="aero-window">
-        
-        <div class="aero-titlebar p-2 flex flex-col gap-2 shrink-0">
-            <div class="flex items-center justify-between px-1">
-                <div class="flex items-center gap-1.5">
-                    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='%23FFFFFF'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/></svg>" class="w-4 h-4 drop-shadow-md">
-                    <span class="text-xs font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">Cheerego Internet Explorer</span>
-                </div>
-                <div class="flex gap-0.5">
-                    <div class="w-6 h-4 bg-gradient-to-b from-[#6094EB] to-[#1551C2] border border-[#01217A] rounded-sm shadow-inner flex justify-center items-center pb-1 text-white leading-none cursor-pointer">_</div>
-                    <div class="w-6 h-4 bg-gradient-to-b from-[#6094EB] to-[#1551C2] border border-[#01217A] rounded-sm shadow-inner flex justify-center items-center text-white leading-none text-[10px] cursor-pointer">□</div>
-                    <div class="w-9 h-4 bg-gradient-to-b from-[#FFAAAA] to-[#E60000] border border-[#7A0F0F] rounded-sm shadow-[inset_0_1px_1px_rgba(255,255,255,0.7)] flex justify-center items-center text-white text-[10px] font-bold cursor-pointer drop-shadow-sm">X</div>
-                </div>
-            </div>
+    <div id="wrap" class="hack_iphoneFullScreen">
+
+        <div class="aero-window">
             
-            <div class="bg-[rgba(150,200,255,0.3)] backdrop-blur-md border border-[rgba(255,255,255,0.5)] p-1 flex gap-1 items-center rounded-sm shadow-[inset_0_1px_3px_rgba(255,255,255,0.8)]">
-                <div class="flex gap-0.5">
-                    <div class="w-6 h-6 rounded-full bg-gradient-to-b from-[rgba(208,234,250,0.8)] to-[rgba(135,206,250,0.8)] backdrop-blur-sm border border-[#5289A5] flex items-center justify-center text-[#003B99] font-black shadow-sm text-xs opacity-80">←</div>
-                    <div class="w-6 h-6 rounded-full bg-gradient-to-b from-[rgba(208,234,250,0.8)] to-[rgba(135,206,250,0.8)] backdrop-blur-sm border border-[#5289A5] flex items-center justify-center text-[#003B99] font-black shadow-sm text-xs opacity-40">→</div>
-                </div>
-                <div class="flex-1 bg-[rgba(255,255,255,0.55)] backdrop-blur-sm border border-[rgba(127,157,185,0.8)] shadow-[inset_0_1px_4px_rgba(0,50,150,0.2)] px-2 py-0.5 text-[11px] text-[#003B99] flex items-center gap-1.5 h-6 rounded-sm">
-                    <span class="text-[#3DA5FF]">🔍</span> https://www.cheerego.com
-                </div>
-            </div>
-        </div>
-
-        <div class="glass-container border-l border-r border-b border-[#5486B6] flex-1 overflow-y-auto p-3 space-y-5 rounded-b-[8px] relative">
-            
-            <div>
-                <marquee scrollamount="3" class="text-[10px] text-[#004FFF] font-bold mb-1 tracking-widest bg-gradient-to-r from-transparent via-[rgba(208,234,250,0.6)] to-transparent py-0.5 rounded-sm">
-                    ₍^ >ヮ<^₎ .ᐟ.ᐟ我愛你 我愛你 ᓚ₍つ^. .^₎っ♥ 我用盡所有美好夢想 /ᐠ > ˕ <マ 不想和別人享用 ( ,,⩌'︿'⩌,,) 你每一個小動作 ૮ ྀིᴗ͈ . ᴗ͈ ྀིა 
-                </marquee>
-
-                <div class="glossy-header engraved-text py-1 text-center text-[11px] mb-2 tracking-wider font-bold">
-                    ♥₊°🌈✩₊° 想要聽你說 你都怎麼過 °₊✩🌈°₊♥
-                </div>
-                
-                <div class="border border-[#A6D2F5] jelly-box p-3 text-xs text-[#335577] leading-relaxed mb-3 rounded-sm">
-                    <strong class="text-[#004499] text-sm">表現給我看 (๑ↀᆺↀ๑)</strong><br>
-                    <span id="modeDescription">選出每張專輯中你的最愛 ♪</span>
-                </div>
-
-                <select id="modeSelect" class="inset-input w-full py-1.5 px-2 text-[11px] font-bold outline-none cursor-pointer">
-                    <option value="1">模式：各專輯最愛ᓚ₍つ^. .^₎っ♥</option>
-                    <option value="2">模式：全專輯排行 ≽^-⩊-^≼</option>
-                    <option value="3">模式：單專歌曲排行 ₍^ >⩊< ^₎Ⳋ</option>
-                    <option value="4">模式：全歌曲TOP10 ദ്ദി/ᐠ - ⩊ -マ.ᐟ</option>
-                </select>
-            </div>
-
-            <section class="space-y-3">
-                <div class="glossy-header engraved-text py-1 text-center text-[11px] tracking-wider font-bold">
-                    ⋆✧꒰ა☆ 總以為謎一般難懂的我 ☆໒꒱✧⋆
-                </div>
-                
-                <div class="flex items-center gap-2 jelly-box p-2 rounded-sm">
-                    <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%232098FF'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" class="w-8 h-8 p-1 border border-[#BCE0F9] bg-[rgba(255,255,255,0.8)] shadow-sm rounded-sm">
-                    <div class="flex-1">
-                        <label class="text-[10px] font-bold text-[#004499] block mb-0.5">我是：</label>
-                        <input type="text" id="userName" placeholder="(輸入名字...)" class="inset-input w-full py-1 px-2 text-[11px]">
+            <div class="aero-titlebar p-2 flex flex-col gap-2 shrink-0">
+                <div class="flex items-center justify-between px-1">
+                    <div class="flex items-center gap-1.5">
+                        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='%23FFFFFF'><path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/></svg>" class="w-4 h-4 drop-shadow-md">
+                        <span class="text-xs font-bold text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)]">Cheerego Internet Explorer</span>
+                    </div>
+                    <div class="flex gap-0.5">
+                        <div class="w-6 h-4 bg-gradient-to-b from-[#6094EB] to-[#1551C2] border border-[#01217A] rounded-sm shadow-inner flex justify-center items-center pb-1 text-white leading-none cursor-pointer">_</div>
+                        <div class="w-6 h-4 bg-gradient-to-b from-[#6094EB] to-[#1551C2] border border-[#01217A] rounded-sm shadow-inner flex justify-center items-center text-white leading-none text-[10px] cursor-pointer">□</div>
+                        <div class="w-9 h-4 bg-gradient-to-b from-[#FFAAAA] to-[#E60000] border border-[#7A0F0F] rounded-sm shadow-[inset_0_1px_1px_rgba(255,255,255,0.7)] flex justify-center items-center text-white text-[10px] font-bold cursor-pointer drop-shadow-sm">X</div>
                     </div>
                 </div>
-
-                <div id="mode1Area" class="grid grid-cols-1 gap-2 pt-2"></div>
-
-                <div id="mode2Area" class="hidden pt-2">
-                    <ul id="rankList" class="space-y-2"></ul>
-                </div>
-
-                <div id="mode3Area" class="hidden pt-2 space-y-3">
-                    <div class="jelly-box p-3 flex gap-3 items-start rounded-sm">
-                        <img id="mode3SelectedCover" src="" class="w-20 h-20 sm:w-24 sm:h-24 object-cover border border-[#8FB4D4] shrink-0 rounded-sm shadow-sm">
-                        <div class="flex-1 min-w-0">
-                            <h2 id="mode3SelectedTitle" class="text-sm font-bold text-[#004499] mb-2 truncate">專輯名稱</h2>
-                            <label class="text-[10px] font-bold text-[#557799] block mb-1">選擇你想排行的專輯：</label>
-                            <select id="mode3AlbumSelect" class="inset-input w-full py-1.5 px-2 text-[11px] font-bold outline-none cursor-pointer">
-                                </select>
-                        </div>
+                
+                <div class="bg-[rgba(150,200,255,0.3)] backdrop-blur-md border border-[rgba(255,255,255,0.5)] p-1 flex gap-1 items-center rounded-sm shadow-[inset_0_1px_3px_rgba(255,255,255,0.8)]">
+                    <div class="flex gap-0.5">
+                        <div class="w-6 h-6 rounded-full bg-gradient-to-b from-[rgba(208,234,250,0.8)] to-[rgba(135,206,250,0.8)] backdrop-blur-sm border border-[#5289A5] flex items-center justify-center text-[#003B99] font-black shadow-sm text-xs opacity-80">←</div>
+                        <div class="w-6 h-6 rounded-full bg-gradient-to-b from-[rgba(208,234,250,0.8)] to-[rgba(135,206,250,0.8)] backdrop-blur-sm border border-[#5289A5] flex items-center justify-center text-[#003B99] font-black shadow-sm text-xs opacity-40">→</div>
                     </div>
-                    <ul id="mode3RankList" class="space-y-2"></ul>
+                    <div class="flex-1 bg-[rgba(255,255,255,0.55)] backdrop-blur-sm border border-[rgba(127,157,185,0.8)] shadow-[inset_0_1px_4px_rgba(0,50,150,0.2)] px-2 py-0.5 text-[11px] text-[#003B99] flex items-center gap-1.5 h-6 rounded-sm">
+                        <span class="text-[#3DA5FF]">🔍</span> https://www.cheerego.com
+                    </div>
                 </div>
+            </div>
 
-                <div id="mode4Area" class="hidden pt-2 space-y-3">
-                    <div class="jelly-box p-2 rounded-sm">
-                        <label class="text-[10px] font-bold text-[#004499] block mb-1">1. 從專輯中挑選歌曲加入 TOP10：</label>
-                        <div class="flex gap-2 overflow-x-auto custom-scrollbar pb-2 pt-1 px-1" id="mode4AlbumTabs"></div>
-                        <div class="grid grid-cols-2 gap-1.5 mt-2 max-h-32 overflow-y-auto custom-scrollbar pr-1" id="mode4TrackPool"></div>
+            <div class="glass-container border-l border-r border-b border-[#5486B6] flex-1 overflow-y-auto p-3 space-y-5 rounded-b-[8px] relative">
+                
+                <div>
+                    <marquee scrollamount="3" class="text-[10px] text-[#004FFF] font-bold mb-1 tracking-widest bg-gradient-to-r from-transparent via-[rgba(208,234,250,0.6)] to-transparent py-0.5 rounded-sm">
+                        ₍^ >ヮ<^₎ .ᐟ.ᐟ我愛你 我愛你 ᓚ₍つ^. .^₎っ♥ 我用盡所有美好夢想 /ᐠ > ˕ <マ 不想和別人享用 ( ,,⩌'︿'⩌,,) 你每一個小動作 ૮ ྀིᴗ͈ . ᴗ͈ ྀིა 
+                    </marquee>
+
+                    <div class="glossy-header engraved-text py-1 text-center text-[11px] mb-2 tracking-wider font-bold">
+                        ♥₊°🌈✩₊° 想要聽你說 你都怎麼過 °₊✩🌈°₊♥
                     </div>
                     
-                    <div class="jelly-box p-2 rounded-sm">
-                        <div class="flex justify-between items-center mb-2">
-                            <label class="text-[10px] font-bold text-[#004499]">2. TOP10 (可拖曳排序)：</label>
-                            <span id="mode4Count" class="text-[10px] font-bold text-red-500 bg-[rgba(255,255,255,0.8)] border border-[#D0EAFA] px-1 rounded-sm">0/10</span>
+                    <div class="border border-[#A6D2F5] jelly-box p-3 text-xs text-[#335577] leading-relaxed mb-3 rounded-sm">
+                        <strong class="text-[#004499] text-sm">表現給我看 (๑ↀᆺↀ๑)</strong><br>
+                        <span id="modeDescription">選出每張專輯中你的最愛 ♪</span>
+                    </div>
+
+                    <select id="modeSelect" class="inset-input w-full py-1.5 px-2 text-[11px] font-bold outline-none cursor-pointer">
+                        <option value="1">模式：各專輯最愛ᓚ₍つ^. .^₎っ♥</option>
+                        <option value="2">模式：全專輯排行 ≽^-⩊-^≼</option>
+                        <option value="3">模式：單專歌曲排行 ₍^ >⩊< ^₎Ⳋ</option>
+                        <option value="4">模式：全歌曲TOP10 ദ്ദി/ᐠ - ⩊ -マ.ᐟ</option>
+                    </select>
+                </div>
+
+                <section class="space-y-3">
+                    <div class="glossy-header engraved-text py-1 text-center text-[11px] tracking-wider font-bold">
+                        ⋆✧꒰ა☆ 總以為謎一般難懂的我 ☆໒꒱✧⋆
+                    </div>
+                    
+                    <div class="flex items-center gap-2 jelly-box p-2 rounded-sm">
+                        <img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='%232098FF'><path d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/></svg>" class="w-8 h-8 p-1 border border-[#BCE0F9] bg-[rgba(255,255,255,0.8)] shadow-sm rounded-sm">
+                        <div class="flex-1">
+                            <label class="text-[10px] font-bold text-[#004499] block mb-0.5">我是：</label>
+                            <input type="text" id="userName" placeholder="(輸入名字...)" class="inset-input w-full py-1 px-2 text-[11px]">
                         </div>
-                        <ul id="mode4RankList" class="space-y-1 min-h-[50px] bg-[rgba(255,255,255,0.6)] border border-[#D0EAFA] p-1 rounded-sm shadow-inner">
-                            </ul>
                     </div>
-                </div>
 
-                <button id="generateResultBtn" class="crystal-btn w-full py-2 text-xs font-bold tracking-wide mt-2 !text-[#8B0000]">
-                    結果! ₍^ >ヮ<^₎✧
-                </button>
-            </section>
+                    <div id="mode1Area" class="grid grid-cols-1 gap-2 pt-2"></div>
 
-            <section id="singleResultArea" class="hidden pt-2 border-t border-dashed border-[#8CBDE6]">
-                <div class="glossy-header engraved-text py-1 text-center text-[11px] tracking-wider mb-3 font-bold">
-                    ⋆✧ 我的花讓我開 ✧⋆
-                </div>
-                
-                <div class="jelly-box p-3 sm:p-4 flex justify-between items-center mb-4 rounded-sm">
-                    <div class="flex-1 z-10 pr-2 min-w-0">
-                        <div id="singleResultHeader" class="tracking-tight mb-2"></div>
+                    <div id="mode2Area" class="hidden pt-2">
+                        <ul id="rankList" class="space-y-2"></ul>
                     </div>
-                    <div id="singleTopCoverContainer" class="relative w-36 h-28 sm:w-64 sm:h-40 shrink-0 flex justify-center items-center">
-                    </div>
-                </div>
 
-                <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
-                    <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="singleListTitle">這就是我 ★</div>
-                    <div class="p-2 bg-[rgba(255,255,255,0.7)] space-y-2 backdrop-blur-sm" id="singleChoicesList"></div>
-                </div>
-            </section>
-
-            <div id="postResultSection" class="hidden pt-3 border-t border-dashed border-[#8CBDE6]">
-                <section>
-                    <div class="glossy-header engraved-text py-1 text-center text-[11px] tracking-wider mb-2 font-bold">
-                        跟你的朋友比較吧！ ✧₍^ >⩊< ^₎Ⳋ
-                    </div>
-                    <div class="jelly-box p-3 rounded-sm flex flex-col gap-3">
-                        <div>
-                            <p class="text-[10px] font-bold text-[#004499] mb-1">複製代碼分享給朋友！ </p>
-                            <div class="relative">
-                                <textarea id="generatedCode" readonly class="inset-input w-full p-2 pr-16 text-[10px] font-mono h-12 flex items-center"></textarea>
-                                <button id="copyCodeBtn" class="absolute bottom-2 right-2 crystal-btn px-2 py-1 text-[10px]">
-                                    複製
-                                </button>
+                    <div id="mode3Area" class="hidden pt-2 space-y-3">
+                        <div class="jelly-box p-3 flex gap-3 items-start rounded-sm">
+                            <img id="mode3SelectedCover" src="" class="w-20 h-20 sm:w-24 sm:h-24 object-cover border border-[#8FB4D4] shrink-0 rounded-sm shadow-sm">
+                            <div class="flex-1 min-w-0">
+                                <h2 id="mode3SelectedTitle" class="text-sm font-bold text-[#004499] mb-2 truncate">專輯名稱</h2>
+                                <label class="text-[10px] font-bold text-[#557799] block mb-1">選擇你想排行的專輯：</label>
+                                <select id="mode3AlbumSelect" class="inset-input w-full py-1.5 px-2 text-[11px] font-bold outline-none cursor-pointer">
+                                    </select>
                             </div>
                         </div>
+                        <ul id="mode3RankList" class="space-y-2"></ul>
+                    </div>
 
-                        <div class="flex flex-col gap-2 pt-2 border-t border-dashed border-[#A6D2F5]">
-                            <div class="flex gap-1.5">
-                                <input type="text" id="friendCode" placeholder="貼上他的代碼( *^-^)ρ" class="inset-input w-full px-2 py-1.5 text-[11px] flex-1">
-                                <button id="pasteCodeBtn" class="crystal-btn px-3 py-1 text-[11px] font-bold shrink-0 whitespace-nowrap">
-                                    貼上
-                                </button>
-                            </div>
-                            <button id="compareBtn" class="crystal-btn w-full py-2 text-xs font-bold tracking-wide !text-[#8B0000]">
-                                我們的喜好契合嗎...？ 
-                            </button>
+                    <div id="mode4Area" class="hidden pt-2 space-y-3">
+                        <div class="jelly-box p-2 rounded-sm">
+                            <label class="text-[10px] font-bold text-[#004499] block mb-1">1. 從專輯中挑選歌曲加入 TOP10：</label>
+                            <div class="flex gap-2 overflow-x-auto custom-scrollbar pb-2 pt-1 px-1" id="mode4AlbumTabs"></div>
+                            <div class="grid grid-cols-2 gap-1.5 mt-2 max-h-32 overflow-y-auto custom-scrollbar pr-1" id="mode4TrackPool"></div>
                         </div>
+                        
+                        <div class="jelly-box p-2 rounded-sm">
+                            <div class="flex justify-between items-center mb-2">
+                                <label class="text-[10px] font-bold text-[#004499]">2. TOP10 (可拖曳排序)：</label>
+                                <span id="mode4Count" class="text-[10px] font-bold text-red-500 bg-[rgba(255,255,255,0.8)] border border-[#D0EAFA] px-1 rounded-sm">0/10</span>
+                            </div>
+                            <ul id="mode4RankList" class="space-y-1 min-h-[50px] bg-[rgba(255,255,255,0.6)] border border-[#D0EAFA] p-1 rounded-sm shadow-inner">
+                                </ul>
+                        </div>
+                    </div>
+
+                    <button id="generateResultBtn" class="crystal-btn w-full py-2 text-xs font-bold tracking-wide mt-2 !text-[#8B0000]">
+                        結果! ₍^ >ヮ<^₎✧
+                    </button>
+                </section>
+
+                <section id="singleResultArea" class="hidden pt-2 border-t border-dashed border-[#8CBDE6]">
+                    <div class="glossy-header engraved-text py-1 text-center text-[11px] tracking-wider mb-3 font-bold">
+                        ⋆✧ 我的花讓我開 ✧⋆
+                    </div>
+                    
+                    <div class="jelly-box p-3 sm:p-4 flex justify-between items-center mb-4 rounded-sm">
+                        <div class="flex-1 z-10 pr-2 min-w-0">
+                            <div id="singleResultHeader" class="tracking-tight mb-2"></div>
+                        </div>
+                        <div id="singleTopCoverContainer" class="relative w-36 h-28 sm:w-64 sm:h-40 shrink-0 flex justify-center items-center">
+                        </div>
+                    </div>
+
+                    <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
+                        <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="singleListTitle">這就是我 ★</div>
+                        <div class="p-2 bg-[rgba(255,255,255,0.7)] space-y-2 backdrop-blur-sm" id="singleChoicesList"></div>
                     </div>
                 </section>
+
+                <div id="postResultSection" class="hidden pt-3 border-t border-dashed border-[#8CBDE6]">
+                    <section>
+                        <div class="glossy-header engraved-text py-1 text-center text-[11px] tracking-wider mb-2 font-bold">
+                            跟你的朋友比較吧！ ✧₍^ >⩊< ^₎Ⳋ
+                        </div>
+                        <div class="jelly-box p-3 rounded-sm flex flex-col gap-3">
+                            <div>
+                                <p class="text-[10px] font-bold text-[#004499] mb-1">複製代碼分享給朋友！ </p>
+                                <div class="relative">
+                                    <textarea id="generatedCode" readonly class="inset-input w-full p-2 pr-16 text-[10px] font-mono h-12 flex items-center"></textarea>
+                                    <button id="copyCodeBtn" class="absolute bottom-2 right-2 crystal-btn px-2 py-1 text-[10px]">
+                                        複製
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-col gap-2 pt-2 border-t border-dashed border-[#A6D2F5]">
+                                <div class="flex gap-1.5">
+                                    <input type="text" id="friendCode" placeholder="貼上他的代碼( *^-^)ρ" class="inset-input w-full px-2 py-1.5 text-[11px] flex-1">
+                                    <button id="pasteCodeBtn" class="crystal-btn px-3 py-1 text-[11px] font-bold shrink-0 whitespace-nowrap">
+                                        貼上
+                                    </button>
+                                </div>
+                                <button id="compareBtn" class="crystal-btn w-full py-2 text-xs font-bold tracking-wide !text-[#8B0000]">
+                                    我們的喜好契合嗎...？ 
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <section id="resultArea" class="hidden pt-2 border-t border-dashed border-[#8CBDE6]">
+                    <div class="glossy-header engraved-text py-1 text-center text-[11px] tracking-wider mb-3 font-bold" id="resultMainTitle">
+                        ⋆✧ match results ✧⋆
+                    </div>
+                    
+                    <div class="jelly-box p-3 sm:p-4 flex justify-between items-center mb-4 rounded-sm">
+                        <div class="flex-1 z-10 pr-2 min-w-0">
+                            <div id="matchResultHeader" class="tracking-tight mb-1 truncate"></div>
+                            <h1 class="text-3xl sm:text-4xl font-black text-[#004FFF] tracking-tighter drop-shadow-[0_2px_2px_rgba(255,255,255,0.8)] flex items-baseline gap-0.5 whitespace-nowrap" id="matchPercentage">
+                                44% <span class="text-base sm:text-lg font-bold text-[#0078FF] pb-0.5">相似</span>
+                            </h1>
+                            <p class="text-[10px] text-[#557799] mt-1 font-bold italic leading-tight pr-1" id="matchQuote">“你們沒有相同的選擇/ᐠ ╥ ˕ ╥マ”</p>
+                        </div>
+                        <div id="topCoverContainer" class="relative w-36 h-28 sm:w-64 sm:h-40 shrink-0 flex justify-center items-center">
+                        </div>
+                    </div>
+
+                    <div id="mode1ResultBlock" class="hidden space-y-3">
+                        <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
+                            <div class="crystal-bar engraved-text px-2 py-1 flex justify-between items-center">
+                                <span class="text-[10px] font-bold">你們都選了... ?</span>
+                                <span class="text-[10px] bg-[rgba(255,255,255,0.8)] border border-[#8FB4D4] px-1 rounded-sm text-[#004499] no-engrave" id="commonCountLabel">4/7</span>
+                            </div>
+                            <div class="p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm grid grid-cols-2 gap-2" id="commonChoicesList"></div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
+                                <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle1">我的喜好★</div>
+                                <div class="p-2 bg-[rgba(248,251,253,0.7)] backdrop-blur-sm space-y-2 h-full" id="myChoicesList"></div>
+                            </div>
+                            <div class="border border-[#A6D2F5] rounded-sm overflow-hidden shadow-sm">
+                                <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="friendColumnTitle1">他的喜好★</div>
+                                <div class="p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm space-y-2 h-full" id="friendChoicesList"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="mode2ResultBlock" class="hidden space-y-3">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
+                                <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle2">我的喜好★</div>
+                                <div class="p-2 bg-[rgba(248,251,253,0.7)] backdrop-blur-sm space-y-2 h-full" id="myRankResultList"></div>
+                            </div>
+                            <div class="border border-[#A6D2F5] rounded-sm overflow-hidden shadow-sm">
+                                <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="friendColumnTitle2">他的喜好★</div>
+                                <div class="p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm space-y-2 h-full" id="friendRankResultList"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="mode3ResultBlock" class="hidden space-y-3">
+                        <div class="crystal-bar engraved-text px-2 py-1 text-[11px] font-bold text-center shadow-sm" id="mode3ResultAlbumName">
+                            專輯名稱
+                        </div>
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
+                                <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle3">我的喜好★</div>
+                                <div class="p-2 bg-[rgba(248,251,253,0.7)] backdrop-blur-sm space-y-2 h-full" id="myTrackRankResultList"></div>
+                            </div>
+                            <div class="border border-[#A6D2F5] rounded-sm overflow-hidden shadow-sm">
+                                <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="friendColumnTitle3">他的喜好★</div>
+                                <div class="p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm space-y-2 h-full" id="friendTrackRankResultList"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="mode4ResultBlock" class="hidden space-y-3">
+                        <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
+                            <div class="crystal-bar engraved-text px-2 py-1 flex justify-between items-center">
+                                <span class="text-[10px] font-bold">你們都選了... ?</span>
+                                <span class="text-[10px] bg-[rgba(255,255,255,0.8)] border border-[#8FB4D4] px-1 rounded-sm text-[#004499] no-engrave" id="mode4CommonCountLabel"></span>
+                            </div>
+                            <div class="p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm grid grid-cols-2 gap-2" id="mode4CommonChoicesList"></div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-2">
+                            <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
+                                <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle4">我的TOP10</div>
+                                <div class="p-1 sm:p-2 bg-[rgba(248,251,253,0.7)] backdrop-blur-sm space-y-1 h-full" id="myTrackTop10ResultList"></div>
+                            </div>
+                            <div class="border border-[#A6D2F5] rounded-sm overflow-hidden shadow-sm">
+                                <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="friendColumnTitle4">他的TOP10</div>
+                                <div class="p-1 sm:p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm space-y-1 h-full" id="friendTrackTop10ResultList"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+
             </div>
-
-            <section id="resultArea" class="hidden pt-2 border-t border-dashed border-[#8CBDE6]">
-                <div class="glossy-header engraved-text py-1 text-center text-[11px] tracking-wider mb-3 font-bold" id="resultMainTitle">
-                    ⋆✧ match results ✧⋆
-                </div>
-                
-                <div class="jelly-box p-3 sm:p-4 flex justify-between items-center mb-4 rounded-sm">
-                    <div class="flex-1 z-10 pr-2 min-w-0">
-                        <div id="matchResultHeader" class="tracking-tight mb-1 truncate"></div>
-                        <h1 class="text-3xl sm:text-4xl font-black text-[#004FFF] tracking-tighter drop-shadow-[0_2px_2px_rgba(255,255,255,0.8)] flex items-baseline gap-0.5 whitespace-nowrap" id="matchPercentage">
-                            44% <span class="text-base sm:text-lg font-bold text-[#0078FF] pb-0.5">相似</span>
-                        </h1>
-                        <p class="text-[10px] text-[#557799] mt-1 font-bold italic leading-tight pr-1" id="matchQuote">“你們沒有相同的選擇/ᐠ ╥ ˕ ╥マ”</p>
-                    </div>
-                    <div id="topCoverContainer" class="relative w-36 h-28 sm:w-64 sm:h-40 shrink-0 flex justify-center items-center">
-                    </div>
-                </div>
-
-                <div id="mode1ResultBlock" class="hidden space-y-3">
-                    <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
-                        <div class="crystal-bar engraved-text px-2 py-1 flex justify-between items-center">
-                            <span class="text-[10px] font-bold">你們都選了... ?</span>
-                            <span class="text-[10px] bg-[rgba(255,255,255,0.8)] border border-[#8FB4D4] px-1 rounded-sm text-[#004499] no-engrave" id="commonCountLabel">4/7</span>
-                        </div>
-                        <div class="p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm grid grid-cols-2 gap-2" id="commonChoicesList"></div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-2">
-                        <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
-                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle1">我的喜好★</div>
-                            <div class="p-2 bg-[rgba(248,251,253,0.7)] backdrop-blur-sm space-y-2 h-full" id="myChoicesList"></div>
-                        </div>
-                        <div class="border border-[#A6D2F5] rounded-sm overflow-hidden shadow-sm">
-                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="friendColumnTitle1">他的喜好★</div>
-                            <div class="p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm space-y-2 h-full" id="friendChoicesList"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="mode2ResultBlock" class="hidden space-y-3">
-                    <div class="grid grid-cols-2 gap-2">
-                        <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
-                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle2">我的喜好★</div>
-                            <div class="p-2 bg-[rgba(248,251,253,0.7)] backdrop-blur-sm space-y-2 h-full" id="myRankResultList"></div>
-                        </div>
-                        <div class="border border-[#A6D2F5] rounded-sm overflow-hidden shadow-sm">
-                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="friendColumnTitle2">他的喜好★</div>
-                            <div class="p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm space-y-2 h-full" id="friendRankResultList"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="mode3ResultBlock" class="hidden space-y-3">
-                    <div class="crystal-bar engraved-text px-2 py-1 text-[11px] font-bold text-center shadow-sm" id="mode3ResultAlbumName">
-                        專輯名稱
-                    </div>
-                    <div class="grid grid-cols-2 gap-2">
-                        <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
-                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle3">我的喜好★</div>
-                            <div class="p-2 bg-[rgba(248,251,253,0.7)] backdrop-blur-sm space-y-2 h-full" id="myTrackRankResultList"></div>
-                        </div>
-                        <div class="border border-[#A6D2F5] rounded-sm overflow-hidden shadow-sm">
-                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="friendColumnTitle3">他的喜好★</div>
-                            <div class="p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm space-y-2 h-full" id="friendTrackRankResultList"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="mode4ResultBlock" class="hidden space-y-3">
-                    <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
-                        <div class="crystal-bar engraved-text px-2 py-1 flex justify-between items-center">
-                            <span class="text-[10px] font-bold">你們都選了... ?</span>
-                            <span class="text-[10px] bg-[rgba(255,255,255,0.8)] border border-[#8FB4D4] px-1 rounded-sm text-[#004499] no-engrave" id="mode4CommonCountLabel"></span>
-                        </div>
-                        <div class="p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm grid grid-cols-2 gap-2" id="mode4CommonChoicesList"></div>
-                    </div>
-
-                    <div class="grid grid-cols-2 gap-2">
-                        <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
-                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle4">我的TOP10</div>
-                            <div class="p-1 sm:p-2 bg-[rgba(248,251,253,0.7)] backdrop-blur-sm space-y-1 h-full" id="myTrackTop10ResultList"></div>
-                        </div>
-                        <div class="border border-[#A6D2F5] rounded-sm overflow-hidden shadow-sm">
-                            <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="friendColumnTitle4">他的TOP10</div>
-                            <div class="p-1 sm:p-2 bg-[rgba(255,255,255,0.7)] backdrop-blur-sm space-y-1 h-full" id="friendTrackTop10ResultList"></div>
-                        </div>
-                    </div>
-                </div>
-
-            </section>
-
         </div>
-    </div>
+    </div> <script>
+        // ==========================================
+        // 執行 Safari 全螢幕 Meta Hack
+        // ==========================================
+        function safariHacks () {
+            const hasSlider = document.getElementById('wrap');
+            const isMata = document.querySelector('meta[name="viewport"]');
 
-    <script>
+            if(hasSlider !== null) {
+                isMata.setAttribute(
+                    'content', 
+                    'width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover'
+                );
+            };
+        }
+        safariHacks();
+
+        // 專輯資料庫
         const chenAlbums = [
             { id: "album_01", title: "讓我想一想", year: "1998", cover: "想.jpg", isEp: false, tracks: [{ id: "t01_01", name: "讓我想一想" }, { id: "t01_02", name: "微涼的你" }, { id: "t01_03", name: "會不會" }, { id: "t01_04", name: "情歌" }, { id: "t01_05", name: "和你在一起" }, { id: "t01_06", name: "嫉妒" }, { id: "t01_07", name: "孤島" }, { id: "t01_08", name: "孩子" }, { id: "t01_09", name: "天使" }, { id: "t01_10", name: "漫漫長夜" }] },
             { id: "album_02", title: "還是會寂寞", year: "2000", cover: "還是.jpg", isEp: false, tracks: [{ id: "t02_01", name: "越洋電話" }, { id: "t02_02", name: "我的驕傲無可救藥" }, { id: "t02_03", name: "還是會寂寞" }, { id: "t02_04", name: "下午三點" }, { id: "t02_05", name: "溫室花朵" }, { id: "t02_06", name: "午餐的約會" }, { id: "t02_07", name: "等待" }, { id: "t02_08", name: "慢歌3" }, { id: "t02_09", name: "告訴我" }, { id: "t02_10", name: "慢歌1" }, { id: "t02_11", name: "靈感" }] },
