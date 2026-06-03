@@ -99,6 +99,7 @@
         }
         .scroll-left > * {
             direction: ltr;
+            text-align: left; /* 強制重置文字靠左，修正 iOS Safari 的 RTL 對齊繼承問題 */
         }
 
         textarea { resize: none; }
@@ -570,10 +571,10 @@
         regularAlbums.forEach(album => {
             const li = document.createElement('li');
             li.dataset.id = album.id;
-            li.className = 'flex items-center gap-2 jelly-item p-2 rounded transition-transform hover:scale-[1.01]';
+            li.className = 'flex items-center gap-2 jelly-item p-2 rounded transition-transform hover:scale-[1.01] text-left';
             li.innerHTML = `
                 <img src="${album.cover}" class="w-10 h-10 object-cover border border-[#66BFFF] rounded-sm pointer-events-none shrink-0">
-                <span class="text-xs font-bold text-[#003B99] pointer-events-none flex-1 truncate">${album.title}</span>
+                <span class="text-xs font-bold text-[#003B99] pointer-events-none flex-1 truncate text-left">${album.title}</span>
                 <span class="text-[9px] text-[#8CBDE6] pointer-events-none select-none tracking-wider shrink-0 pr-1">按住☰來拖動</span>
                 <span class="drag-handle text-[#005A9E] font-bold text-lg px-1 select-none drop-shadow-sm cursor-grab active:cursor-grabbing shrink-0">☰</span>
             `;
@@ -601,10 +602,10 @@
                 const li = document.createElement('li');
                 li.dataset.id = track.id;
                 li.dataset.originalIdx = idx;
-                li.className = 'flex items-center gap-2 jelly-item p-2 rounded transition-transform hover:scale-[1.01]';
+                li.className = 'flex items-center gap-2 jelly-item p-2 rounded transition-transform hover:scale-[1.01] text-left';
                 li.innerHTML = `
-                    <span class="text-[10px] text-[#0078D7] font-mono font-bold pointer-events-none shrink-0 w-8">Tr.${String(idx+1).padStart(2,'0')}</span>
-                    <span class="text-xs font-bold text-[#003B99] truncate pointer-events-none flex-1">${track.name}</span>
+                    <span class="text-[10px] text-[#0078D7] font-mono font-bold pointer-events-none shrink-0 w-8 text-left">Tr.${String(idx+1).padStart(2,'0')}</span>
+                    <span class="text-xs font-bold text-[#003B99] truncate pointer-events-none flex-1 text-left">${track.name}</span>
                     <span class="text-[9px] text-[#8CBDE6] pointer-events-none select-none tracking-wider shrink-0 pr-1">按住☰來拖動</span>
                     <span class="drag-handle text-[#005A9E] font-bold text-lg px-1 select-none drop-shadow-sm cursor-grab active:cursor-grabbing shrink-0">☰</span>
                 `;
@@ -653,7 +654,7 @@
             album.tracks.forEach(track => {
                 const btn = document.createElement('button');
                 btn.className = "flex items-center text-left px-2 py-1.5 text-[10px] text-[#004499] font-bold bg-[rgba(255,255,255,0.8)] border border-[#8CBDE6] hover:bg-[#BCE4FF] rounded-sm transition-colors shadow-sm cursor-pointer";
-                btn.innerHTML = `<span class="mr-1.5 text-[#0078FF] font-black">+</span><span class="truncate flex-1">${track.name}</span>`;
+                btn.innerHTML = `<span class="mr-1.5 text-[#0078FF] font-black">+</span><span class="truncate flex-1 text-left">${track.name}</span>`;
                 btn.onclick = () => {
                     if (mode4SelectedTracks.length >= 10) { alert("榜單已經填滿 10 首歌ㄛ！"); return; }
                     if (mode4SelectedTracks.find(t => t.id === track.id)) { alert("這首歌已經在榜單中ㄛ！"); return; }
@@ -669,11 +670,11 @@
             mode4SelectedTracks.forEach((item, index) => {
                 const li = document.createElement('li');
                 li.dataset.id = item.id;
-                li.className = "flex items-center gap-1.5 p-1.5 border border-[#8CBDE6] bg-[rgba(232,245,255,0.8)] rounded-sm shadow-sm";
+                li.className = "flex items-center gap-1.5 p-1.5 border border-[#8CBDE6] bg-[rgba(232,245,255,0.8)] rounded-sm shadow-sm text-left";
                 li.innerHTML = `
-                    <span class="text-[10px] font-black text-[#0026CC] w-3 drop-shadow-sm pointer-events-none shrink-0">${index + 1}</span>
+                    <span class="text-[10px] font-black text-[#0026CC] w-3 drop-shadow-sm pointer-events-none shrink-0 text-left">${index + 1}</span>
                     <img src="${item.cover}" class="w-6 h-6 object-cover border border-[#66BFFF] shrink-0 rounded-sm pointer-events-none">
-                    <span class="text-[10px] font-bold text-[#004499] flex-1 truncate pointer-events-none">${item.name}</span>
+                    <span class="text-[10px] font-bold text-[#004499] flex-1 truncate pointer-events-none text-left">${item.name}</span>
                     <span class="text-[8px] text-[#8CBDE6] pointer-events-none select-none tracking-wider shrink-0 pr-1">按住☰來拖動</span>
                     <span class="drag-handle text-[#0078FF] font-bold text-base px-1 select-none cursor-grab active:cursor-grabbing shrink-0">☰</span>
                     <button class="text-red-500 hover:text-red-700 font-black px-1 text-[10px] shrink-0" onclick="removeMode4Track('${item.id}')">✕</button>
