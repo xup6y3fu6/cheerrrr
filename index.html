@@ -299,7 +299,7 @@
                         ⋆✧ my code ✧⋆
                     </div>
                     <div class="jelly-box p-3 rounded-sm">
-                        <p class="text-[10px] font-bold text-[#004499] mb-1">複製代碼分享給朋友！ (ﾉ>ω<)ﾉ</p>
+                        <p class="text-[10px] font-bold text-[#004499] mb-1">複製代碼分享給朋友！ </p>
                         <div class="relative">
                             <textarea id="generatedCode" readonly class="inset-input w-full p-2 pr-16 text-[10px] font-mono h-12 flex items-center"></textarea>
                             <button id="copyCodeBtn" class="absolute bottom-2 right-2 crystal-btn px-2 py-1 text-[10px]">
@@ -432,7 +432,7 @@
             
             // ▼ 預留 EP / 單曲欄位，帶有 isEp: true 標記，會在 1、2、3 模式被隱藏 ▼
             
-            { id: "ep_01", title: "CHEER", year: "2005", cover: "https://i.meee.com.tw/hZU8UO0.jpg", isEp: false, tracks: [{ id: "ep_01", name: "九份的咖啡店" }, { id: "ep_01", name: "雨天的尾巴(滬尾小情歌)" }] },
+            { id: "ep_01", title: "CHEER", year: "2005", cover: "https://i.meee.com.tw/hZU8UO0.jpg", isEp: true, tracks: [{ id: "ep_01", name: "九份的咖啡店" }, { id: "ep_01", name: "雨天的尾巴(滬尾小情歌)" }] },
             { id: "ep_02", title: "After 17 - Single", year: "2004", cover: "https://i.meee.com.tw/OupUSo3.jpg", isEp: true, tracks: [{ id: "ep02_01", name: "After 17" }, { id: "ep02_02", name: "小小校歌" }] },
             { id: "ep_03", title: "夏季練習曲世界巡迴現場錄音", year: "2004", cover: "https://i.meee.com.tw/HFULuBX.jpg", isEp: true, tracks: [{ id: "ep03_01", name: "（失明前）我想記得的四十七件事" }] },
             { id: "ep_04", title: "pussy - Single", year: "2007", cover: "https://i.meee.com.tw/HBKvaUD.jpg", isEp: true, tracks: [{ id: "ep04_01", name: "pussy" }] },
@@ -701,17 +701,27 @@
             let displayCovers = [];
             let dataParts = [];
 
-            let modeTitle = "";
-            if (currentMode === '1') modeTitle = "各專輯最愛";
-            else if (currentMode === '2') modeTitle = "專輯喜好排行";
-            else if (currentMode === '3') modeTitle = "單專歌曲排行";
-            else if (currentMode === '4') modeTitle = "全歌曲 TOP10";
-
-            document.getElementById('singleResultHeader').innerHTML = `
+            let resultHeaderHtml = `
                 <span class="text-lg sm:text-xl font-bold text-[#005A9E] block leading-tight drop-shadow-sm">${userName} 的</span>
                 <span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight mt-0.5 drop-shadow-md">陳綺貞</span>
-                <span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md">${modeTitle}</span>
             `;
+
+            if (currentMode === '1') {
+                resultHeaderHtml += `<span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md">各專輯最愛</span>`;
+            } else if (currentMode === '2') {
+                resultHeaderHtml += `<span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md">專輯喜好排行</span>`;
+            } else if (currentMode === '3') {
+                const albumIdx = parseInt(mode3AlbumSelect.value, 10);
+                const albumTitle = chenAlbums[albumIdx].title;
+                resultHeaderHtml += `
+                    <span class="text-xl sm:text-2xl font-extrabold text-[#005A9E] block leading-tight drop-shadow-md mt-0.5">《${albumTitle}》</span>
+                    <span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md mt-0.5">喜好排行</span>
+                `;
+            } else if (currentMode === '4') {
+                resultHeaderHtml += `<span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md">全歌曲 TOP10</span>`;
+            }
+
+            document.getElementById('singleResultHeader').innerHTML = resultHeaderHtml;
 
             if (currentMode === '1') {
                 const selects = document.querySelectorAll('.album-select');
@@ -1070,7 +1080,7 @@
                 if (currentMode !== '3' || myAlbumIdx !== friendData.a) {
                     modeSelect.value = '3'; modeSelect.dispatchEvent(new Event('change'));
                     mode3AlbumSelect.value = friendData.a; mode3AlbumSelect.dispatchEvent(new Event('change'));
-                    alert(`對方使用的是「單專歌曲排序」模式，並且選擇了《${chenAlbums[friendData.a].title}》。請先為這張專輯排序再比對ㄛ！`);
+                    alert(`對方使用的是「單專歌曲排行」模式，並且選擇了《${chenAlbums[friendData.a].title}》。請先為這張專輯排序再比對ㄛ！`);
                     return;
                 }
 
