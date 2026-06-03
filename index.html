@@ -2,7 +2,10 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <title>表現給我看</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
@@ -10,42 +13,40 @@
         /* ========================================== */
         /* 背景強制填滿修正與 App 視窗化配置           */
         /* ========================================== */
-        html {
-            background-color: #4B97FF;
-        }
-
-        html::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: #4B97FF;
-    background-image: url('bg.jpg'); 
-    background-size: cover;
-    background-position: center center;
-    background-repeat: no-repeat;
-    z-index: -1;
-    filter: saturate(1.2) contrast(1.1);
+        /* 確保 html 也填滿高度，這是關鍵的一步 */
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-        body {
-            height: 100vh;
-            height: 100dvh;
-            margin: 0;
-            
-            /* 適配 iOS 安全邊距 */
-            padding-top: env(safe-area-inset-top);
-            padding-bottom: env(safe-area-inset-bottom);
-            padding-left: env(safe-area-inset-left);
-            padding-right: env(safe-area-inset-right);
-            box-sizing: border-box;
-            
-            overflow: hidden;
-            background-color: transparent;
-        }
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    /* 使用 min-height: 100vh 確保填滿整個視口高度 */
+    min-height: 100vh;
+    
+    /* 背景設置 */
+    background-image: url('bg.jpg'); /* 請確保 bg.jpg 檔案路徑正確 */
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    
+    /* 如果您的背景是深色的，建議將文字設定為淺色 (例如：白色)
+       以便在 black-translucent 模式下清晰可見狀態列文字 */
+    color: #ffffff; /* 視您的圖片而定 */
+}
 
+/* 如果您的網頁內容需要避開安全區域 (例如：按鈕不被瀏海遮擋)，
+   可以使用 CSS 環境變數： */
+.content-wrapper {
+    padding-top: env(safe-area-inset-top);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+}
         /* 新寫法 — 掛在 html 上，完全脫離 safe area 的影響 */
 
 
