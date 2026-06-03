@@ -8,23 +8,10 @@
     <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
     <style>
         /* ========================================== */
-        /* 背景漸層絕對滿版鎖定修正配置               */
+        /* 背景強制填滿修正與 App 視窗化配置           */
         /* ========================================== */
         html {
-            height: 100vh;
-            height: 100dvh;
-        }
-
-        /* 讓漸層化身為一個固定在最底層的獨立面板，徹底封鎖白邊 */
-        html::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(to bottom, #4B97FF, #264100);
-            z-index: -2;
+            background-color: #4B97FF;
         }
 
         body {
@@ -36,14 +23,14 @@
             background-color: transparent;
         }
 
-        /* 圖片背景層，疊在漸層上方 */
         body::before {
             content: "";
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: -20px;
+            left: -20px;
+            right: -20px;
+            bottom: -20px;
+            background-color: #4B97FF;
             background-image: url('https://i.meee.com.tw/ph013sW.jpg'); 
             background-size: cover;
             background-position: center center;
@@ -240,7 +227,7 @@
 
             <section class="space-y-3">
                 <div class="glossy-header engraved-text py-1 text-center text-[11px] tracking-wider font-bold">
-                    ⋆✧꒰裝神弄鬼難懂的我 ☆໒꒱✧⋆
+                    ⋆✧꒰ა☆ 總以為謎一般難懂的我 ☆໒꒱✧⋆
                 </div>
                 
                 <div class="flex items-center gap-2 jelly-box p-2 rounded-sm">
@@ -437,7 +424,7 @@
 
     <script>
         const chenAlbums = [
-            { id: "album_01", title: "讓我想一想", year: "1998", cover: "https://i.meee.com.tw/Z9O3qXW.jpg", isEp: false, tracks: [{ id: "t01_01", name: "讓我想一想" }, { id: "t01_02", name: "微涼的你" }, { id: "t01_03", name: "會會" }, { id: "t01_04", name: "情歌" }, { id: "t01_05", name: "和你在一起" }, { id: "t01_06", name: "嫉妒" }, { id: "t01_07", name: "孤島" }, { id: "t01_08", name: "孩子" }, { id: "t01_09", name: "天使" }, { id: "t01_10", name: "漫漫長夜" }] },
+            { id: "album_01", title: "讓我想一想", year: "1998", cover: "https://i.meee.com.tw/Z9O3qXW.jpg", isEp: false, tracks: [{ id: "t01_01", name: "讓我想一想" }, { id: "t01_02", name: "微涼的你" }, { id: "t01_03", name: "會不會" }, { id: "t01_04", name: "情歌" }, { id: "t01_05", name: "和你在一起" }, { id: "t01_06", name: "嫉妒" }, { id: "t01_07", name: "孤島" }, { id: "t01_08", name: "孩子" }, { id: "t01_09", name: "天使" }, { id: "t01_10", name: "漫漫長夜" }] },
             { id: "album_02", title: "還是會寂寞", year: "2000", cover: "https://i.meee.com.tw/IjFYPaq.jpg", isEp: false, tracks: [{ id: "t02_01", name: "越洋電話" }, { id: "t02_02", name: "我的驕傲無可救藥" }, { id: "t02_03", name: "還是會寂寞" }, { id: "t02_04", name: "下午三點" }, { id: "t02_05", name: "溫室花朵" }, { id: "t02_06", name: "午餐的約會" }, { id: "t02_07", name: "等待" }, { id: "t02_08", name: "慢歌3" }, { id: "t02_09", name: "告訴我" }, { id: "t02_10", name: "慢歌1" }, { id: "t02_11", name: "靈感" }] },
             { id: "album_03", title: "吉他手", year: "2002", cover: "https://i.meee.com.tw/Y9wVsSX.jpg", isEp: false, tracks: [{ id: "t03_01", name: "我親愛的偏執狂" }, { id: "t03_02", name: "太聰明" }, { id: "t03_03", name: "小步舞曲" }, { id: "t03_04", name: "1234567" }, { id: "t03_05", name: "隨便說說" }, { id: "t03_06", name: "躺在你的衣櫃 (Guitar Version)" }, { id: "t03_07", name: "A Practice" }, { id: "t03_08", name: "吉他手" }, { id: "t03_09", name: "黑眼圈" }, { id: "t03_10", name: "就算全世界與我為敵" }, { id: "t03_11", name: "小塵埃" }, { id: "t03_12", name: "不應該" }, { id: "t03_13", name: "躺在你的衣櫃 (Piano Version)" }] },
             { id: "album_04", title: "華麗的冒險", year: "2005", cover: "https://i.meee.com.tw/zsIZNHo.jpg", isEp: false, tracks: [{ id: "t04_01", name: "旅行的意義" }, { id: "t04_02", name: "腐朽" }, { id: "t04_03", name: "Sentimental Kills" }, { id: "t04_04", name: "華麗的冒險" }, { id: "t04_05", name: "太多" }, { id: "t04_06", name: "花的姿態" }, { id: "t04_07", name: "Self" }, { id: "t04_08", name: "80%完美的日子" }, { id: "t04_09", name: "表面的和平" }, { id: "t04_10", name: "靜靜的生活" }, { id: "t04_11", name: "最初的起點" }] },
