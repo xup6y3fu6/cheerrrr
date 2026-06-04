@@ -6,16 +6,13 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-    <!-- 1. 給 Safari 標籤頁與一般瀏覽器看的 (加入 ?v=2 強制更新) -->
     <link rel="icon" type="image/png" href="https://xup6y3fu6.github.io/cheerrrr/ico.png?v=2" />
     <link rel="shortcut icon" href="https://xup6y3fu6.github.io/cheerrrr/ico.ico?v=2" type="image/x-icon" />
 
-    <!-- 2. 給 iOS 加入主畫面用的 (加入 ?v=2 強制更新) -->
     <link rel="apple-touch-icon" sizes="180x180" href="https://xup6y3fu6.github.io/cheerrrr/ico.png?v=2" />
 
-    <!-- 3. 以下你的社群 meta 標籤照舊... -->
-    <meta property="og:title" content="表現給我看" />
-    <meta property="og:description" content="你的陳綺貞喜好" />
+    <meta property="og:title" content="表現給我看(๑ↀᆺↀ๑)" />
+    <meta property="og:description" content="你的陳綺貞喜好♪" />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://xup6y3fu6.github.io/cheerrrr/" />
     <meta property="og:image" content="https://xup6y3fu6.github.io/cheerrrr/share.png" />
@@ -383,8 +380,8 @@
                 <div class="jelly-box p-3 sm:p-4 flex justify-between items-center mb-4 rounded-sm">
                     <div class="flex-1 z-10 pr-2 min-w-0">
                         <div id="matchResultHeader" class="tracking-tight mb-1 truncate"></div>
-                        <h1 class="text-3xl sm:text-4xl font-black text-[#004FFF] tracking-tighter drop-shadow-[0_2px_2px_rgba(255,255,255,0.8)] flex items-baseline gap-0.5 whitespace-nowrap" id="matchPercentage">
-                            44% <span class="text-base sm:text-lg font-bold text-[#0078FF] pb-0.5">相似</span>
+                        <h1 class="text-5xl sm:text-6xl font-black text-[#004FFF] tracking-tighter drop-shadow-[0_2px_2px_rgba(255,255,255,0.8)] flex items-baseline gap-0.5 whitespace-nowrap" id="matchPercentage">
+                            44% <span class="text-xl sm:text-2xl font-bold text-[#0078FF] pb-0.5">相似</span>
                         </h1>
                         <p class="text-[10px] text-[#557799] mt-1 font-bold italic leading-tight pr-1" id="matchQuote">“你們沒有相同的選擇/ᐠ ╥ ˕ ╥マ”</p>
                     </div>
@@ -427,9 +424,6 @@
                 </div>
 
                 <div id="mode3ResultBlock" class="hidden space-y-3">
-                    <div class="crystal-bar engraved-text px-2 py-1 text-[11px] font-bold text-center shadow-sm" id="mode3ResultAlbumName">
-                        專輯名稱
-                    </div>
                     <div class="grid grid-cols-2 gap-2">
                         <div class="border border-[#8CBDE6] rounded-sm overflow-hidden shadow-sm">
                             <div class="crystal-bar engraved-text px-2 py-1 text-[10px] font-bold" id="myColumnTitle3">我的喜好★</div>
@@ -766,7 +760,7 @@
                 const albumIdx = parseInt(mode3AlbumSelect.value, 10);
                 const albumTitle = chenAlbums[albumIdx].title;
                 resultHeaderHtml += `
-                    <span class="text-xl sm:text-2xl font-extrabold text-[#005A9E] block leading-tight drop-shadow-md mt-0.5">《${albumTitle}》</span>
+                    <span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md mt-0.5">《${albumTitle}》</span>
                     <span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md mt-0.5">喜好排行</span>
                 `;
                 prefixTitle = `M3(${albumTitle})`;
@@ -980,16 +974,22 @@
             const topCoverContainer = document.getElementById('topCoverContainer');
             let matchRate = 0;
 
-            let friendModeTitle = "";
-            if (friendData.m === 1) friendModeTitle = "各專輯最愛";
-            else if (friendData.m === 2) friendModeTitle = "專輯喜好排行";
-            else if (friendData.m === 3) friendModeTitle = "單專歌曲排行";
-            else if (friendData.m === 4) friendModeTitle = "TOP10";
+            let friendModeTitleHtml = "";
+            if (friendData.m === 1) friendModeTitleHtml = `<span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md mt-0.5">各專輯最愛</span>`;
+            else if (friendData.m === 2) friendModeTitleHtml = `<span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md mt-0.5">專輯喜好排行</span>`;
+            else if (friendData.m === 3) {
+                const albumTitle = chenAlbums[friendData.a].title;
+                friendModeTitleHtml = `
+                    <span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md mt-0.5">《${albumTitle}》</span>
+                    <span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md mt-0.5">喜好排行</span>
+                `;
+            }
+            else if (friendData.m === 4) friendModeTitleHtml = `<span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md mt-0.5">TOP10</span>`;
 
             document.getElementById('matchResultHeader').innerHTML = `
-                <span class="text-[9px] sm:text-[10px] font-bold text-[#335577] block leading-tight">${myName} vs. ${friendName} 的</span>
-                <span class="text-[11px] sm:text-xs font-bold text-[#005A9E] block leading-tight drop-shadow-sm">陳綺貞</span>
-                <span class="text-[11px] sm:text-xs font-bold text-[#005A9E] block leading-tight drop-shadow-sm">${friendModeTitle}</span>
+                <span class="text-lg sm:text-xl font-bold text-[#005A9E] block leading-tight drop-shadow-sm">${myName} vs. ${friendName} 的</span>
+                <span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight mt-0.5 drop-shadow-md">陳綺貞</span>
+                ${friendModeTitleHtml}
             `;
             
             if (friendData.m === 1) {
@@ -1204,7 +1204,6 @@
                     friendHtml += `<div class="flex items-center gap-2 border border-dashed ${bgClass} p-1 mb-1 rounded-sm"><span class="text-[10px] font-bold text-[#0078D7] w-4 text-center drop-shadow-sm">${idx+1}</span><span class="text-[10px] text-[#335577] truncate flex-1">${track.name}</span>${labelHtml}</div>`;
                 });
 
-                document.getElementById('mode3ResultAlbumName').textContent = `《${album.title}》歌曲排行比對`;
                 document.getElementById('myColumnTitle3').textContent = `${myName} 的喜好★`;
                 document.getElementById('friendColumnTitle3').textContent = `${friendName} 的喜好★`;
                 document.getElementById('myTrackRankResultList').innerHTML = myHtml;
@@ -1356,7 +1355,7 @@
                 modeSelect.value = '4';
             }
 
-            document.getElementById('matchPercentage').innerHTML = `${matchRate}%<span class="text-sm sm:text-base font-bold text-[#0078FF] ml-0.5 pb-0.5">相似</span>`;
+            document.getElementById('matchPercentage').innerHTML = `${matchRate}%<span class="text-xl sm:text-2xl font-bold text-[#0078FF] ml-1 pb-0.5">相似</span>`;
             
             const quoteEl = document.getElementById('matchQuote');
             if (matchRate === 100) quoteEl.textContent = "“好像除了我，沒人能把你看透”";
