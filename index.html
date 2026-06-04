@@ -215,6 +215,27 @@
 
         .sortable-ghost { opacity: 0.4; }
         .drag-handle { touch-action: none; }
+
+        /* ========================================== */
+        /* 復古無襯線字體樣式設計（Retro Text Classes） */
+        /* ========================================== */
+        .retro-title {
+            font-family: 'Tahoma', 'Verdana', sans-serif;
+            text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.9);
+            font-weight: 900;
+            letter-spacing: 0.05em;
+        }
+        .retro-number {
+            font-family: 'Tahoma', 'Verdana', sans-serif;
+            text-shadow: 2px 2px 0 rgba(255, 255, 255, 0.9), 3px 3px 0 rgba(73, 153, 203, 0.6);
+            font-weight: 900;
+        }
+        .retro-quote {
+            font-family: 'Tahoma', 'Verdana', sans-serif;
+            text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.8);
+            font-style: italic;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -249,7 +270,7 @@
             
             <div>
                 <marquee scrollamount="3" class="text-[10px] text-[#004FFF] font-bold mb-1 tracking-widest bg-gradient-to-r from-transparent via-[rgba(208,234,250,0.6)] to-transparent py-0.5 rounded-sm">
-                    ₍^ >ヮ<^₎ .ᐟ.ᐟ我愛你 我愛你 ᓚ₍つ^..^₎っෆ 我用盡所有美好夢想 /ᐠ > ˕ <マ 不想和別人享用 ( ,,⩌'︿'⩌,,) 你每一個小動作 ૮ ྀིᴗ͈ .ᴗ͈ 飾 ྀིა 
+                    ₍^ >ヮ<^₎ .ᐟ.ᐟ我愛你 我愛你 ᓚ₍つ^..^₎っෆ 我用盡所有美好夢想 /ᐠ > ˕ <マ 不想和別人享用 ( ,,⩌'︿'⩌,,) 你每一個小動作 ૮ ྀིᴗ͈ .ᴗ͈ ྀིა 
                 </marquee>
 
                 <div class="glossy-header engraved-text py-1 text-center text-[11px] mb-2 tracking-wider font-bold">
@@ -271,7 +292,7 @@
 
             <section class="space-y-3">
                 <div class="glossy-header engraved-text py-1 text-center text-[11px] tracking-wider font-bold">
-                    ⋆✧꒰派☆ 總以為謎一般難懂的我 ☆໒꒱✧⋆
+                    ⋆✧꒰ა☆ 總以為謎一般難懂的我 ☆໒꒱✧⋆
                 </div>
                 
                 <div class="flex items-center gap-2 jelly-box p-2 rounded-sm">
@@ -383,10 +404,10 @@
                 <div class="jelly-box p-3 sm:p-4 flex justify-between items-center mb-4 rounded-sm">
                     <div class="flex-1 z-10 pr-2 min-w-0">
                         <div id="matchResultHeader" class="tracking-tight mb-1 truncate"></div>
-                        <h1 class="text-3xl sm:text-4xl font-black text-[#004FFF] tracking-tighter drop-shadow-[0_2px_2px_rgba(255,255,255,0.8)] flex items-baseline gap-0.5 whitespace-nowrap" id="matchPercentage">
-                            44% <span class="text-xs sm:text-sm font-bold text-[#0078FF] pb-0.5">相似</span>
+                        <h1 class="text-3xl sm:text-4xl font-black text-[#004FFF] tracking-tighter flex items-baseline gap-0.5 whitespace-nowrap retro-number" id="matchPercentage">
+                            44% <span class="text-xs sm:text-sm font-bold text-[#0078FF] pb-0.5 retro-title">相似</span>
                         </h1>
-                        <p class="text-[10px] text-[#557799] mt-1 font-bold italic leading-tight pr-1" id="matchQuote">“你們沒有相同的選擇/ᐠ ╥ ˕ ╥マ”</p>
+                        <p class="text-[10px] text-[#557799] mt-1 font-bold leading-tight pr-1 retro-quote" id="matchQuote">“你們沒有相同的選擇/ᐠ ╥ ˕ ╥マ”</p>
                     </div>
                     <div id="topCoverContainer" class="relative w-36 h-28 sm:w-64 sm:h-40 shrink-0 flex justify-center items-center">
                     </div>
@@ -749,26 +770,26 @@
             let dataParts = [];
 
             let resultHeaderHtml = `
-                <span class="text-lg sm:text-xl font-bold text-[#005A9E] block leading-tight drop-shadow-sm">${userName} 的</span>
-                <span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight mt-0.5 drop-shadow-md">陳綺貞</span>
+                <span class="text-lg sm:text-xl font-bold text-[#005A9E] block leading-tight retro-title">${userName} 的</span>
+                <span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight mt-0.5 retro-title">陳綺貞</span>
             `;
 
             let prefixTitle = `M${currentMode}`;
 
             if (currentMode === '1') {
-                resultHeaderHtml += `<span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md">各專輯最愛</span>`;
+                resultHeaderHtml += `<span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight retro-title">各專輯最愛</span>`;
             } else if (currentMode === '2') {
-                resultHeaderHtml += `<span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md">專輯喜好排行</span>`;
+                resultHeaderHtml += `<span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight retro-title">專輯喜好排行</span>`;
             } else if (currentMode === '3') {
                 const albumIdx = parseInt(mode3AlbumSelect.value, 10);
                 const albumTitle = chenAlbums[albumIdx].title;
                 resultHeaderHtml += `
-                    <span class="text-xl sm:text-2xl font-extrabold text-[#005A9E] block leading-tight drop-shadow-md mt-0.5">《${albumTitle}》</span>
-                    <span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md mt-0.5">喜好排行</span>
+                    <span class="text-xl sm:text-2xl font-extrabold text-[#005A9E] block leading-tight mt-0.5 retro-title -ml-[0.5em]">《${albumTitle}》</span>
+                    <span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight mt-0.5 retro-title">喜好排行</span>
                 `;
                 prefixTitle = `M3(${albumTitle})`;
             } else if (currentMode === '4') {
-                resultHeaderHtml += `<span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight drop-shadow-md">TOP10</span>`;
+                resultHeaderHtml += `<span class="text-2xl sm:text-3xl font-extrabold text-[#0026CC] block leading-tight retro-title">TOP10</span>`;
             }
 
             document.getElementById('singleResultHeader').innerHTML = resultHeaderHtml;
@@ -978,19 +999,22 @@
             let matchRate = 0;
 
             let friendModeTitle = "";
-            if (friendData.m === 1) friendModeTitle = "各專輯最愛";
-            else if (friendData.m === 2) friendModeTitle = "專輯喜好排行";
+            if (friendData.m === 1) friendModeTitle = `<span class="text-[11px] sm:text-xs font-bold text-[#005A9E] block leading-tight mt-0.5 retro-title">各專輯最愛</span>`;
+            else if (friendData.m === 2) friendModeTitle = `<span class="text-[11px] sm:text-xs font-bold text-[#005A9E] block leading-tight mt-0.5 retro-title">專輯喜好排行</span>`;
             else if (friendData.m === 3) {
                 const albumTitle = chenAlbums[friendData.a].title;
-                // 在此修改專輯名稱文字大小（例如加上 text-[11px] 或自訂 class）並加入區塊級換行
-                friendModeTitle = `<span class="block text-[11px] sm:text-xs">《${albumTitle}》</span>喜好排行`;
+                // 加入負 margin 修正左引號空白，達成齊平效果
+                friendModeTitle = `
+                    <span class="text-[11px] sm:text-xs font-bold text-[#005A9E] block leading-tight mt-0.5 retro-title -ml-[0.5em]">《${albumTitle}》</span>
+                    <span class="text-[11px] sm:text-xs font-bold text-[#005A9E] block leading-tight retro-title">喜好排行</span>
+                `;
             }
-            else if (friendData.m === 4) friendModeTitle = "TOP10";
+            else if (friendData.m === 4) friendModeTitle = `<span class="text-[11px] sm:text-xs font-bold text-[#005A9E] block leading-tight mt-0.5 retro-title">TOP10</span>`;
 
             document.getElementById('matchResultHeader').innerHTML = `
-                <span class="text-[9px] sm:text-[10px] font-bold text-[#335577] block leading-tight">${myName} vs. ${friendName} 的</span>
-                <span class="text-[11px] sm:text-xs font-bold text-[#005A9E] block leading-tight drop-shadow-sm">陳綺貞</span>
-                <span class="text-[11px] sm:text-xs font-bold text-[#005A9E] block leading-tight drop-shadow-sm">${friendModeTitle}</span>
+                <span class="text-[9px] sm:text-[10px] font-bold text-[#335577] block leading-tight retro-title">${myName} vs. ${friendName} 的</span>
+                <span class="text-[11px] sm:text-xs font-bold text-[#005A9E] block leading-tight mt-0.5 retro-title">陳綺貞</span>
+                ${friendModeTitle}
             `;
             
             if (friendData.m === 1) {
@@ -1356,8 +1380,8 @@
                 modeSelect.value = '4';
             }
 
-            // 在這裡調整「相似」兩個字的大小 (修改 text-xs sm:text-sm 部分)
-            document.getElementById('matchPercentage').innerHTML = `${matchRate}%<span class="text-xs sm:text-sm font-bold text-[#0078FF] ml-0.5 pb-0.5">相似</span>`;
+            // 套用 retro-number 以及 retro-title 達成復古視覺
+            document.getElementById('matchPercentage').innerHTML = `${matchRate}%<span class="text-xs sm:text-sm font-bold text-[#0078FF] ml-0.5 pb-0.5 retro-title">相似</span>`;
             
             const quoteEl = document.getElementById('matchQuote');
             if (matchRate === 100) quoteEl.textContent = "“好像除了我，沒人能把你看透”";
