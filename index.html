@@ -1054,7 +1054,7 @@
                 });
 
                 if (matchCount === 0) { 
-                    commonHtml = `<p class="text-[10px] text-[#557799] text-center py-2 col-span-2 italic">030</p>`;
+                    commonHtml = `<p class="text-[10px] text-[#557799] text-center py-2 col-span-2 italic">你們沒有相同的選擇/ᐠ ╥ ˕ ╥マ</p>`;
                     regularAlbums.forEach(album => matchedCovers.push(album.cover));
                 }
 
@@ -1389,10 +1389,10 @@ document.getElementById('matchPercentage').innerHTML = `
 `;
             
             const quoteEl = document.getElementById('matchQuote');
-            if (matchRate === 100) quoteEl.textContent = "“好像除了我，沒人能把你看透”";
-            else if (matchRate >= 40) quoteEl.textContent = "“我從你的話語之間，才明白你和我之間，不需要語言”";
-            else if (matchRate > 0) quoteEl.textContent = "“為什麼你總沉迷，某種神奇的幻想”";
-            else quoteEl.textContent = "“你擁有你的，我擁有我的，姿態”";
+            if (matchRate === 100) quoteEl.innerHTML = "“好像除了我，<br>沒人能把你看透”";
+            else if (matchRate >= 40) quoteEl.innerHTML = "“我從你的話語之間，<br>才明白你和我之間，<br>不需要語言”";
+            else if (matchRate > 0) quoteEl.innerHTML = "“為什麼你總沉迷，<br>某種神奇的幻想”";
+            else quoteEl.innerHTML = "“你擁有你的，<br>我擁有我的，姿態”";
 
             document.getElementById('singleResultArea').classList.add('hidden');
             document.getElementById('resultArea').classList.remove('hidden');
